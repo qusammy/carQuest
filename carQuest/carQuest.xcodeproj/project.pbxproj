@@ -11,6 +11,10 @@
 		002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002ABF6C2C73A3A100FFCC86 /* ContentView.swift */; };
 		002ABF6F2C73A3A300FFCC86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */; };
 		002ABF722C73A3A300FFCC86 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */; };
+		0042038F2C7622EA00B7FFCD /* Jost-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0042038E2C7622E900B7FFCD /* Jost-Regular.ttf */; };
+		00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF079B2C80D21E000404AA /* listingCreation.swift */; };
+		00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */; };
+		00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB293C2C7E2A1600A67EF1 /* SignInView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,11 @@
 		002ABF6C2C73A3A100FFCC86 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0042038E2C7622E900B7FFCD /* Jost-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Regular.ttf"; sourceTree = "<group>"; };
+		004203902C76233000B7FFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		00BF079B2C80D21E000404AA /* listingCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingCreation.swift; sourceTree = "<group>"; };
+		00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZingRustDemo-Base.otf"; sourceTree = "<group>"; };
+		00FB293C2C7E2A1600A67EF1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +60,12 @@
 		002ABF692C73A3A100FFCC86 /* carQuest */ = {
 			isa = PBXGroup;
 			children = (
+				00E32F022C763E9300840AAA /* Font */,
+				004203902C76233000B7FFCD /* Info.plist */,
 				002ABF6A2C73A3A100FFCC86 /* carQuestApp.swift */,
 				002ABF6C2C73A3A100FFCC86 /* ContentView.swift */,
+				00FB293C2C7E2A1600A67EF1 /* SignInView.swift */,
+				00BF079B2C80D21E000404AA /* listingCreation.swift */,
 				002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */,
 				002ABF702C73A3A300FFCC86 /* Preview Content */,
 			);
@@ -65,6 +78,15 @@
 				002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		00E32F022C763E9300840AAA /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */,
+				0042038E2C7622E900B7FFCD /* Jost-Regular.ttf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,6 +149,8 @@
 			files = (
 				002ABF722C73A3A300FFCC86 /* Preview Assets.xcassets in Resources */,
 				002ABF6F2C73A3A300FFCC86 /* Assets.xcassets in Resources */,
+				0042038F2C7622EA00B7FFCD /* Jost-Regular.ttf in Resources */,
+				00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +161,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */,
 				002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */,
 				002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */,
+				00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +301,7 @@
 				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = carQuest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +331,7 @@
 				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = carQuest/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

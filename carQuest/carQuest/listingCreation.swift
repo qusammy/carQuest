@@ -9,7 +9,16 @@ import SwiftUI
 
 struct listingCreation: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Image(systemName: "x.circle.fill")
+                .resizable()
+                .frame(width:40, height:40)
+                .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
+            Text("Create listing")
+                .font(Font.custom("Jost-Regular", size:40))
+            
+            
+        }
     }
 }
 
