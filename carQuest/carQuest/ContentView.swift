@@ -3,7 +3,7 @@
 //  carQuest
 //
 //  Created by Maddy Quinn on 8/19/24.
-//
+//  Added by james
 // when navigation view, use .navigationViewStyle(StackNavigationViewStyle()) at the last bracket
 import SwiftUI
 
