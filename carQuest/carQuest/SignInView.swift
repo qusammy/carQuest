@@ -3,7 +3,7 @@
 //  carQuest
 //
 //  Created by Maddy Quinn on 8/27/24.
-//
+//  Additions by James Hollander
 
 import SwiftUI
 
