@@ -9,6 +9,7 @@ import SwiftUI
 
 struct listingCreation: View {
     @State var typeOfCar: String
+    @State var location: String
     var body: some View {
         VStack{
             Button(action: {
@@ -20,14 +21,15 @@ struct listingCreation: View {
                         .frame(width:40, height:40)
                         .foregroundColor(.black)
                 }
-            }).offset(x:-165)
+            }).frame(maxWidth: 375, alignment: .leading)
+
 
             Text("Create listing")
                 .font(Font.custom("Jost-Regular", size:40))
-                .offset(x:-75)
+                .frame(maxWidth: 375, alignment: .leading)
             Text("Type of car")
                 .font(Font.custom("ZingRustDemo-Base", size:30))
-                .offset(x:-120)
+                .frame(maxWidth: 375, alignment: .leading)
             ScrollView(.horizontal){
                 HStack{
                     carType(type: "SUV")
@@ -41,10 +43,10 @@ struct listingCreation: View {
                     carType(type: "Convertible")
                     
                 }
-            }
+            }.frame(maxWidth: 375, alignment: .leading)
         Text("Brand of car")
             .font(Font.custom("ZingRustDemo-Base", size:30))
-            .offset(x:-110)
+            .frame(maxWidth: 375, alignment: .leading)
             ScrollView(.horizontal){
                 HStack{
                     carBrand(brand: "Audi")
@@ -70,13 +72,24 @@ struct listingCreation: View {
                     carBrand(brand: "Other")
 
                 }
-            }
+            }.frame(maxWidth: 375, alignment: .leading)
+            Text("Location")
+                .font(Font.custom("ZingRustDemo-Base", size:30))
+                .frame(maxWidth: 375, alignment: .leading)
+            TextField("City, zip, address", text: $location)
+                .foregroundColor(.black)
+                .frame(width:375, height:50)
+                .font(.custom("Jost-Regular", size: 20))
+                .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
+                .cornerRadius(10)
+                .multilineTextAlignment(.leading)
+                .disableAutocorrection(true)
         }
     }
 }
 
 #Preview {
-    listingCreation(typeOfCar: "")
+    listingCreation(typeOfCar: "", location: "")
 }
 
 struct carType: View {
