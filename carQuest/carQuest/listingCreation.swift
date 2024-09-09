@@ -20,11 +20,14 @@ struct listingCreation: View {
                         .frame(width:40, height:40)
                         .foregroundColor(.black)
                 }
-            })
+            }).offset(x:-165)
+
             Text("Create listing")
                 .font(Font.custom("Jost-Regular", size:40))
+                .offset(x:-75)
             Text("Type of car")
                 .font(Font.custom("ZingRustDemo-Base", size:30))
+                .offset(x:-120)
             ScrollView(.horizontal){
                 HStack{
                     carType(type: "SUV")
@@ -41,6 +44,7 @@ struct listingCreation: View {
             }
         Text("Brand of car")
             .font(Font.custom("ZingRustDemo-Base", size:30))
+            .offset(x:-110)
             ScrollView(.horizontal){
                 HStack{
                     carBrand(brand: "Audi")
