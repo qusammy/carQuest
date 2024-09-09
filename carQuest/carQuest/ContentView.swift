@@ -17,10 +17,12 @@ struct ContentView: View {
                 HStack{
                     Text("CARQUEST")
                         .font(Font.custom("ZingRustDemo-Base", size:50))
+                        .foregroundColor(Color("Foreground"))
                     Spacer()
                     Image(systemName: "bell.fill")
                         .resizable()
                         .frame(width:30, height:30)
+                        .foregroundColor(Color("Foreground"))
                 } /*.offset(y: -540)*/
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
@@ -69,10 +71,10 @@ struct ContentView: View {
                 HStack{
                     Image("gavel")
                         .resizable()
-                        .frame(width: 70, height:70)
+                        .frame(width: 60, height:60)
                     Image("rent")
                         .resizable()
-                        .frame(width: 70, height:70)
+                        .frame(width: 60, height:60)
                     Image("home")
                         .resizable()
                         .frame(width: 60, height:60)
