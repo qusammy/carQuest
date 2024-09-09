@@ -95,7 +95,7 @@ struct SignInView: View {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width:250, height:50)
-                            .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                            .foregroundColor(.accentColor)
                         Text("Sign In")
                             .font(.custom("Jost-Regular", size: 25))
                             .foregroundColor(Color("Background"))
@@ -122,7 +122,7 @@ struct SignInView: View {
         }, label: {
             ZStack{
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color(hue: 1.0, saturation: 0.005, brightness: 0.927), lineWidth:5)
+                    .stroke(Color("grayFlip"))
                     .frame(width:250, height:75)
                 HStack{
                     Image("googleIcon")
