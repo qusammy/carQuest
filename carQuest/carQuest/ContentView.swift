@@ -12,79 +12,82 @@ struct ContentView: View {
     @State private var isHeartFilled: Bool = false
     
     var body: some View {
-
-        VStack {
-            HStack{
-                Text("CARQUEST")
-                    .font(Font.custom("ZingRustDemo-Base", size:50))
-                Spacer()
-                Image(systemName: "bell.fill")
-                    .resizable()
-                    .frame(width:30, height:30)
-            } /*.offset(y: -540)*/
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-//                .offset(y: -570)
-            ScrollView{
-                VStack{
-                    Text("Welcome, name!")
-                        .font(Font.custom("Jost-Regular", size:30))
-                    HStack{
-                        Text("Recently viewed")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(Font.custom("Jost-Regular", size:20))
-                        Text("See all")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .font(Font.custom("Jost-Regular", size:15))
-                            .underline()
-                    }
-                    HStack{
-                        imageBox()
-                        imageBox()
+        NavigationView {
+            VStack {
+                HStack{
+                    Text("CARQUEST")
+                        .font(Font.custom("ZingRustDemo-Base", size:50))
+                    Spacer()
+                    Image(systemName: "bell.fill")
+                        .resizable()
+                        .frame(width:30, height:30)
+                } /*.offset(y: -540)*/
+                RoundedRectangle(cornerRadius: 70)
+                    .frame(width:345, height:1)
+                //                .offset(y: -570)
+                ScrollView{
+                    VStack{
+                        Text("Welcome, name!")
+                            .font(Font.custom("Jost-Regular", size:30))
+                        HStack{
+                            Text("Recently viewed")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(Font.custom("Jost-Regular", size:20))
+                            Text("See all")
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .font(Font.custom("Jost-Regular", size:15))
+                                .underline()
                         }
-                    HStack{
-                        imageBox()
-                        imageBox()
+                        HStack{
+                            imageBox()
+                            imageBox()
                         }
-                    RoundedRectangle(cornerRadius: 70)
-                        .frame(width:345, height:1)
-                    HStack{
-                        Text("Saved for later")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(Font.custom("Jost-Regular", size:20))
-                        Text("See all")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .font(Font.custom("Jost-Regular", size:15))
-                            .underline()
+                        HStack{
+                            imageBox()
+                            imageBox()
+                        }
+                        RoundedRectangle(cornerRadius: 70)
+                            .frame(width:345, height:1)
+                        HStack{
+                            Text("Saved for later")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(Font.custom("Jost-Regular", size:20))
+                            Text("See all")
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .font(Font.custom("Jost-Regular", size:15))
+                                .underline()
+                        }
+                        HStack{
+                            imageBox()
+                            imageBox()
+                        }
                     }
-                    HStack{
-                        imageBox()
-                        imageBox()
-                    }
-                }
-            }.frame(width:350)
-           
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-                    HStack{
-                        Image("gavel")
-                            .resizable()
-                            .frame(width: 70, height:70)
-                        Image("rent")
-                            .resizable()
-                            .frame(width: 70, height:70)
-                        Image("home")
-                            .resizable()
-                            .frame(width: 60, height:60)
-                        Image("buy")
-                            .resizable()
-                            .frame(width: 60, height:60)
+                }.frame(width:350)
+                
+                RoundedRectangle(cornerRadius: 70)
+                    .frame(width:345, height:1)
+                HStack{
+                    Image("gavel")
+                        .resizable()
+                        .frame(width: 70, height:70)
+                    Image("rent")
+                        .resizable()
+                        .frame(width: 70, height:70)
+                    Image("home")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                    Image("buy")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                    NavigationLink(destination: SignInView()) {
                         Image("profileIcon")
                             .resizable()
                             .frame(width: 55, height:55)
                     }
-                }/*.offset(x:0,y:280)*/
-        .padding()
+                }
+            }/*.offset(x:0,y:280)*/
+            .padding()
+        }
     }
     //structs
     func image (_ image: Image, show: Bool) -> some View {
