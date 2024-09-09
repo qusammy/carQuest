@@ -27,22 +27,18 @@ struct listingCreation: View {
                 .font(Font.custom("ZingRustDemo-Base", size:30))
             ScrollView(.horizontal){
                 HStack{
-                    carType(type: "SUV", typeOfCar: $typeOfCar)
-                        .onTapGesture {
-                            typeOfCar = "SUV"
-                        }
-//                    carType(type: "Sedan")
-//                    carType(type: "Coupe")
-//                    carType(type: "Sport")
-//                    carType(type: "Truck")
-//                    carType(type: "Minivan")
-//                    carType(type: "Hatchback")
-//                    carType(type: "Van")
-//                    carType(type: "Convertible")
+                    carType(type: "SUV")
+                    carType(type: "Sedan")
+                    carType(type: "Coupe")
+                    carType(type: "Sport")
+                    carType(type: "Truck")
+                    carType(type: "Minivan")
+                    carType(type: "Hatchback")
+                    carType(type: "Van")
+                    carType(type: "Convertible")
                     
                 }
             }
-            Text("Car type: \(typeOfCar)")
         Text("Brand of car")
             .font(Font.custom("ZingRustDemo-Base", size:30))
             ScrollView(.horizontal){
@@ -82,7 +78,6 @@ struct listingCreation: View {
 struct carType: View {
     var type: String
     @State var isTypeOfCarSelected: Bool = false
-    @Binding var typeOfCar: String
     
     var body: some View {
         
@@ -91,7 +86,6 @@ struct carType: View {
                           label: {
                               switch isTypeOfCarSelected {
                                   case true:
-                                 // typeOfCar = String(type)
                                   ZStack{
                                       RoundedRectangle(cornerRadius: 10)
                                           .frame(width:100, height:60)
