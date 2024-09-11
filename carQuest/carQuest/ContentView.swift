@@ -10,7 +10,6 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var isHeartFilled: Bool = false
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -108,7 +107,7 @@ struct ContentView: View {
 }
 struct imageBox: View
 {
-    private var _name = ""
+    var _name = ""
 
     var body: some View {
         ZStack{
@@ -131,7 +130,7 @@ struct FittedImage: View
 
     var body: some View {
         VStack {
-            Image("carQuestLogo")
+            Image(imageName)
                 .resizable()
                 .aspectRatio(1, contentMode: .fit)
         }
