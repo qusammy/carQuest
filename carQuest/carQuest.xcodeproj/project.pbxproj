@@ -15,6 +15,7 @@
 		00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF079B2C80D21E000404AA /* listingCreation.swift */; };
 		00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */; };
 		00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB293C2C7E2A1600A67EF1 /* SignInView.swift */; };
+		22C6DF092C91D31A00F41EB3 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C6DF082C91D31A00F41EB3 /* SignUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		00BF079B2C80D21E000404AA /* listingCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingCreation.swift; sourceTree = "<group>"; };
 		00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZingRustDemo-Base.otf"; sourceTree = "<group>"; };
 		00FB293C2C7E2A1600A67EF1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		22C6DF082C91D31A00F41EB3 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				002ABF6A2C73A3A100FFCC86 /* carQuestApp.swift */,
 				002ABF6C2C73A3A100FFCC86 /* ContentView.swift */,
 				00FB293C2C7E2A1600A67EF1 /* SignInView.swift */,
+				22C6DF082C91D31A00F41EB3 /* SignUpView.swift */,
 				00BF079B2C80D21E000404AA /* listingCreation.swift */,
 				002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */,
 				002ABF702C73A3A300FFCC86 /* Preview Content */,
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */,
+				22C6DF092C91D31A00F41EB3 /* SignUpView.swift in Sources */,
 				002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */,
 				002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */,
 				00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */,

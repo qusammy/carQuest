@@ -17,124 +17,124 @@ struct SignInView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
     var body: some View {
-        VStack{
-            Spacer()
-            .navigationBarBackButtonHidden(true)
-            .toolbar(content: {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .frame(width: 90, height: 35)
-                                .foregroundColor(.accentColor)
-                            HStack {
-                                Image(systemName: "arrow.left")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                    .foregroundColor(.white)
-                                Text("Back")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.white)
+            VStack{
+                Spacer()
+                    .navigationBarBackButtonHidden(true)
+                    .toolbar(content: {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                presentationMode.wrappedValue.dismiss()
+                            }, label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .frame(width: 90, height: 35)
+                                        .foregroundColor(.accentColor)
+                                    HStack {
+                                        Image(systemName: "arrow.left")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                            .foregroundColor(.white)
+                                        Text("Back")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.white)
+                                    }
+                                }
                             }
+                            )
                         }
-                    }
-                    )
-                }
-            })
-            Image("carQuestLogo")
-                .resizable()
-                .renderingMode(.original)
-                .cornerRadius(30)
-                .frame(width:100, height:100)
-            Text("CARQUEST")
-                .font(Font.custom("ZingRustDemo-Base", size:60))
-                .foregroundColor(Color("Foreground"))
-            Text("Login to your account")
+                    })
+                Image("carQuestLogo")
+                    .resizable()
+                    .renderingMode(.original)
+                    .cornerRadius(30)
+                    .frame(width:100, height:100)
+                Text("CARQUEST")
+                    .font(Font.custom("ZingRustDemo-Base", size:60))
+                    .foregroundColor(Color("Foreground"))
+                Text("Login to your account")
                     .font(Font.custom("Jost-Regular", size:30))
                     .foregroundColor(Color("Foreground"))
-            
-            TextField("Email", text: $userEmail)
-                .foregroundColor(Color("darkGrayFlip"))
-                .frame(width:250, height:50)
-                .font(.custom("Jost-Regular", size: 20))
-                .background(Color("grayFlip"))
-                .cornerRadius(50)
-                .multilineTextAlignment(.center)
-                .disableAutocorrection(true)
-            SecureField("Password", text: $userPassword)
-                .foregroundColor(Color("darkGrayFlip"))
-                .frame(width:250, height:50)
-                .font(.custom("Jost-Regular", size: 20))
-                .background(Color("grayFlip"))
-                .cornerRadius(50)
-                .multilineTextAlignment(.center)
-                .disableAutocorrection(true)
-            Button{
-                self.isBoxChecked.toggle()
-            } label: {
-                HStack{
-                    ZStack{
-                        image(Image(systemName: "square.fill"), show: isBoxChecked)
-                            .foregroundColor(Color("Foreground"))
-                        image(Image(systemName: "square"), show: !isBoxChecked)
+                
+                TextField("Email", text: $userEmail)
+                    .foregroundColor(Color("darkGrayFlip"))
+                    .frame(width:250, height:50)
+                    .font(.custom("Jost-Regular", size: 20))
+                    .background(Color("grayFlip"))
+                    .cornerRadius(50)
+                    .multilineTextAlignment(.center)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
+                SecureField("Password", text: $userPassword)
+                    .foregroundColor(Color("darkGrayFlip"))
+                    .frame(width:250, height:50)
+                    .font(.custom("Jost-Regular", size: 20))
+                    .background(Color("grayFlip"))
+                    .cornerRadius(50)
+                    .multilineTextAlignment(.center)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
+                Button{
+                    self.isBoxChecked.toggle()
+                } label: {
+                    HStack{
+                        ZStack{
+                            image(Image(systemName: "square.fill"), show: isBoxChecked)
+                                .foregroundColor(Color("Foreground"))
+                            image(Image(systemName: "checkmark.square"), show: isBoxChecked)
+                                .foregroundColor(Color("Background"))
+                            image(Image(systemName: "square"), show: !isBoxChecked)
+                                .foregroundColor(Color("Foreground"))
+                        }
+                        Text("Remember me")
+                            .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(Color("Foreground"))
                     }
-                    Text("Remember me")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color("Foreground"))
                 }
-            }
-            VStack{
-                Button(action: {
-                    
-                    
-                    
-                }, label: {
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(width:250, height:50)
-                            .foregroundColor(.accentColor)
-                        Text("Sign In")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .foregroundColor(Color("Background"))
-                    }
-                })
-                HStack{
-                    Text("Don't have an account?")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color("Foreground"))
+                VStack{
                     Button(action: {
-                        //bring to sign up page
-                    }, label: {
+
                         
+                        
+                    }, label: {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width:250, height:50)
+                                .foregroundColor(.accentColor)
+                            Text("Sign In")
+                                .font(.custom("Jost-Regular", size: 25))
+                                .foregroundColor(Color("Background"))
+                        }
+                    })
+                    Button(action: {
+                        //bring to Google Login
+                    }, label: {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color("grayFlip"))
+                                .frame(width:250, height:75)
+                            HStack{
+                                Image("googleIcon")
+                                    .resizable()
+                                    .frame(width:40, height:40)
+                                Text("Sign in with Google")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(Color("Foreground"))
+                            }
+                        }
+                    })
+                    HStack{
+                        Text("Don't have an account?")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(Color("Foreground"))
+                        NavigationLink(destination: SignUpView()) {
                             Text("Sign up")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .underline()
                                 .foregroundColor(.accentColor)
-                        })
+                        }
                     }
                 }
             }
-        Button(action: {
-            //bring to Google Login
-        }, label: {
-            ZStack{
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color("grayFlip"))
-                    .frame(width:250, height:75)
-                HStack{
-                    Image("googleIcon")
-                        .resizable()
-                        .frame(width:40, height:40)
-                    Text("Sign in with Google")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color("Foreground"))
-                }
-            }
-            })
-       
         }
     func image (_ image: Image, show: Bool) -> some View {
             image
