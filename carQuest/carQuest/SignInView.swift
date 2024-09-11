@@ -6,11 +6,13 @@
 //  Additions by James Hollander
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
 
 struct SignInView: View {
     
-    @State var userEmail: String = ""
-    @State var userPassword: String = ""
+    @State var email: String = ""
+    @State var password: String = ""
 
     @State private var isBoxChecked = false
     
@@ -28,7 +30,7 @@ struct SignInView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 15)
                                         .frame(width: 90, height: 35)
-                                        .foregroundColor(.accentColor)
+                                        .foregroundColor(Color("appColor"))
                                     HStack {
                                         Image(systemName: "arrow.left")
                                             .resizable()
@@ -55,17 +57,14 @@ struct SignInView: View {
                     .font(Font.custom("Jost-Regular", size:30))
                     .foregroundColor(Color("Foreground"))
                 
-                TextField("Email", text: $userEmail)
-                    .foregroundColor(Color("darkGrayFlip"))
-                    .frame(width:250, height:50)
+                TextField("Email", text: $email)                    .frame(width:250, height:50)
                     .font(.custom("Jost-Regular", size: 20))
                     .background(Color("grayFlip"))
                     .cornerRadius(50)
                     .multilineTextAlignment(.center)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
-                SecureField("Password", text: $userPassword)
-                    .foregroundColor(Color("darkGrayFlip"))
+                SecureField("Password", text: $password)
                     .frame(width:250, height:50)
                     .font(.custom("Jost-Regular", size: 20))
                     .background(Color("grayFlip"))
@@ -92,17 +91,15 @@ struct SignInView: View {
                 }
                 VStack{
                     Button(action: {
-
-                        
-                        
+                        login()
                     }, label: {
                         ZStack{
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width:250, height:50)
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(Color("appColor"))
                             Text("Sign In")
                                 .font(.custom("Jost-Regular", size: 25))
-                                .foregroundColor(Color("Background"))
+                                .foregroundColor(.white)
                         }
                     })
                     Button(action: {
@@ -130,7 +127,7 @@ struct SignInView: View {
                             Text("Sign up")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .underline()
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(Color("appColor"))
                         }
                     }
                 }
@@ -143,6 +140,14 @@ struct SignInView: View {
             .font(.system(size: 30))
             .scaleEffect(show ? 1 : 0)
             .frame(width:20, height: 20)
+    }
+    
+    func login() {
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
     }
 }
 

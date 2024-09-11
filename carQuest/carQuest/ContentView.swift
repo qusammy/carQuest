@@ -29,7 +29,7 @@ struct ContentView: View {
                 //                .offset(y: -570)
                 ScrollView{
                     VStack{
-                        Text("Welcome, name!")
+                        Text("Welcome, Guest!")
                             .font(Font.custom("Jost-Regular", size:30))
                         HStack{
                             Text("Recently viewed")

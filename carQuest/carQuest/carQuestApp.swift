@@ -6,9 +6,14 @@
 //  Additions by James Hollander
 
 import SwiftUI
+import Firebase
 
 @main
 struct carQuestApp: App {
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
