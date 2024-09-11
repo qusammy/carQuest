@@ -64,12 +64,12 @@ struct ContentView: View {
             }.frame(width:350)
            
             RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-                    HStack{
-                        Image("gravelLightMode")
-                            .resizable()
-                            .frame(width: 70, height:70)
-                        Image("rentLightMode")
+                         .frame(width:345, height:1)
+                             HStack{
+                                 Image("gravelLightMode")
+                                     .resizable()
+                                     .frame(width: 70, height:70)
+                                 Image("rentLightMode")
                             .resizable()
                             .frame(width: 70, height:70)
                         Image("homeLightMode")
