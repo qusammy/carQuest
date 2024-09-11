@@ -89,7 +89,7 @@ struct ContentView: View {
                 }
             }/*.offset(x:0,y:280)*/
             .padding()
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     //structs
     func image (_ image: Image, show: Bool) -> some View {
