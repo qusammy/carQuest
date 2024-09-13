@@ -1,4 +1,7 @@
+
+//packages to download
 //https://github.com/firebase/firebase-ios-sdk.git
+//https://github.com/google/GoogleSignIn-iOS.git
 //  carQuestApp.swift
 //  carQuest
 //
@@ -19,6 +22,7 @@ struct carQuestApp: App {
             ContentView()
         }
     }
+    
 }
 
 
