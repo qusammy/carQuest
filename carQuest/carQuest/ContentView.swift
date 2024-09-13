@@ -42,8 +42,8 @@ struct ContentView: View {
                         imageBox(_name: "carExample")
                         }
                     HStack{
-                        imageBox()
-                        imageBox()
+                        imageBox(_name: "carQuestLogo")
+                        imageBox(_name: "carQuestLogo")
                         }
                     RoundedRectangle(cornerRadius: 70)
                         .frame(width:345, height:1)
@@ -57,19 +57,19 @@ struct ContentView: View {
                             .underline()
                     }
                     HStack{
-                        imageBox()
-                        imageBox()
+                        imageBox(_name: "carQuestLogo")
+                        imageBox(_name: "carQuestLogo")
                     }
                 }
             }.frame(width:350)
            
             RoundedRectangle(cornerRadius: 70)
-                         .frame(width:345, height:1)
-                             HStack{
-                                 Image("gravelLightMode")
-                                     .resizable()
-                                     .frame(width: 70, height:70)
-                                 Image("rentLightMode")
+                    .frame(width:345, height:1)
+            HStack{
+                        Image("gravelLightMode")
+                            .resizable()
+                            .frame(width: 70, height:70)
+                        Image("rentLightMode")
                             .resizable()
                             .frame(width: 70, height:70)
                         Image("homeLightMode")
