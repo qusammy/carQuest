@@ -63,42 +63,44 @@ struct ContentView: View {
                             imageBox()
                         }
                     }
-                }
-            }.frame(width:350)
-            
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-            HStack{
-                Image("gavel")
-                    .resizable()
-                    .frame(width: 60, height:60)
-                Image("rent")
-                    .resizable()
-                    .frame(width: 60, height:60)
-                Image("home")
-                    .resizable()
-                    .frame(width: 60, height:60)
-                Image("buy")
-                    .resizable()
-                    .frame(width: 60, height:60)
-                NavigationLink(destination: SignInView()) {
-                    Image("profileIcon")
+                }.frame(width:350)
+                
+                RoundedRectangle(cornerRadius: 70)
+                    .frame(width:345, height:1)
+                HStack{
+                    Image("gavel")
                         .resizable()
-                        .frame(width: 55, height:55)
+                        .frame(width: 60, height:60)
+                    Image("rent")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                    Image("home")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                    Image("buy")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                    NavigationLink(destination: SignInView()) {
+                        Image("profileIcon")
+                            .resizable()
+                            .frame(width: 55, height:55)
+                    }
                 }
-            }
-        }/*.offset(x:0,y:280)*/
-        .padding()
+            }/*.offset(x:0,y:280)*/
+            .padding()
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
-}
     //structs
     func image (_ image: Image, show: Bool) -> some View {
-
             image
             .resizable()
+            .tint(isHeartFilled ? .white : .black)
             .offset(x:65, y:-65)
             .frame(width:40, height:40)
     }
+    
+    
+}
 
 #Preview {
     ContentView()
