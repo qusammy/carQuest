@@ -63,10 +63,9 @@ struct ContentView: View {
                             imageBox()
                         }
                     }
-                }
-            }.frame(width:350)
-           
-            RoundedRectangle(cornerRadius: 70)
+                }.frame(width:350)
+                
+                RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
                 HStack{
                     Image("gavel")
