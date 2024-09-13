@@ -13,6 +13,7 @@ struct SignUpView: View {
     @State var email: String = ""
     @State var password: String = ""
     
+    @StateObject private var viewModel = AuthenticationViewModel()
 //    @State var confirmPass: String = ""
     
 //    @State var passMatch: Bool = false
@@ -132,7 +133,13 @@ struct SignUpView: View {
             }
         }
         Button(action: {
-            //bring to Google Login
+            Task {
+                do {
+                    try await viewModel.googleSignIn()
+                }catch {
+                    print(error)
+                }
+            }
         }, label: {
             ZStack{
                 RoundedRectangle(cornerRadius: 15)

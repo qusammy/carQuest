@@ -14,11 +14,11 @@ struct listingCreation: View {
     @State var model: String
     @State var make: String
     @State var description: String
-    @State private var carYear = "2024"
+    @State var carYear = "2024"
     let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+    @State var previewListing = false
+    @State var date = Date()
     var suggestions: Array = ["Audi", "BMW", "Fiat", "Ford"]
-    
-    //  @StateObject private var locationManager = LocationManager()
     var body: some View {
         VStack{
             Button(action: {
@@ -28,24 +28,40 @@ struct listingCreation: View {
                     Image(systemName: "x.circle.fill")
                         .resizable()
                         .frame(width:40, height:40)
-                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                        .foregroundColor(.black)
                 }
             }).frame(maxWidth: 375, alignment: .leading)
             
-            
-            Text("Create listing")
-                .font(Font.custom("Jost-Regular", size:40))
-                .frame(maxWidth: 375, alignment: .leading)
-            ScrollView{
+            HStack{
+                Text("Create listing")
+                    .font(Font.custom("Jost-Regular", size:40))
+                    .frame(maxWidth: 275, alignment: .leading)
+                
+                ZStack{
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(maxWidth:100, maxHeight:50)
+                            .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                        Text("Preview")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .foregroundColor(.white)
+                    }.onTapGesture {
+                        previewListing = true}
+                    .sheet(isPresented: $previewListing){
+                        carQuest.previewListing(carYear: $carYear, make: $make, model: $model, description: $description, typeOfCar: $typeOfCar, date: $date)
+                        }
+            }
+            ScrollView(showsIndicators:false){
                 Text("Type of car")
                     .font(Font.custom("ZingRustDemo-Base", size:30))
                     .frame(maxWidth: 375, alignment: .leading)
-                ScrollView(.horizontal){
+                ScrollView(.horizontal, showsIndicators: false){
                     HStack{
                         carType(type: "SUV")
+                            .onTapGesture {
+                                typeOfCar = "SUV"
+                            }
                         carType(type: "Sedan")
                         carType(type: "Coupe")
-                        carType(type: "Sport")
                         carType(type: "Truck")
                         carType(type: "Minivan")
                         carType(type: "Hatchback")
@@ -84,7 +100,9 @@ struct listingCreation: View {
                                     Text($0)
                                         
                                 }
-                }.pickerStyle(.inline)
+                }
+                .frame(width:375, height:100)
+                .pickerStyle(.inline)
     
                 Text("Description")
                     .font(Font.custom("ZingRustDemo-Base", size:30))
@@ -142,9 +160,7 @@ struct listingCreation: View {
 struct carType: View {
     var type: String
     @State var isTypeOfCarSelected: Bool = false
-    
     var body: some View {
-        
             VStack{
                 Button(action: { isTypeOfCarSelected.toggle() },
                           label: {
@@ -157,8 +173,7 @@ struct carType: View {
                                       Text("\(type)")
                                           .font(.custom("Jost-Regular", size: 17))
                                           .foregroundColor(.white)
-                                      
-                                  }
+                                        }
                                   default:
                                   ZStack{
                                       RoundedRectangle(cornerRadius: 10)
@@ -168,8 +183,8 @@ struct carType: View {
                                           .font(.custom("Jost-Regular", size: 17))
                                           .foregroundColor(.black)
                                   }
-                              }
-                   })
+                }
+            })
         }
     }
 }
@@ -178,27 +193,27 @@ struct carBrand: View {
     var brand: String
     @State var isCarBrandSelected: Bool = false
     var body: some View {
-            VStack{
-                Button(action: { isCarBrandSelected.toggle() },
-                          label: {
-                              switch isCarBrandSelected {
-                                  case true:
-                                  ZStack{
-                                      RoundedRectangle(cornerRadius: 10)
-                                          .frame(width:100, height:60)
-                                          .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+        VStack{
+            Button(action: { isCarBrandSelected.toggle() },
+                    label: {
+                        switch isCarBrandSelected {
+                            case true:
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(width:100, height:60)
+                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
                                       Text("\(brand)")
                                           .font(.custom("Jost-Regular", size: 17))
                                           .foregroundColor(.white)
-                                  }
+                                    }
                                   default:
-                                  ZStack{
-                                      RoundedRectangle(cornerRadius: 10)
-                                          .frame(width:100, height:60)
-                                          .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.92))
-                                      Text("\(brand)")
-                                          .font(.custom("Jost-Regular", size: 17))
-                                          .foregroundColor(.black)
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(width:100, height:60)
+                                        .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.92))
+                                    Text("\(brand)")
+                                        .font(.custom("Jost-Regular", size:17))
+                                        .foregroundColor(.black)
                                   }
                               }
                    })
@@ -206,4 +221,47 @@ struct carBrand: View {
     }
 }
 
-
+struct previewListing: View {
+    @Binding var carYear: String
+    @Binding var make: String
+    @Binding var model: String
+    @Binding var description: String
+    @Binding var typeOfCar: String
+    @Binding var date: Date
+    var body: some View{
+        VStack{
+            RoundedRectangle(cornerRadius: 70)
+                .frame(width:345, height:2)
+                .padding(.top, 5.0)
+            Text("Preview listing")
+                .font(.custom("Jost-Regular", size: 30))
+                .foregroundColor(.black)
+            ScrollView{
+                Image("carQuestLogo")
+                    .resizable()
+                    .frame(width:375, height:375)
+                Text("\(carYear) \(make) \(model) \(typeOfCar)")
+                    .font(.custom("Jost-Regular", size: 25))
+                    .foregroundColor(.black)
+                HStack{
+                    Image("profileIcon")
+                        .resizable()
+                        .frame(width:55, height:55)
+                    Text("$username")
+                        .font(.custom("Jost-Regular", size: 20))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: 375, alignment: .leading)
+                }
+                Text("\(description)")
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: 375, alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                Text("Listed \(date)")
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: 375, alignment: .leading)
+            }
+        }
+    }
+}
