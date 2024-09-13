@@ -45,6 +45,25 @@
 		22C6DF362C91EF4F00F41EB3 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 22C6DF352C91EF4F00F41EB3 /* FirebaseStorageCombine-Community */; };
 		22C6DF382C91EF4F00F41EB3 /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = 22C6DF372C91EF4F00F41EB3 /* FirebaseVertexAI-Preview */; };
 		22C6DF3C2C91F78000F41EB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22C6DF3B2C91F78000F41EB3 /* GoogleService-Info.plist */; };
+		6F2EBC842C948E7100EF07FC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC832C948E7100EF07FC /* Constants.swift */; };
+		6F2EBC862C948E9100EF07FC /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC852C948E9100EF07FC /* Helpers.swift */; };
+		6F2EBC882C948EB700EF07FC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC872C948EB700EF07FC /* Extensions.swift */; };
+		6F2EBC942C94933400EF07FC /* RideDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC932C94933400EF07FC /* RideDetails.swift */; };
+		6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC952C94934000EF07FC /* CarDetails.swift */; };
+		6F2EBC982C94936700EF07FC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC972C94936700EF07FC /* ProfileView.swift */; };
+		6F2EBC9A2C94937700EF07FC /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC992C94937700EF07FC /* UserProfileView.swift */; };
+		6F2EBC9C2C94938400EF07FC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC9B2C94938400EF07FC /* HomeView.swift */; };
+		6F2EBC9E2C9493F900EF07FC /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC9D2C9493F900EF07FC /* WelcomeView.swift */; };
+		6F2EBCA02C94947200EF07FC /* CarBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBC9F2C94947200EF07FC /* CarBox.swift */; };
+		6F2EBCA22C94949800EF07FC /* LocationSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCA12C94949800EF07FC /* LocationSearchBar.swift */; };
+		6F2EBCA42C9494C200EF07FC /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCA32C9494C200EF07FC /* Shared.swift */; };
+		6F2EBCA62C94964500EF07FC /* CarViewModell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCA52C94964500EF07FC /* CarViewModell.swift */; };
+		6F2EBCA82C94965300EF07FC /* RideViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCA72C94965300EF07FC /* RideViewModel.swift */; };
+		6F2EBCAA2C9496EE00EF07FC /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCA92C9496EE00EF07FC /* UserViewModel.swift */; };
+		6F2EBCAC2C94973400EF07FC /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCAB2C94973400EF07FC /* FireStoreService.swift */; };
+		6F2EBCAF2C9497E100EF07FC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCAE2C9497E100EF07FC /* User.swift */; };
+		6F2EBCB12C9497EE00EF07FC /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCB02C9497EE00EF07FC /* Car.swift */; };
+		6F2EBCB32C94980200EF07FC /* Ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F2EBCB22C94980200EF07FC /* Ride.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +82,25 @@
 		2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		22C6DF082C91D31A00F41EB3 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		22C6DF3B2C91F78000F41EB3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6F2EBC832C948E7100EF07FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		6F2EBC852C948E9100EF07FC /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		6F2EBC872C948EB700EF07FC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		6F2EBC932C94933400EF07FC /* RideDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideDetails.swift; sourceTree = "<group>"; };
+		6F2EBC952C94934000EF07FC /* CarDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarDetails.swift; sourceTree = "<group>"; };
+		6F2EBC972C94936700EF07FC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		6F2EBC992C94937700EF07FC /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		6F2EBC9B2C94938400EF07FC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		6F2EBC9D2C9493F900EF07FC /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		6F2EBC9F2C94947200EF07FC /* CarBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarBox.swift; sourceTree = "<group>"; };
+		6F2EBCA12C94949800EF07FC /* LocationSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchBar.swift; sourceTree = "<group>"; };
+		6F2EBCA32C9494C200EF07FC /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		6F2EBCA52C94964500EF07FC /* CarViewModell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarViewModell.swift; sourceTree = "<group>"; };
+		6F2EBCA72C94965300EF07FC /* RideViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideViewModel.swift; sourceTree = "<group>"; };
+		6F2EBCA92C9496EE00EF07FC /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		6F2EBCAB2C94973400EF07FC /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
+		6F2EBCAE2C9497E100EF07FC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6F2EBCB02C9497EE00EF07FC /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
+		6F2EBCB22C94980200EF07FC /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,16 +158,13 @@
 		002ABF692C73A3A100FFCC86 /* carQuest */ = {
 			isa = PBXGroup;
 			children = (
+				6F2EBC822C948D8F00EF07FC /* Services */,
+				6F2EBC812C948D7F00EF07FC /* ViewModels */,
+				6F2EBC7F2C948C6400EF07FC /* View */,
 				00E32F022C763E9300840AAA /* Font */,
 				2287A97C2C94798500EB7D34 /* Utilities */,
 				004203902C76233000B7FFCD /* Info.plist */,
-				2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */,
 				002ABF6A2C73A3A100FFCC86 /* carQuestApp.swift */,
-				002ABF6C2C73A3A100FFCC86 /* ContentView.swift */,
-				00FB293C2C7E2A1600A67EF1 /* SignInView.swift */,
-				22C6DF082C91D31A00F41EB3 /* SignUpView.swift */,
-				00BF079B2C80D21E000404AA /* listingCreation.swift */,
-				00BB2DDE2C91E1D7003379DA /* settingsView.swift */,
 				002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */,
 				22C6DF3B2C91F78000F41EB3 /* GoogleService-Info.plist */,
 				002ABF702C73A3A300FFCC86 /* Preview Content */,
@@ -158,8 +193,134 @@
 			isa = PBXGroup;
 			children = (
 				2287A97D2C94799C00EB7D34 /* Utilities.swift */,
+				6F2EBC832C948E7100EF07FC /* Constants.swift */,
+				6F2EBC852C948E9100EF07FC /* Helpers.swift */,
+				6F2EBC872C948EB700EF07FC /* Extensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6F2EBC7F2C948C6400EF07FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBC8A2C948FCC00EF07FC /* ViewsComponents */,
+				6F2EBC892C948FA900EF07FC /* Views */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6F2EBC812C948D7F00EF07FC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBCA52C94964500EF07FC /* CarViewModell.swift */,
+				6F2EBCA72C94965300EF07FC /* RideViewModel.swift */,
+				6F2EBCA92C9496EE00EF07FC /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		6F2EBC822C948D8F00EF07FC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBCB42C94980800EF07FC /* Authentication */,
+				6F2EBCAD2C94979400EF07FC /* FireStore */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6F2EBC892C948FA900EF07FC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				002ABF6C2C73A3A100FFCC86 /* ContentView.swift */,
+				6F2EBC922C9492CD00EF07FC /* Home */,
+				6F2EBC912C94923A00EF07FC /* RideQuest */,
+				6F2EBC902C94921600EF07FC /* Settings */,
+				6F2EBC8F2C9491DA00EF07FC /* RideDetails */,
+				6F2EBC8E2C9491CC00EF07FC /* Profile */,
+				6F2EBC8C2C948FEA00EF07FC /* OnBoarding */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6F2EBC8A2C948FCC00EF07FC /* ViewsComponents */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBC9F2C94947200EF07FC /* CarBox.swift */,
+				6F2EBCA12C94949800EF07FC /* LocationSearchBar.swift */,
+				6F2EBCA32C9494C200EF07FC /* Shared.swift */,
+			);
+			path = ViewsComponents;
+			sourceTree = "<group>";
+		};
+		6F2EBC8C2C948FEA00EF07FC /* OnBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				00FB293C2C7E2A1600A67EF1 /* SignInView.swift */,
+				22C6DF082C91D31A00F41EB3 /* SignUpView.swift */,
+				6F2EBC9D2C9493F900EF07FC /* WelcomeView.swift */,
+			);
+			path = OnBoarding;
+			sourceTree = "<group>";
+		};
+		6F2EBC8E2C9491CC00EF07FC /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBC972C94936700EF07FC /* ProfileView.swift */,
+				6F2EBC992C94937700EF07FC /* UserProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		6F2EBC8F2C9491DA00EF07FC /* RideDetails */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBC932C94933400EF07FC /* RideDetails.swift */,
+				6F2EBC952C94934000EF07FC /* CarDetails.swift */,
+			);
+			path = RideDetails;
+			sourceTree = "<group>";
+		};
+		6F2EBC902C94921600EF07FC /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				00BB2DDE2C91E1D7003379DA /* settingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		6F2EBC912C94923A00EF07FC /* RideQuest */ = {
+			isa = PBXGroup;
+			children = (
+				00BF079B2C80D21E000404AA /* listingCreation.swift */,
+			);
+			path = RideQuest;
+			sourceTree = "<group>";
+		};
+		6F2EBC922C9492CD00EF07FC /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBC9B2C94938400EF07FC /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		6F2EBCAD2C94979400EF07FC /* FireStore */ = {
+			isa = PBXGroup;
+			children = (
+				6F2EBCAB2C94973400EF07FC /* FireStoreService.swift */,
+				6F2EBCAE2C9497E100EF07FC /* User.swift */,
+				6F2EBCB02C9497EE00EF07FC /* Car.swift */,
+				6F2EBCB22C94980200EF07FC /* Ride.swift */,
+			);
+			path = FireStore;
+			sourceTree = "<group>";
+		};
+		6F2EBCB42C94980800EF07FC /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,13 +428,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
+				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
+				6F2EBCA22C94949800EF07FC /* LocationSearchBar.swift in Sources */,
+				6F2EBCAF2C9497E100EF07FC /* User.swift in Sources */,
+				6F2EBCB12C9497EE00EF07FC /* Car.swift in Sources */,
 				2287A9812C94825D00EB7D34 /* AuthenticationManager.swift in Sources */,
 				00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */,
+				6F2EBC862C948E9100EF07FC /* Helpers.swift in Sources */,
+				6F2EBC9E2C9493F900EF07FC /* WelcomeView.swift in Sources */,
 				2287A97E2C94799C00EB7D34 /* Utilities.swift in Sources */,
+				6F2EBCA62C94964500EF07FC /* CarViewModell.swift in Sources */,
 				22C6DF092C91D31A00F41EB3 /* SignUpView.swift in Sources */,
 				002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */,
+				6F2EBCA42C9494C200EF07FC /* Shared.swift in Sources */,
+				6F2EBCB32C94980200EF07FC /* Ride.swift in Sources */,
 				002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */,
+				6F2EBCAC2C94973400EF07FC /* FireStoreService.swift in Sources */,
 				00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */,
+				6F2EBC9A2C94937700EF07FC /* UserProfileView.swift in Sources */,
+				6F2EBC882C948EB700EF07FC /* Extensions.swift in Sources */,
+				6F2EBC942C94933400EF07FC /* RideDetails.swift in Sources */,
+				6F2EBC9C2C94938400EF07FC /* HomeView.swift in Sources */,
+				6F2EBC982C94936700EF07FC /* ProfileView.swift in Sources */,
+				6F2EBCA82C94965300EF07FC /* RideViewModel.swift in Sources */,
+				6F2EBCA02C94947200EF07FC /* CarBox.swift in Sources */,
+				6F2EBC842C948E7100EF07FC /* Constants.swift in Sources */,
+				6F2EBCAA2C9496EE00EF07FC /* UserViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
