@@ -37,6 +37,7 @@ final class AuthenticationViewModel: ObservableObject {
 }
 struct SignInView: View {
     @StateObject private var viewModel = AuthenticationViewModel()
+    
     @State var email: String = ""
     @State var password: String = ""
     @State private var isBoxChecked = false
