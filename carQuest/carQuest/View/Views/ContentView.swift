@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var isHeartFilled: Bool = false
     var body: some View {
         NavigationView {
             VStack {
@@ -22,48 +20,45 @@ struct ContentView: View {
                         .resizable()
                         .frame(width:30, height:30)
                         .foregroundColor(Color("Foreground"))
-                } /*.offset(y: -540)*/
+                }
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
-                //                .offset(y: -570)
                 ScrollView{
                     VStack{
                         Text("Welcome, Guest!")
                             .font(Font.custom("Jost-Regular", size:30))
                         HStack{
                             Text("Recently viewed")
-                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(Font.custom("Jost-Regular", size:20))
+                            Spacer()
                             Text("See all")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
                                 .font(Font.custom("Jost-Regular", size:15))
                                 .underline()
                         }
                         HStack{
-                            imageBox()
-                            imageBox()
+                            imageBox(imageName: "carQuestLogo")
+                            imageBox(imageName: "carExample")
                         }
                         HStack{
-                            imageBox()
-                            imageBox()
+                            imageBox(imageName: "carQuestLogo")
+                            imageBox(imageName: "carQuestLogo")
                         }
                         RoundedRectangle(cornerRadius: 70)
                             .frame(width:345, height:1)
                         HStack{
-                            Text("Saved for later")
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("Liked vehicles")
                                 .font(Font.custom("Jost-Regular", size:20))
+                            Spacer()
                             Text("See all")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
                                 .font(Font.custom("Jost-Regular", size:15))
                                 .underline()
                         }
                         HStack{
-                            imageBox()
-                            imageBox()
+                           
                         }
                     }
-                }.frame(width:350)
+                    .frame(width:375)
+                }
                 
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
@@ -90,71 +85,20 @@ struct ContentView: View {
             .padding()
         }.navigationViewStyle(StackNavigationViewStyle())
     }
-    //structs
-    func image (_ image: Image, show: Bool) -> some View {
-            image
-            .resizable()
-            .tint(isHeartFilled ? .white : .black)
-            .offset(x:65, y:-65)
-            .frame(width:40, height:40)
-    }
-    
-    
 }
 
 #Preview {
     ContentView()
 }
-struct imageBox: View
-{
-    var _name = ""
 
-    var body: some View {
-        ZStack{
-            FittedImage(imageName: _name, width: 180, height: 180)
-            Image(systemName: "heart")
-                    .resizable()
-                    .foregroundColor(.white)
-                    .frame(width:40, height:35)
-                    .offset(x:65, y:-65)
-        }
-        
-    }
-}
-
-struct FittedImage: View
-{
+struct imageBox: View {
     var imageName: String
-    let width: CGFloat
-    let height: CGFloat
-
     var body: some View {
-        VStack {
+        VStack{
             Image(imageName)
                 .resizable()
-                .aspectRatio(1, contentMode: .fit)
+                .frame(width:200, height:200)
+                .clipped()
         }
-        .frame(width: width, height: height)
     }
 }
-
-//Unfitted image struct
-
-//struct imageBox2: View {
-//    var body: some View{
-//        ZStack{
-//            Image("carExample")
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width:180, height:180)
-//            Image(systemName: "heart")
-//                .resizable()
-//                .foregroundColor(.white)
-//                .frame(width:35, height:35)
-//                .offset(x:65, y:-65)
-//        }
-//        Text("2019 Civic LX white 4 door")
-//            .font(Font.custom("Jost-Regular", size: 15))
-//            .lineLimit(1)
-//    }
-//}

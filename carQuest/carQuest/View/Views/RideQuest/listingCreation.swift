@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import PhotosUI
 
 struct listingCreation: View {
     @State var typeOfCar: String
@@ -18,6 +19,10 @@ struct listingCreation: View {
     let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
     @State var previewListing = false
     @State var date = Date()
+    @State private var photoItem1: PhotosPickerItem?
+    @State private var listedPhoto1: Image?
+    @State private var photoItem2: PhotosPickerItem?
+    @State private var listedPhoto2: Image?
     var suggestions: Array = ["Audi", "BMW", "Fiat", "Ford"]
     var body: some View {
         VStack{
@@ -47,13 +52,11 @@ struct listingCreation: View {
                     }.onTapGesture {
                         previewListing = true}
                     .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: $carYear, make: $make, model: $model, description: $description, typeOfCar: $typeOfCar, date: $date)
+                        carQuest.previewListing(carYear: $carYear, make: $make, model: $model, description: $description, typeOfCar: $typeOfCar, date: $date, listedPhoto1: $listedPhoto1, listedPhoto2: $listedPhoto2)
                         }
             }
             ScrollView(showsIndicators:false){
-                Text("Type of car")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                headline(headerText: "Type")
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{
                         carType(type: "SUV")
@@ -70,9 +73,7 @@ struct listingCreation: View {
                         
                     }
                 }.frame(maxWidth: 375, alignment: .leading)
-                Text("Make")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                headline(headerText: "Make")
                 TextField("BMW, Honda, etc.", text: $make)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
@@ -81,9 +82,7 @@ struct listingCreation: View {
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
                 
-                Text("Model")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                headline(headerText: "Model")
                 TextField("Civic, 4Runner, etc.", text: $model)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
@@ -92,21 +91,17 @@ struct listingCreation: View {
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
                     .disableAutocorrection(true)
-                Text("Year")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                headline(headerText: "Year")
                 Picker("Select year of vehicle", selection: $carYear){
-                                ForEach(years, id: \.self) {
-                                    Text($0)
-                                        
-                                }
+                    ForEach(years, id: \.self) {
+                        Text($0)
+                        
+                    }
                 }
                 .frame(width:375, height:100)
                 .pickerStyle(.inline)
-    
-                Text("Description")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                
+                headline(headerText: "Description")
                 TextField("Description of vehicle", text: $description)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
@@ -114,9 +109,7 @@ struct listingCreation: View {
                     .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
-                Text("Location")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
+                headline(headerText: "Location")
                 TextField("City, zip, address", text: $location)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
@@ -125,36 +118,74 @@ struct listingCreation: View {
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
                     .disableAutocorrection(true)
-                Text("Photos")
-                    .font(Font.custom("ZingRustDemo-Base", size:30))
-                    .frame(maxWidth: 375, alignment: .leading)
-                
-                //asks for location perms
-                //                .onTapGesture {
-                //                    locationManager.checkLocationAuthorization()
-                //                }
-                
-                // gives coordinates
-                //            if let coordinate = locationManager.lastKnownLocation {
-                //                Text("\(reverseGeocoding(latitude:37.334730, longitude: -122.008919))")
-                //                Text("Latitude: \(coordinate.latitude)")
-                //                    .font(Font.custom("ZingRustDemo-Base", size:20))
-                //                    .frame(maxWidth: 375, alignment: .leading)
-                //                Text("Longitude: \(coordinate.longitude)")
-                //                    .font(Font.custom("ZingRustDemo-Base", size:20))
-                //                    .frame(maxWidth: 375, alignment: .leading)
-                //                       } else {
-                //                           Text("Unknown Location")
-                //                               .font(Font.custom("ZingRustDemo-Base", size:20))
-                //                               .frame(maxWidth: 375, alignment: .leading)
-                //                       }
-                
+                headline(headerText: "Photos")
+                ScrollView(.horizontal, showsIndicators: false){
+                    HStack{
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width:200, height:200)
+                                .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
+                            PhotosPicker("Select image", selection: $photoItem1, matching: .images)
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/Color(red: 0.723, green: 0.717, blue: 0.726)/*@END_MENU_TOKEN@*/)
+                            
+                            listedPhoto1?
+                                .resizable()
+                                .scaledToFill()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 200, height: 200)
+                                .clipped()
+                        }
+                        .onChange(of: photoItem1) {
+                            Task {
+                                if let loaded = try? await photoItem1?.loadTransferable(type: Image.self) {
+                                    listedPhoto1 = loaded
+                                } else {
+                                    print("Failed")
+                                }
+                            }
+                        }
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width:200, height:200)
+                                .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
+                            PhotosPicker("Select image", selection: $photoItem2, matching: .images)
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(/*@START_MENU_TOKEN@*/Color(red: 0.723, green: 0.717, blue: 0.726)/*@END_MENU_TOKEN@*/)
+                            
+                            listedPhoto2?
+                                .resizable()
+                                .scaledToFill()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 200, height: 200)
+                                .clipped()
+                        }
+                        .onChange(of: photoItem2) {
+                            Task {
+                                if let loaded = try? await photoItem2?.loadTransferable(type: Image.self) {
+                                    listedPhoto2 = loaded
+                                } else {
+                                    print("Failed")
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 #Preview {
     listingCreation(typeOfCar: "", location: "", model: "", make: "", description: "")
+}
+
+struct headline: View {
+    var headerText: String
+    var body: some View {
+        Text(headerText)
+            .font(Font.custom("ZingRustDemo-Base", size:30))
+            .frame(maxWidth: 375, alignment: .leading)
+    }
 }
 
 struct carType: View {
@@ -228,6 +259,8 @@ struct previewListing: View {
     @Binding var description: String
     @Binding var typeOfCar: String
     @Binding var date: Date
+    @Binding var listedPhoto1: Image?
+    @Binding var listedPhoto2: Image?
     var body: some View{
         VStack{
             RoundedRectangle(cornerRadius: 70)
@@ -237,9 +270,20 @@ struct previewListing: View {
                 .font(.custom("Jost-Regular", size: 30))
                 .foregroundColor(.black)
             ScrollView{
-                Image("carQuestLogo")
-                    .resizable()
-                    .frame(width:375, height:375)
+                ScrollView(.horizontal, showsIndicators: false)
+                {
+                    HStack{
+                        listedPhoto1?
+                            .resizable()
+                            .clipped()
+                            .frame(width:300, height:300)
+                        listedPhoto2?
+                            .resizable()
+                            .clipped()
+                            .frame(width:300, height:300)
+                    }
+                }
+                
                 Text("\(carYear) \(make) \(model) \(typeOfCar)")
                     .font(.custom("Jost-Regular", size: 25))
                     .foregroundColor(.black)
