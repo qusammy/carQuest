@@ -8,39 +8,13 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
-import GoogleSignIn
-import GoogleSignInSwift
 
-struct GoogleSignInResultModel {
-    let idToken: String
-    let accessToken: String
-}
-
-@MainActor
-final class AuthenticationViewModel: ObservableObject {
-    
-    func googleSignIn() async throws{
-        guard let topVC = Utilities.shared.topViewController() else {
-            throw URLError(.cannotFindHost)
-        }
-        
-        let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
-        
-        guard let idToken: String = gidSignInResult.user.idToken?.tokenString else {
-            throw URLError(.badServerResponse)
-        }
-        let accessToken: String = gidSignInResult.user.accessToken.tokenString
-                
-        let tokens = GoogleSignInResultModel(idToken: idToken, accessToken: accessToken)
-        try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
-    }
-}
 struct SignInView: View {
-    @StateObject private var viewModel = AuthenticationViewModel()
+    @StateObject private var viewModelGoogle = AuthenticationViewModel()
+    @StateObject private var viewModel = SignInEmailViewModel()
     
-    @State var email: String = ""
-    @State var password: String = ""
-    @State private var isBoxChecked = false
+    @Binding var showSignInView: Bool
+    @Binding var showLogOut: Bool
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
@@ -79,18 +53,13 @@ struct SignInView: View {
             Text("CARQUEST")
                 .font(Font.custom("ZingRustDemo-Base", size:60))
                 .foregroundColor(Color("Foreground"))
-            Text("Login to your account")
+            Text("Sign In")
                 .font(Font.custom("Jost-Regular", size:30))
                 .foregroundColor(Color("Foreground"))
-            
-            TextField("Email", text: $email)                    .frame(width:250, height:50)
-                .font(.custom("Jost-Regular", size: 20))
-                .background(Color("grayFlip"))
-                .cornerRadius(50)
-                .multilineTextAlignment(.center)
-                .disableAutocorrection(true)
-                .autocapitalization(.none)
-            SecureField("Password", text: $password)
+            Text(viewModel.errorText)
+                .font(Font.custom("Jost-Regular", size:20))
+                .foregroundColor(Color("appColor"))
+            TextField("Email", text: $viewModel.email)                    
                 .frame(width:250, height:50)
                 .font(.custom("Jost-Regular", size: 20))
                 .background(Color("grayFlip"))
@@ -98,26 +67,30 @@ struct SignInView: View {
                 .multilineTextAlignment(.center)
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
-            Button{
-                self.isBoxChecked.toggle()
-            } label: {
-                HStack{
-                    ZStack{
-                        image(Image(systemName: "square.fill"), show: isBoxChecked)
-                            .foregroundColor(Color("Foreground"))
-                        image(Image(systemName: "checkmark.square"), show: isBoxChecked)
-                            .foregroundColor(Color("Background"))
-                        image(Image(systemName: "square"), show: !isBoxChecked)
-                            .foregroundColor(Color("Foreground"))
-                    }
-                    Text("Remember me")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color("Foreground"))
-                }
-            }
+            SecureField("Password", text: $viewModel.password)
+                .frame(width:250, height:50)
+                .font(.custom("Jost-Regular", size: 20))
+                .background(Color("grayFlip"))
+                .cornerRadius(50)
+                .multilineTextAlignment(.center)
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
             VStack{
                 Button(action: {
-                    login()
+                    Task {
+                        do {
+                            try await viewModel.signIn()
+                            showSignInView = false
+                        }catch {
+                            if viewModel.email.isEmpty {
+                                viewModel.errorText = "Please provide a valid email."
+                            }else if viewModel.password.isEmpty {
+                                viewModel.errorText = "Password must have at least 6 characters."
+                            }else {
+                                viewModel.errorText = "Your email or password is incorrect."
+                            }
+                        }
+                    }
                 }, label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
@@ -128,14 +101,24 @@ struct SignInView: View {
                             .foregroundColor(.white)
                     }
                 })
+                HStack {
+                    Text("Don't have an account?")
+                        .font(Font.custom("Jost-Regular", size:20))
+                        .foregroundColor(Color("Foreground"))
+                    NavigationLink(destination: SignUpView(showSignInView: $showSignInView, showLogOut: $showLogOut)) {
+                        Text("Sign Up!")
+                            .font(Font.custom("Jost-Regular", size:20))
+                            .foregroundColor(Color("appColor"))
+                    }
+//                    .onTapGesture {
+//                        showSignInView = false
+//                    }
+                }
                 
-//                GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .dark, style: .wide, state: .normal)){
-//                    
-//                }
                 Button(action: {
                     Task {
                         do {
-                            try await viewModel.googleSignIn()
+                            try await viewModelGoogle.googleSignIn()
                         }catch {
                             print(error)
                         }
@@ -155,39 +138,21 @@ struct SignInView: View {
                         }
                     }
                 })
-                HStack{
-                    Text("Don't have an account?")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color("Foreground"))
-                    NavigationLink(destination: SignUpView()) {
-                        Text("Sign up")
-                            .font(.custom("Jost-Regular", size: 20))
-                            .underline()
-                            .foregroundColor(Color("appColor"))
-                    }
-                }
             }
         }
     }
     func image (_ image: Image, show: Bool) -> some View {
         image
             .resizable()
-            .tint(isBoxChecked ? .black : .black)
             .font(.system(size: 30))
             .scaleEffect(show ? 1 : 0)
             .frame(width:20, height: 20)
     }
     
-    func login() {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
-        }
-    }
+
     
 
 }
 #Preview {
-    SignInView()
+    SignInView(showSignInView: .constant(false), showLogOut: .constant(false))
 }

@@ -8,6 +8,11 @@
 import Foundation
 import FirebaseAuth
 
+
+enum userError: Error {
+    case runtimeError(String)
+}
+
 struct AuthDataResultModel {
     let uid: String
     let email: String?
@@ -25,6 +30,32 @@ final class AuthenticationManager {
     private init() {
         
     }
+    
+    func getAuthenticatedUser() throws -> AuthDataResultModel {
+        guard let user = Auth.auth().currentUser else {
+            throw userError.runtimeError("No user signed in")
+        }
+        return AuthDataResultModel(user: user)
+    }
+    
+    
+    @discardableResult
+    func createUser(email: String, password: String) async throws -> AuthDataResultModel {
+        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        return AuthDataResultModel(user: authDataResult.user)
+    }
+    
+    func signOut() throws {
+        try Auth.auth().signOut()
+    }
+    
+    @discardableResult
+    func signInUser(email: String, password: String) async throws -> AuthDataResultModel {
+        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
+        return AuthDataResultModel(user: authDataResult.user)
+    }
+    
+    
     @discardableResult
     func signInWithGoogle(tokens: GoogleSignInResultModel) async throws  -> AuthDataResultModel{
         let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)

@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var isHeartFilled: Bool = false
+    @Binding var showSignInView: Bool
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -80,7 +82,7 @@ struct ContentView: View {
                     Image("buy")
                         .resizable()
                         .frame(width: 60, height:60)
-                    NavigationLink(destination: SignInView()) {
+                    NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                         Image("profileIcon")
                             .resizable()
                             .frame(width: 55, height:55)
@@ -103,7 +105,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(showSignInView: .constant(false))
 }
 struct imageBox: View
 {
