@@ -70,9 +70,11 @@ struct ContentView: View {
                     Image("gavel")
                         .resizable()
                         .frame(width: 60, height:60)
-                    Image("rent")
-                        .resizable()
-                        .frame(width: 60, height:60)
+                    NavigationLink(destination: rentView().navigationBarBackButtonHidden(true)) {
+                                        Image("rent")
+                                            .resizable()
+                                            .frame(width: 55, height:55)
+                                    }
                     Image("home")
                         .resizable()
                         .frame(width: 60, height:60)

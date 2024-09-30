@@ -17,6 +17,7 @@
 		00CF05332CA313B900E53D2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00CF05322CA313B900E53D2F /* GoogleService-Info.plist */; };
 		00CF05352CA3144000E53D2F /* listingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF05342CA3144000E53D2F /* listingView.swift */; };
 		00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */; };
+		00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5C0C02CAB07B900856E1E /* rentView.swift */; };
 		00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB293C2C7E2A1600A67EF1 /* SignInView.swift */; };
 		2287A9792C9474D900EB7D34 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 2287A9782C9474D900EB7D34 /* GoogleSignIn */; };
 		2287A97B2C9474D900EB7D34 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2287A97A2C9474D900EB7D34 /* GoogleSignInSwift */; };
@@ -82,6 +83,7 @@
 		00CF05322CA313B900E53D2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		00CF05342CA3144000E53D2F /* listingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingView.swift; sourceTree = "<group>"; };
 		00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZingRustDemo-Base.otf"; sourceTree = "<group>"; };
+		00F5C0C02CAB07B900856E1E /* rentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rentView.swift; sourceTree = "<group>"; };
 		00FB293C2C7E2A1600A67EF1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		2287A97D2C94799C00EB7D34 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			children = (
 				00BF079B2C80D21E000404AA /* listingCreation.swift */,
 				00CF05342CA3144000E53D2F /* listingView.swift */,
+				00F5C0C02CAB07B900856E1E /* rentView.swift */,
 			);
 			path = RideQuest;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22CB13652CA5A63A00BACD8F /* AuthenticationViewModels.swift in Sources */,
+				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
 				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
 				6F2EBCA22C94949800EF07FC /* LocationSearchBar.swift in Sources */,

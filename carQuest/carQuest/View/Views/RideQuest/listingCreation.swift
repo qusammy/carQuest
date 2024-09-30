@@ -4,26 +4,29 @@
 //
 //  Created by Maddy Quinn on 8/29/24.
 //  Additions by James Hollander
-
 import SwiftUI
 import CoreLocation
 import PhotosUI
-
+import FirebaseFirestore
+import Combine
+import FirebaseAnalytics
 struct listingCreation: View {
-    @State var typeOfCar: String
+    let db = Firestore.firestore()
+    
+    @State var carType: String
     @State var location: String
-    @State var model: String
-    @State var make: String
-    @State var description: String
+    @State var carModel: String
+    @State var carMake: String
+    @State var carDescription: String
     @State var carYear = "2024"
     let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
-    @State var previewListing = false
     @State var date = Date()
     @State private var photoItem1: PhotosPickerItem?
     @State private var listedPhoto1: Image?
     @State private var photoItem2: PhotosPickerItem?
     @State private var listedPhoto2: Image?
-    var suggestions: Array = ["Audi", "BMW", "Fiat", "Ford"]
+    
+    @State var previewListing = false
     var body: some View {
         VStack{
             Button(action: {
@@ -52,38 +55,28 @@ struct listingCreation: View {
                     }.onTapGesture {
                         previewListing = true}
                     .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: $carYear, make: $make, model: $model, description: $description, typeOfCar: $typeOfCar, date: $date, listedPhoto1: $listedPhoto1, listedPhoto2: $listedPhoto2)
+                        carQuest.previewListing(carYear: $carYear, make: $carMake, model: $carModel, description: $carDescription, typeOfCar: $carType, date: $date, listedPhoto1: $listedPhoto1, listedPhoto2: $listedPhoto2)
                         }
             }
             ScrollView(showsIndicators:false){
-                headline(headerText: "Type")
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack{
-                        carType(type: "SUV")
-                            .onTapGesture {
-                                typeOfCar = "SUV"
-                            }
-                        carType(type: "Sedan")
-                        carType(type: "Coupe")
-                        carType(type: "Truck")
-                        carType(type: "Minivan")
-                        carType(type: "Hatchback")
-                        carType(type: "Van")
-                        carType(type: "Convertible")
-                        
+                headline(headerText: "Year")
+                Picker("Select year of vehicle", selection: $carYear){
+                    ForEach(years, id: \.self) {
+                        Text($0)
                     }
-                }.frame(maxWidth: 375, alignment: .leading)
+                }
+                .frame(width:375, height:100)
+                .pickerStyle(.inline)
                 headline(headerText: "Make")
-                TextField("BMW, Honda, etc.", text: $make)
+                TextField("BMW, Honda, etc.", text: $carMake)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
                     .font(.custom("Jost-Regular", size: 20))
                     .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
-                
                 headline(headerText: "Model")
-                TextField("Civic, 4Runner, etc.", text: $model)
+                TextField("Civic, 4Runner, etc.", text: $carModel)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
                     .font(.custom("Jost-Regular", size: 20))
@@ -91,18 +84,17 @@ struct listingCreation: View {
                     .cornerRadius(10)
                     .multilineTextAlignment(.leading)
                     .disableAutocorrection(true)
-                headline(headerText: "Year")
-                Picker("Select year of vehicle", selection: $carYear){
-                    ForEach(years, id: \.self) {
-                        Text($0)
-                        
-                    }
-                }
-                .frame(width:375, height:100)
-                .pickerStyle(.inline)
+                headline(headerText: "Type")
+                TextField("Sedan, coupe, hatchback, etc.", text: $carType)
+                    .foregroundColor(.black)
+                    .frame(width:375, height:50)
+                    .font(.custom("Jost-Regular", size: 20))
+                    .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
+                    .cornerRadius(10)
+                    .multilineTextAlignment(.leading)
                 
                 headline(headerText: "Description")
-                TextField("Description of vehicle", text: $description)
+                TextField("Description of vehicle", text: $carDescription)
                     .foregroundColor(.black)
                     .frame(width:375, height:50)
                     .font(.custom("Jost-Regular", size: 20))
@@ -171,14 +163,34 @@ struct listingCreation: View {
                         }
                     }
                 }
+                Button(action: {
+                    createListing()
+                }, label: {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(maxWidth:150, maxHeight:100)
+                            .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                        Text("Post Listing")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.white)
+                    }
+                }).frame(maxWidth: 375, alignment: .center)
             }
         }
     }
+    func createListing(){
+        db.collection("carListings").addDocument(data: [
+            "carMake": carMake,
+            "carDescription": carDescription,
+            "carModel": carModel,
+            "carType": carType,
+            "carYear": carYear,
+        ])
+    }
 }
 #Preview {
-    listingCreation(typeOfCar: "", location: "", model: "", make: "", description: "")
+    listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "")
 }
-
 struct headline: View {
     var headerText: String
     var body: some View {
@@ -187,71 +199,6 @@ struct headline: View {
             .frame(maxWidth: 375, alignment: .leading)
     }
 }
-
-struct carType: View {
-    var type: String
-    @State var isTypeOfCarSelected: Bool = false
-    var body: some View {
-            VStack{
-                Button(action: { isTypeOfCarSelected.toggle() },
-                          label: {
-                              switch isTypeOfCarSelected {
-                                  case true:
-                                  ZStack{
-                                      RoundedRectangle(cornerRadius: 10)
-                                          .frame(width:100, height:60)
-                                          .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                      Text("\(type)")
-                                          .font(.custom("Jost-Regular", size: 17))
-                                          .foregroundColor(.white)
-                                        }
-                                  default:
-                                  ZStack{
-                                      RoundedRectangle(cornerRadius: 10)
-                                          .frame(width:100, height:60)
-                                          .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.92))
-                                      Text("\(type)")
-                                          .font(.custom("Jost-Regular", size: 17))
-                                          .foregroundColor(.black)
-                                  }
-                }
-            })
-        }
-    }
-}
- 
-struct carBrand: View {
-    var brand: String
-    @State var isCarBrandSelected: Bool = false
-    var body: some View {
-        VStack{
-            Button(action: { isCarBrandSelected.toggle() },
-                    label: {
-                        switch isCarBrandSelected {
-                            case true:
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .frame(width:100, height:60)
-                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                      Text("\(brand)")
-                                          .font(.custom("Jost-Regular", size: 17))
-                                          .foregroundColor(.white)
-                                    }
-                                  default:
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .frame(width:100, height:60)
-                                        .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.92))
-                                    Text("\(brand)")
-                                        .font(.custom("Jost-Regular", size:17))
-                                        .foregroundColor(.black)
-                                  }
-                              }
-                   })
-        }
-    }
-}
-
 struct previewListing: View {
     @Binding var carYear: String
     @Binding var make: String
