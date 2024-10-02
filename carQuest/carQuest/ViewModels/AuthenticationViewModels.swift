@@ -17,6 +17,14 @@ final class ProfileViewModel: ObservableObject {
         try AuthenticationManager.shared.signOut()
     }
     
+    func resetPassword(email: String) async throws {
+//        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
+//        guard let email = authUser.email else {
+//            throw URLError(.fileDoesNotExist)
+//        }
+        try await Auth.auth().sendPasswordReset(withEmail: email)
+    }
+    
 }
 
 struct GoogleSignInResultModel {

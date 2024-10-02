@@ -81,6 +81,7 @@ struct SignInView: View {
                         do {
                             try await viewModel.signIn()
                             showSignInView = false
+                            showLogOut = true
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
@@ -102,6 +103,16 @@ struct SignInView: View {
                     }
                 })
                 HStack {
+                    Text("Forgot Password?")
+                        .font(Font.custom("Jost-Regular", size:20))
+                        .foregroundColor(Color("Foreground"))
+                    NavigationLink(destination: ResetPassword()) {
+                        Text("Click Here!")
+                            .font(Font.custom("Jost-Regular", size:20))
+                            .foregroundColor(Color("appColor"))
+                    }
+                }
+                HStack {
                     Text("Don't have an account?")
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundColor(Color("Foreground"))
@@ -119,6 +130,7 @@ struct SignInView: View {
                     Task {
                         do {
                             try await viewModelGoogle.googleSignIn()
+                            showLogOut = true
                         }catch {
                             print(error)
                         }

@@ -19,6 +19,7 @@
 		00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */; };
 		00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5C0C02CAB07B900856E1E /* rentView.swift */; };
 		00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB293C2C7E2A1600A67EF1 /* SignInView.swift */; };
+		227AF15B2CAD86D2005A23F0 /* ResetPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AF15A2CAD86D2005A23F0 /* ResetPassword.swift */; };
 		2287A9792C9474D900EB7D34 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 2287A9782C9474D900EB7D34 /* GoogleSignIn */; };
 		2287A97B2C9474D900EB7D34 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2287A97A2C9474D900EB7D34 /* GoogleSignInSwift */; };
 		2287A97E2C94799C00EB7D34 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2287A97D2C94799C00EB7D34 /* Utilities.swift */; };
@@ -85,6 +86,7 @@
 		00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZingRustDemo-Base.otf"; sourceTree = "<group>"; };
 		00F5C0C02CAB07B900856E1E /* rentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rentView.swift; sourceTree = "<group>"; };
 		00FB293C2C7E2A1600A67EF1 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		227AF15A2CAD86D2005A23F0 /* ResetPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPassword.swift; sourceTree = "<group>"; };
 		2287A97D2C94799C00EB7D34 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		22C6DF082C91D31A00F41EB3 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				22C6DF082C91D31A00F41EB3 /* RootView.swift */,
 				6F2EBC9D2C9493F900EF07FC /* WelcomeView.swift */,
 				22CB13662CA5B5C500BACD8F /* SignUpView.swift */,
+				227AF15A2CAD86D2005A23F0 /* ResetPassword.swift */,
 			);
 			path = OnBoarding;
 			sourceTree = "<group>";
@@ -443,6 +446,7 @@
 				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
 				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
+				227AF15B2CAD86D2005A23F0 /* ResetPassword.swift in Sources */,
 				6F2EBCA22C94949800EF07FC /* LocationSearchBar.swift in Sources */,
 				6F2EBCAF2C9497E100EF07FC /* User.swift in Sources */,
 				6F2EBCB12C9497EE00EF07FC /* Car.swift in Sources */,

@@ -83,7 +83,7 @@ struct SignUpView: View {
                         do {
                             try await viewModel.signUp()
                             showSignInView = false
-                            
+                            showLogOut = true
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
