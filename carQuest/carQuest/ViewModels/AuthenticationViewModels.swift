@@ -68,4 +68,8 @@ final class SignInEmailViewModel: ObservableObject {
         }
         try await AuthenticationManager.shared.signInUser(email: email, password: password)
     }
+    
+    func resetPassword(email: String) async throws {
+        try await Auth.auth().sendPasswordReset(withEmail: email)
+    }
 }

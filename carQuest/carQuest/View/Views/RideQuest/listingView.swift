@@ -5,7 +5,10 @@
 //  Created by Maddy Quinn on 9/24/24.
 //
 import SwiftUI
+import Firebase
+import FirebaseFirestore
 struct listingView: View {
+    let db = Firestore.firestore()
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     var body: some View {
@@ -97,7 +100,7 @@ struct listingView: View {
                             .foregroundColor(.black)
                             .frame(maxWidth: 375, alignment: .leading)
                     }
-                    Text("description")
+                    Text("Description")
                         .font(.custom("Jost-Regular", size: 20))
                         .foregroundColor(.black)
                         .frame(maxWidth: 375, alignment: .leading)
@@ -110,8 +113,15 @@ struct listingView: View {
             }
         }
     }
+    func readListings(){
+        db.collection("carListings").document().getDocument { (document, error) in
+            if let document = document {
+                let make = document.data()?["carMake"] as? String
+                let type = document.data()?["carType"] as? Bool
+            }
+        }
+    }
 }
 #Preview {
     listingView()
 }
-

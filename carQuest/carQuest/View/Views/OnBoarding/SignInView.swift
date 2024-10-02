@@ -59,7 +59,7 @@ struct SignInView: View {
             Text(viewModel.errorText)
                 .font(Font.custom("Jost-Regular", size:20))
                 .foregroundColor(Color("appColor"))
-            TextField("Email", text: $viewModel.email)                    
+            TextField("Email", text: $viewModel.email)
                 .frame(width:250, height:50)
                 .font(.custom("Jost-Regular", size: 20))
                 .background(Color("grayFlip"))
@@ -81,6 +81,7 @@ struct SignInView: View {
                         do {
                             try await viewModel.signIn()
                             showSignInView = false
+                            showLogOut = true
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
@@ -102,6 +103,16 @@ struct SignInView: View {
                     }
                 })
                 HStack {
+                    Text("Forgot Password?")
+                        .font(Font.custom("Jost-Regular", size:20))
+                        .foregroundColor(Color("Foreground"))
+                    NavigationLink(destination: ResetPassword()) {
+                        Text("Click Here!")
+                            .font(Font.custom("Jost-Regular", size:20))
+                            .foregroundColor(Color("appColor"))
+                    }
+                }
+                HStack {
                     Text("Don't have an account?")
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundColor(Color("Foreground"))
@@ -110,15 +121,13 @@ struct SignInView: View {
                             .font(Font.custom("Jost-Regular", size:20))
                             .foregroundColor(Color("appColor"))
                     }
-//                    .onTapGesture {
-//                        showSignInView = false
-//                    }
                 }
                 
                 Button(action: {
                     Task {
                         do {
                             try await viewModelGoogle.googleSignIn()
+                            showLogOut = true
                         }catch {
                             print(error)
                         }

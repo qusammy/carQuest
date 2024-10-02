@@ -55,6 +55,10 @@ final class AuthenticationManager {
         return AuthDataResultModel(user: authDataResult.user)
     }
     
+    func resetPassword(email: String) async throws{
+        try await Auth.auth().sendPasswordReset(withEmail: email)
+    }
+    
     
     @discardableResult
     func signInWithGoogle(tokens: GoogleSignInResultModel) async throws  -> AuthDataResultModel{
