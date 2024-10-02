@@ -10,7 +10,7 @@ import SwiftUI
 struct ResetPassword: View {
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-    @StateObject var viewModel = ProfileViewModel()
+    @StateObject var viewModel = SignInEmailViewModel()
     @State private var email: String = ""
     
     @State private var showingAlert = false
@@ -50,6 +50,9 @@ struct ResetPassword: View {
             Text("CARQUEST")
                 .font(Font.custom("ZingRustDemo-Base", size:60))
                 .foregroundColor(Color("Foreground"))
+            Text(viewModel.errorText)
+                .font(Font.custom("Jost-Regular", size:20))
+                .foregroundColor(Color("appColor"))
             TextField("Email", text: $email)
                 .frame(width:250, height:50)
                 .font(.custom("Jost-Regular", size: 20))
@@ -63,8 +66,9 @@ struct ResetPassword: View {
                     do {
                         try await viewModel.resetPassword(email: email)
                         showingAlert.toggle()
+                        viewModel.errorText = ""
                     }catch {
-                        print(error)
+                        viewModel.errorText = "There is no account using this email."
                     }
                 }
             }, label: {

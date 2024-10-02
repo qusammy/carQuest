@@ -59,7 +59,7 @@ struct SignInView: View {
             Text(viewModel.errorText)
                 .font(Font.custom("Jost-Regular", size:20))
                 .foregroundColor(Color("appColor"))
-            TextField("Email", text: $viewModel.email)                    
+            TextField("Email", text: $viewModel.email)
                 .frame(width:250, height:50)
                 .font(.custom("Jost-Regular", size: 20))
                 .background(Color("grayFlip"))
@@ -121,9 +121,6 @@ struct SignInView: View {
                             .font(Font.custom("Jost-Regular", size:20))
                             .foregroundColor(Color("appColor"))
                     }
-//                    .onTapGesture {
-//                        showSignInView = false
-//                    }
                 }
                 
                 Button(action: {

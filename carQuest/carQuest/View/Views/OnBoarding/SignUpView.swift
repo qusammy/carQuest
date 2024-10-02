@@ -15,7 +15,6 @@ struct SignUpView: View {
     
     @Binding var showSignInView: Bool
     @Binding var showLogOut: Bool
-    var errorText: String = ""
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
@@ -84,6 +83,7 @@ struct SignUpView: View {
                             try await viewModel.signUp()
                             showSignInView = false
                             showLogOut = true
+                            viewModel.errorText = ""
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
