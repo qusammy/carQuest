@@ -17,3 +17,22 @@ struct imageBox: View {
         }
     }
 }
+
+struct topNavigationBar: View {
+    var body: some View {
+        VStack{
+            HStack{
+                Text("CARQUEST")
+                    .font(Font.custom("ZingRustDemo-Base", size:50))
+                    .foregroundColor(Color("Foreground"))
+                Spacer()
+                Image(systemName: "bell.fill")
+                    .resizable()
+                    .frame(width:30, height:30)
+                    .foregroundColor(Color("Foreground"))
+            }
+            RoundedRectangle(cornerRadius: 70)
+                .frame(width:345, height:1)
+        }
+    }
+}

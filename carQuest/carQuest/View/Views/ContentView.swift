@@ -1,32 +1,19 @@
-// We Are in james branch
-//  ContentView.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 8/19/24.
-//  Additions by James Hollander
-// when navigation view, use .navigationViewStyle(StackNavigationViewStyle()) at the last bracket
 import SwiftUI
-
+import Firebase
+import FirebaseFirestore
+import FirebaseAuth
+import FirebaseAnalytics
+import Combine
 struct ContentView: View {
     
-    @State private var isHeartFilled: Bool = false
     @Binding var showSignInView: Bool
     
     var body: some View {
         NavigationView {
             VStack {
-                HStack{
-                    Text("CARQUEST")
-                        .font(Font.custom("ZingRustDemo-Base", size:50))
-                        .foregroundColor(Color("Foreground"))
-                    Spacer()
-                    Image(systemName: "bell.fill")
-                        .resizable()
-                        .frame(width:30, height:30)
-                        .foregroundColor(Color("Foreground"))
-                }
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
+                Spacer()
+                    .navigationBarBackButtonHidden(true)
+                topNavigationBar()
                 ScrollView{
                     VStack{
                         Text("Welcome, Guest!")
@@ -40,8 +27,20 @@ struct ContentView: View {
                                 .underline()
                         }
                         HStack{
-                            imageBox(imageName: "carQuestLogo")
-                            imageBox(imageName: "carExample")
+                            VStack{
+                                imageBox(imageName: "carQuestLogo")
+                                Text("")
+                                    .font(Font.custom("Jost-Regular", size:17))
+                                    .frame(maxWidth:200, maxHeight:15)
+                                    .offset(x:-25)
+                            }
+                            VStack{
+                                imageBox(imageName: "carExample")
+                                Text("Recently viewed")
+                                    .font(Font.custom("Jost-Regular", size:17))
+                                    .frame(maxWidth:200, maxHeight:15)
+                                    .offset(x:-40)
+                            }
                         }
                         HStack{
                             imageBox(imageName: "carQuestLogo")
@@ -58,41 +57,46 @@ struct ContentView: View {
                                 .underline()
                         }
                         HStack{
-                           
                         }
-                    }
-                    .frame(width:375)
+                    }.frame(width:375)
                 }
-                
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
-                HStack{
-                    Image("gavel")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    NavigationLink(destination: rentView().navigationBarBackButtonHidden(true)) {
-                                        Image("rent")
-                                            .resizable()
-                                            .frame(width: 55, height:55)
-                                    }
-                    Image("home")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    Image("buy")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                        Image("profileIcon")
-                            .resizable()
-                            .frame(width: 55, height:55)
-                    }
-                }
-            }/*.offset(x:0,y:280)*/
-            .padding()
+               bottomNavigationBar(showSignInView: $showSignInView)
+            }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
-
 #Preview {
-    ContentView()
+    ContentView(showSignInView: .constant(false))
+}
+
+struct bottomNavigationBar: View {
+    @Binding var showSignInView: Bool
+    var body: some View {
+        HStack{
+            Image("gavel")
+                .resizable()
+                .frame(width: 60, height:60)
+            NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                Image("rent")
+                    .resizable()
+                    .frame(width: 55, height:55)
+            }
+            NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
+) {
+                Image("home")
+                    .resizable()
+                    .frame(width: 55, height:55)
+            }
+            Image("buy")
+                .resizable()
+                .frame(width: 60, height:60)
+            NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                Image("profileIcon")
+                    .resizable()
+                    .frame(width: 55, height:55)
+            }
+        }
+    }
 }
