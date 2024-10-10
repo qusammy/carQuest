@@ -6,15 +6,21 @@
 //  Additions by James Hollander
 // when navigation view, use .navigationViewStyle(StackNavigationViewStyle()) at the last bracket
 import SwiftUI
+import FirebaseAuth
+
+
 
 struct ContentView: View {
     
     @State private var isHeartFilled: Bool = false
     @Binding var showSignInView: Bool
-    
+    @StateObject var viewModel = SignInEmailViewModel()
+        
     var body: some View {
         NavigationView {
             VStack {
+                Spacer()
+                    .navigationBarBackButtonHidden(true)
                 HStack{
                     Text("CARQUEST")
                         .font(Font.custom("ZingRustDemo-Base", size:50))
@@ -29,8 +35,17 @@ struct ContentView: View {
                     .frame(width:345, height:1)
                 ScrollView{
                     VStack{
-                        Text("Welcome, Guest!")
-                            .font(Font.custom("Jost-Regular", size:30))
+                        HStack {
+                            if viewModel.displayName == "" {
+                                Text("Welcome User!")
+                                    .font(Font.custom("Jost", size:30))
+                                    .foregroundColor(Color("Foreground"))
+                            }else {
+                                Text("Welcome \(viewModel.displayName)!")
+                                    .font(Font.custom("Jost", size:30))
+                                    .foregroundColor(Color("Foreground"))
+                            }
+                        }
                         HStack{
                             Text("Recently viewed")
                                 .font(Font.custom("Jost-Regular", size:20))
@@ -71,13 +86,15 @@ struct ContentView: View {
                         .resizable()
                         .frame(width: 60, height:60)
                     NavigationLink(destination: rentView().navigationBarBackButtonHidden(true)) {
-                                        Image("rent")
-                                            .resizable()
-                                            .frame(width: 55, height:55)
-                                    }
-                    Image("home")
-                        .resizable()
-                        .frame(width: 60, height:60)
+                        Image("rent")
+                            .resizable()
+                            .frame(width: 55, height:55)
+                    }
+                    NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                        Image("home")
+                            .resizable()
+                            .frame(width: 60, height:60)
+                    }
                     Image("buy")
                         .resizable()
                         .frame(width: 60, height:60)
@@ -90,6 +107,9 @@ struct ContentView: View {
             }/*.offset(x:0,y:280)*/
             .padding()
         }.navigationViewStyle(StackNavigationViewStyle())
+        .task {
+            viewModel.getDisplayName()
+        }
     }
 }
 

@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct ProfileView: View {
     
+    @StateObject private var nameViewModel = SignInEmailViewModel()
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
-    @State var showLogOut: Bool = false
+    @State private var showingAlert: Bool = false
+    
     
     var body: some View {
         NavigationView{
@@ -29,8 +33,8 @@ struct ProfileView: View {
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
                 VStack {
-                    if showLogOut == false {
-                        NavigationLink(destination: SignInView(showSignInView: $showSignInView, showLogOut: $showLogOut)){
+                    if showSignInView == true {
+                        NavigationLink(destination: SignInView(showSignInView: $showSignInView)){
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .frame(width:250, height:50)
@@ -45,9 +49,13 @@ struct ProfileView: View {
                         }
                     }
                     List {
-                        //settings go here e.g. dark mode
                         
-                        if showLogOut == true {
+                        if showSignInView == false {
+                            
+                            if let user = viewModel.user {
+                                Text("UserId: \(user.userId)")
+                            }
+                            
                             Button("Log Out") {
                                 Task {
                                     do {
@@ -58,11 +66,35 @@ struct ProfileView: View {
                                     }
                                 }
                             }
+                            Button {
+                                showingAlert = true
+                            }label: {
+                                Text("Delete Account")
+                                    .foregroundColor(.accentColor)
+                            }.alert("Are you sure you want to delete your account?", isPresented: $showingAlert) {
+                                Button(role: .destructive) {
+                                    Task {
+                                        do {
+                                            try await viewModel.deleteAccount()
+                                            showSignInView = true
+                                        }catch {
+                                            print(error)
+                                        }
+                                    }
+                                }label: {
+                                    Text("Delete Account")
+                                        .font(.custom("Jost-Regular", size: 25))
+                                }
+                            }message: {
+                                Text("This action cannot be undone. \n The info on this account will be unrecoverable")
+                            }
                         }
                     }
-                }.onAppear {
+                }.task {
                     let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                    self.showLogOut = currentUser != nil
+                    self.showSignInView = currentUser == nil
+                    try? await viewModel.loadCurrentUser()
+                
                 }
 
                 .foregroundColor(.accentColor)
@@ -78,9 +110,11 @@ struct ProfileView: View {
                     Image("rent")
                         .resizable()
                         .frame(width: 60, height:60)
-                    Image("home")
-                        .resizable()
-                        .frame(width: 60, height:60)
+                    NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                        Image("home")
+                            .resizable()
+                            .frame(width: 60, height:60)
+                    }
                     Image("buy")
                         .resizable()
                         .frame(width: 60, height:60)

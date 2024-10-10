@@ -6,15 +6,12 @@
 //  Additions by James Hollander
 
 import SwiftUI
-import Firebase
-import FirebaseAuth
 
 struct SignInView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
     
     @Binding var showSignInView: Bool
-    @Binding var showLogOut: Bool
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
@@ -81,7 +78,6 @@ struct SignInView: View {
                         do {
                             try await viewModel.signIn()
                             showSignInView = false
-                            showLogOut = true
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
@@ -116,7 +112,7 @@ struct SignInView: View {
                     Text("Don't have an account?")
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundColor(Color("Foreground"))
-                    NavigationLink(destination: SignUpView(showSignInView: $showSignInView, showLogOut: $showLogOut)) {
+                    NavigationLink(destination: SignUpView(showSignInView: $showSignInView)) {
                         Text("Sign Up!")
                             .font(Font.custom("Jost-Regular", size:20))
                             .foregroundColor(Color("appColor"))
@@ -127,7 +123,7 @@ struct SignInView: View {
                     Task {
                         do {
                             try await viewModelGoogle.googleSignIn()
-                            showLogOut = true
+                            showSignInView = false
                         }catch {
                             print(error)
                         }
@@ -163,5 +159,5 @@ struct SignInView: View {
 
 }
 #Preview {
-    SignInView(showSignInView: .constant(false), showLogOut: .constant(false))
+    SignInView(showSignInView: .constant(false))
 }
