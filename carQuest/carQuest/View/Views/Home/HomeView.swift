@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @State private var isHeartFilled: Bool = false
+    @Binding var showSignInView: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            
+        }
     }
 }
 
-#Preview {
-    HomeView()
-}
+
+

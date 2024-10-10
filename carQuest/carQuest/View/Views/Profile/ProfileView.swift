@@ -103,27 +103,7 @@ struct ProfileView: View {
                 .listRowBackground(Color(.background))
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
-                HStack{
-                    Image("gavel")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    Image("rent")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                        Image("home")
-                            .resizable()
-                            .frame(width: 60, height:60)
-                    }
-                    Image("buy")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                        Image("profileIcon")
-                            .resizable()
-                            .frame(width: 55, height:55)
-                    }
-                }
+                bottomNavigationBar(showSignInView: .constant(false))
             }/*.offset(x:0,y:280)*/
             .padding()
         }

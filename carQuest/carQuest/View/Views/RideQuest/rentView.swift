@@ -1,28 +1,34 @@
 //  Created by Maddy Quinn on 9/30/24.
 //
 import SwiftUI
+import Combine
+import Firebase
+import FirebaseFirestore
 struct rentView: View {
+    @Binding var showSignInView: Bool
     var body: some View {
         NavigationView{
             VStack{
+                topNavigationBar()
+                ScrollView(){
+                    NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width:220, height:50)
+                                .foregroundColor(Color("appColor"))
+                            Text("List a Rental")
+                                .foregroundColor(.white)
+                                .font(.custom("Jost-Regular", size: 30))
+                        }
+                    }
+                }
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
-                HStack{
-                    Image("gavel")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    Image("home")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                    Image("buy")
-                        .resizable()
-                        .frame(width: 60, height:60)
-                  
-                }
-            }
+                bottomNavigationBar(showSignInView: $showSignInView)
+            }.frame(width:375)
         }
     }
 }
 #Preview {
-    rentView()
+    rentView(showSignInView: .constant(false))
 }

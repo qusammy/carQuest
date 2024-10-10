@@ -8,7 +8,6 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 struct listingView: View {
-    let db = Firestore.firestore()
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     var body: some View {
@@ -113,14 +112,14 @@ struct listingView: View {
             }
         }
     }
-    func readListings(){
-        db.collection("carListings").document().getDocument { (document, error) in
-            if let document = document {
-                let make = document.data()?["carMake"] as? String
-                let type = document.data()?["carType"] as? Bool
-            }
-        }
-    }
+//    func readListings(){
+//        db.collection("carListings").document().getDocument { (document, error) in
+//            if let document = document {
+//                let make = document.data()?["carMake"] as? String
+//                let type = document.data()?["carType"] as? Bool
+//            }
+//        }
+//    }
 }
 #Preview {
     listingView()
