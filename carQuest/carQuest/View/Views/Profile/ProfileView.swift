@@ -40,7 +40,11 @@ struct ProfileView: View {
                     List{
                         
                         //settings go here e.g. dark mode
+<<<<<<< HEAD
                         if showSignInView == true {
+=======
+                        if showLogOut == true {
+>>>>>>> 5d2dcae310b74df334461389e046ebdbb2f07c3f
                             NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
@@ -121,9 +125,21 @@ struct ProfileView: View {
                         .listRowBackground(Color(.background))
                         bottomNavigationBar(showSignInView: .constant(false))
                         }
+<<<<<<< HEAD
                 }
                 }
             }
+=======
+                        }
+                }.onAppear {
+                    }
+                }.task {
+                    let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                    self.showSignInView = currentUser == nil
+                    try? await viewModel.loadCurrentUser()
+                
+                }
+>>>>>>> 5d2dcae310b74df334461389e046ebdbb2f07c3f
                 .foregroundColor(.accentColor)
                 .background(Color.background)
                 .scrollContentBackground(.hidden)
