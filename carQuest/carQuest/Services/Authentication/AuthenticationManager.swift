@@ -7,7 +7,8 @@
 
 import Foundation
 import FirebaseAuth
-import FirebaseStorage
+import FirebaseFirestore
+
 
 enum userError: Error {
     case runtimeError(String)
