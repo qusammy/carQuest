@@ -7,7 +7,7 @@
 
 import Foundation
 import FirebaseAuth
-
+import FirebaseStorage
 
 enum userError: Error {
     case runtimeError(String)
@@ -26,9 +26,10 @@ struct AuthDataResultModel {
 }
 
 final class AuthenticationManager {
+
     static let shared = AuthenticationManager()
     private init() {
-        
+
     }
     
     func getAuthenticatedUser() throws -> AuthDataResultModel {

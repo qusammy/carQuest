@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		001111422CB56DBB001F877D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001111412CB56DBB001F877D /* LocationManager.swift */; };
+		001111442CB58C41001F877D /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001111432CB58C41001F877D /* ImageManager.swift */; };
 		002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002ABF6A2C73A3A100FFCC86 /* carQuestApp.swift */; };
 		002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002ABF6C2C73A3A100FFCC86 /* ContentView.swift */; };
 		002ABF6F2C73A3A300FFCC86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */; };
@@ -74,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		001111412CB56DBB001F877D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		001111432CB58C41001F877D /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		002ABF672C73A3A100FFCC86 /* carQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = carQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		002ABF6A2C73A3A100FFCC86 /* carQuestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = carQuestApp.swift; sourceTree = "<group>"; };
 		002ABF6C2C73A3A100FFCC86 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -235,7 +237,7 @@
 		6F2EBC822C948D8F00EF07FC /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6F2EBCB42C94980800EF07FC /* Authentication */,
+				6F2EBCB42C94980800EF07FC /* Managing */,
 				6F2EBCAD2C94979400EF07FC /* FireStore */,
 			);
 			path = Services;
@@ -332,13 +334,14 @@
 			path = FireStore;
 			sourceTree = "<group>";
 		};
-		6F2EBCB42C94980800EF07FC /* Authentication */ = {
+		6F2EBCB42C94980800EF07FC /* Managing */ = {
 			isa = PBXGroup;
 			children = (
 				2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */,
 				001111412CB56DBB001F877D /* LocationManager.swift */,
+				001111432CB58C41001F877D /* ImageManager.swift */,
 			);
-			path = Authentication;
+			path = Managing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -446,6 +449,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22CB13652CA5A63A00BACD8F /* AuthenticationViewModels.swift in Sources */,
+				001111442CB58C41001F877D /* ImageManager.swift in Sources */,
 				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
 				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
@@ -611,7 +615,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"carQuest/Preview Content\"";
-				DEVELOPMENT_TEAM = K54C8RV3DL;
+				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;
@@ -644,7 +648,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"carQuest/Preview Content\"";
-				DEVELOPMENT_TEAM = K54C8RV3DL;
+				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;

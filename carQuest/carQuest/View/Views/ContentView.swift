@@ -6,9 +6,11 @@ import FirebaseAnalytics
 import Combine
 struct ContentView: View {
     
+    static var isAlreadyLaunchedOnce = false // Used to avoid 2 FIRApp configure
     @Binding var showSignInView: Bool
     
     var body: some View {
+      
         NavigationView {
             VStack {
                 Spacer()
@@ -25,21 +27,27 @@ struct ContentView: View {
                             Text("See all")
                                 .font(Font.custom("Jost-Regular", size:15))
                                 .underline()
-                        }
-                        HStack{
+                    }
+                    HStack{
+                        VStack{
+                        NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                             VStack{
                                 imageBox(imageName: "carQuestLogo")
                                 Text("")
-                                    .font(Font.custom("Jost-Regular", size:17))
-                                    .frame(maxWidth:200, maxHeight:15)
-                                    .offset(x:-25)
+                                .font(.custom("Jost-Regular", size:17))
+                                .frame(maxWidth:370, maxHeight:15)
+                                .multilineTextAlignment(.leading)
+                                .foregroundColor(.black)
+                                    }
+                                }
+                                
                             }
-                            VStack{
-                                imageBox(imageName: "carExample")
-                                Text("Recently viewed")
-                                    .font(Font.custom("Jost-Regular", size:17))
-                                    .frame(maxWidth:200, maxHeight:15)
-                                    .offset(x:-40)
+                        VStack{
+                            imageBox(imageName: "carExample")
+                            Text("2019 Honda Civic")
+                                .font(Font.custom("Jost-Regular", size:17))
+                                .frame(maxWidth:200, maxHeight:15)
+                                .offset(x:-40)
                             }
                         }
                         HStack{
@@ -60,9 +68,11 @@ struct ContentView: View {
                         }
                     }.frame(width:375)
                 }
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
                bottomNavigationBar(showSignInView: $showSignInView)
+            }
+        }.onAppear{
+            if FirebaseApp.app() == nil {
+                FirebaseApp.configure()
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
@@ -71,32 +81,3 @@ struct ContentView: View {
     ContentView(showSignInView: .constant(false))
 }
 
-struct bottomNavigationBar: View {
-    @Binding var showSignInView: Bool
-    var body: some View {
-        HStack{
-            Image("gavel")
-                .resizable()
-                .frame(width: 60, height:60)
-            NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                Image("rent")
-                    .resizable()
-                    .frame(width: 55, height:55)
-            }
-            NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
-) {
-                Image("home")
-                    .resizable()
-                    .frame(width: 55, height:55)
-            }
-            Image("buy")
-                .resizable()
-                .frame(width: 60, height:60)
-            NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                Image("profileIcon")
-                    .resizable()
-                    .frame(width: 55, height:55)
-            }
-        }
-    }
-}

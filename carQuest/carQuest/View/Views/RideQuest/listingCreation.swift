@@ -79,39 +79,17 @@ struct listingCreation: View {
                     .frame(width:375, height:100)
                     .pickerStyle(.inline)
                     headline(headerText: "Make")
-                    TextField("BMW, Honda, etc.", text: $carMake)
-                        .foregroundColor(.black)
-                        .frame(width:375, height:50)
-                        .font(.custom("Jost-Regular", size: 20))
-                        .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                        .cornerRadius(10)
-                        .multilineTextAlignment(.leading)
+                    listingTextField(carFactor: $carMake, textFieldText: "BMW, Honda, etc.")
+
                     headline(headerText: "Model")
-                    TextField("Civic, 4Runner, etc.", text: $carModel)
-                        .foregroundColor(.black)
-                        .frame(width:375, height:50)
-                        .font(.custom("Jost-Regular", size: 20))
-                        .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                        .cornerRadius(10)
-                        .multilineTextAlignment(.leading)
-                        .disableAutocorrection(true)
+                    listingTextField(carFactor: $carModel, textFieldText: "Civic, 4Runner, etc.")
+                    
                     headline(headerText: "Type")
-                    TextField("Sedan, coupe, hatchback, etc.", text: $carType)
-                        .foregroundColor(.black)
-                        .frame(width:375, height:50)
-                        .font(.custom("Jost-Regular", size: 20))
-                        .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                        .cornerRadius(10)
-                        .multilineTextAlignment(.leading)
+                    listingTextField(carFactor: $carType, textFieldText: "Sedan, hatchback, etc.")
                     
                     headline(headerText: "Description")
-                    TextField("Description of vehicle", text: $carDescription)
-                        .foregroundColor(.black)
-                        .frame(width:375, height:50)
-                        .font(.custom("Jost-Regular", size: 20))
-                        .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                        .cornerRadius(10)
-                        .multilineTextAlignment(.leading)
+                    listingTextField(carFactor: $carDescription, textFieldText: "Description of vehicle")
+                
                     headline(headerText: "Location")
                     Group{
                         if locationManager.userLocation == nil {
@@ -220,69 +198,4 @@ struct listingCreation: View {
 }
 #Preview {
     listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", showSignInView: .constant(false))
-}
-struct headline: View {
-    var headerText: String
-    var body: some View {
-        Text(headerText)
-            .font(Font.custom("ZingRustDemo-Base", size:30))
-            .frame(maxWidth: 375, alignment: .leading)
-    }
-}
-struct previewListing: View {
-    @Binding var carYear: String
-    @Binding var make: String
-    @Binding var model: String
-    @Binding var description: String
-    @Binding var typeOfCar: String
-    @Binding var date: Date
-    @Binding var listedPhoto1: Image?
-    @Binding var listedPhoto2: Image?
-    var body: some View{
-        VStack{
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:2)
-                .padding(.top, 5.0)
-            Text("Preview listing")
-                .font(.custom("Jost-Regular", size: 30))
-                .foregroundColor(.black)
-            ScrollView{
-                ScrollView(.horizontal, showsIndicators: false)
-                {
-                    HStack{
-                        listedPhoto1?
-                            .resizable()
-                            .clipped()
-                            .frame(width:300, height:300)
-                        listedPhoto2?
-                            .resizable()
-                            .clipped()
-                            .frame(width:300, height:300)
-                    }
-                }
-                
-                Text("\(carYear) \(make) \(model) \(typeOfCar)")
-                    .font(.custom("Jost-Regular", size: 25))
-                    .foregroundColor(.black)
-                HStack{
-                    Image("profileIcon")
-                        .resizable()
-                        .frame(width:55, height:55)
-                    Text("$username")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.black)
-                        .frame(maxWidth: 375, alignment: .leading)
-                }
-                Text("\(description)")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: 375, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                Text("Listed \(date)")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: 375, alignment: .leading)
-            }
-        }
-    }
 }

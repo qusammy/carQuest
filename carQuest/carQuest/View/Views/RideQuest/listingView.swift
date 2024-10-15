@@ -10,26 +10,27 @@ import FirebaseFirestore
 struct listingView: View {
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
+    @Binding var showSignInView: Bool
     var body: some View {
         VStack{
-            Button(action: {
-                
-            }, label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .frame(width: 90, height: 35)
-                        .foregroundColor(Color("appColor"))
-                    HStack {
-                        Image(systemName: "arrow.left")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.white)
-                        Text("Back")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
+            ZStack{
+                NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .frame(width: 90, height: 35)
+                            .foregroundColor(Color("appColor"))
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
+                            Text("Back")
+                                .font(.system(size: 20))
+                                .foregroundColor(.white)
+                        }
                     }
                 }
-            }).offset(x:-140)
+            }.offset(x:-140)
             ScrollView{
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{
@@ -46,7 +47,7 @@ struct listingView: View {
                 VStack{
                     HStack{
                         Button(action: {
-                        //brings up message view
+                        //brings up booking view
                         }, label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 15)
@@ -112,15 +113,7 @@ struct listingView: View {
             }
         }
     }
-//    func readListings(){
-//        db.collection("carListings").document().getDocument { (document, error) in
-//            if let document = document {
-//                let make = document.data()?["carMake"] as? String
-//                let type = document.data()?["carType"] as? Bool
-//            }
-//        }
-//    }
 }
 #Preview {
-    listingView()
+    listingView(showSignInView: .constant(false))
 }
