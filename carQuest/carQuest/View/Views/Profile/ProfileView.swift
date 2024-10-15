@@ -33,34 +33,16 @@ struct ProfileView: View {
                                     .foregroundColor(.white)
                             }
                         }
-                        .onTapGesture {
-                            showSignInView = true
-                        }
-                    }
-                    List{
                         
-                        //settings go here e.g. dark mode
-<<<<<<< HEAD
-                        if showSignInView == true {
-=======
-                        if showLogOut == true {
->>>>>>> 5d2dcae310b74df334461389e046ebdbb2f07c3f
-                            NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
-                                Text("Profile")
-                                    .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
-                                }
-                            Text("App Appearance")
-                                .font(.custom("Jost-Regular", size:20))
-                                .foregroundColor(.black)
-                            Text("Privacy")
-                                .font(.custom("Jost-Regular", size:20))
-                                .foregroundColor(.black)
+                    }
                     List {
                         
-                        //settings go here e.g. dark mode
-                        if showSignInView == true {
-                            NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
+                        if showSignInView == false {
+                            
+                            if let user = viewModel.user {
+                                Text("UserId: \(user.userId)")
+                            }
+                            NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.black)
@@ -71,86 +53,56 @@ struct ProfileView: View {
                             Text("Privacy")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
-                        }
-                        List {
-                            
-                            if showSignInView == false {
-                                
-                                if let user = viewModel.user {
-                                    Text("UserId: \(user.userId)")
+                            Button("Log Out") {
+                                Task {
+                                    do {
+                                        try viewModel.signOut()
+                                        showSignInView = true
+                                    }catch {
+                                        print(error)
+                                    }
                                 }
-                                
-                                Button("Log Out") {
+                            }
+                            Button {
+                                showingAlert = true
+                            }label: {
+                                Text("Delete Account")
+                                    .foregroundColor(.accentColor)
+                            }.alert("Are you sure you want to delete your account?", isPresented: $showingAlert) {
+                                Button(role: .destructive) {
                                     Task {
                                         do {
-                                            try viewModel.signOut()
+                                            try await viewModel.deleteAccount()
                                             showSignInView = true
                                         }catch {
                                             print(error)
                                         }
                                     }
-                                }
-                                Button {
-                                    showingAlert = true
                                 }label: {
                                     Text("Delete Account")
-                                        .foregroundColor(.accentColor)
-                                }.alert("Are you sure you want to delete your account?", isPresented: $showingAlert) {
-                                    Button(role: .destructive) {
-                                        Task {
-                                            do {
-                                                try await viewModel.deleteAccount()
-                                                showSignInView = true
-                                            }catch {
-                                                print(error)
-                                            }
-                                        }
-                                    }label: {
-                                        Text("Delete Account")
-                                            .font(.custom("Jost-Regular", size: 25))
-                                    }
-                                }message: {
-                                    Text("This action cannot be undone. \n The info on this account will be unrecoverable")
+                                        .font(.custom("Jost-Regular", size: 25))
                                 }
+                            }message: {
+                                Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
-                        }.task {
-                            let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                            self.showSignInView = currentUser == nil
-                            try? await viewModel.loadCurrentUser()
-                            
                         }
-                        .foregroundColor(.accentColor)
-                        .background(Color.background)
-                        .scrollContentBackground(.hidden)
-                        .listRowBackground(Color(.background))
-                        bottomNavigationBar(showSignInView: .constant(false))
-                        }
-<<<<<<< HEAD
-                }
-                }
-            }
-=======
-                        }
-                }.onAppear {
+                    }.task {
+                        let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                        self.showSignInView = currentUser == nil
+                        try? await viewModel.loadCurrentUser()
+                        
                     }
-                }.task {
-                    let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                    self.showSignInView = currentUser == nil
-                    try? await viewModel.loadCurrentUser()
-                
+                    .foregroundColor(.accentColor)
+                    .background(Color.background)
+                    .scrollContentBackground(.hidden)
+                    .listRowBackground(Color(.background))
+                    bottomNavigationBar(showSignInView: .constant(false))
                 }
->>>>>>> 5d2dcae310b74df334461389e046ebdbb2f07c3f
-                .foregroundColor(.accentColor)
-                .background(Color.background)
-                .scrollContentBackground(.hidden)
-                .listRowBackground(Color(.background))
-                bottomNavigationBar(showSignInView: .constant(false))
             }
             .padding()
         }
     }
 }
-
 #Preview {
     ProfileView(showSignInView: .constant(false))
 }
