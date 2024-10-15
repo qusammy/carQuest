@@ -6,15 +6,13 @@
 //
 
 import SwiftUI
-import Firebase
-import FirebaseAuth
 
 struct SignUpView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
     
+    
     @Binding var showSignInView: Bool
-    @Binding var showLogOut: Bool
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
@@ -53,12 +51,21 @@ struct SignUpView: View {
             Text("CARQUEST")
                 .font(Font.custom("ZingRustDemo-Base", size:60))
                 .foregroundColor(Color("Foreground"))
-            Text("Login or Create Account")
+            Text("Create Account")
                 .font(Font.custom("Jost-Regular", size:30))
                 .foregroundColor(Color("Foreground"))
             Text(viewModel.errorText)
                 .font(Font.custom("Jost-Regular", size:20))
                 .foregroundColor(Color("appColor"))
+            TextField("Display Name", text: $viewModel.displayName)
+                .foregroundStyle(Color.black)
+                .frame(width:250, height:50)
+                .font(.custom("Jost-Regular", size: 20))
+                .background(Color("grayFlip"))
+                .cornerRadius(50)
+                .multilineTextAlignment(.center)
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
             TextField("Email", text: $viewModel.email)
                 .frame(width:250, height:50)
                 .font(.custom("Jost-Regular", size: 20))
@@ -75,6 +82,7 @@ struct SignUpView: View {
                 .multilineTextAlignment(.center)
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
+
             }
             VStack{
                 Button(action: {
@@ -82,12 +90,13 @@ struct SignUpView: View {
                         do {
                             try await viewModel.signUp()
                             showSignInView = false
-                            showLogOut = true
                             viewModel.errorText = ""
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
                             }else if viewModel.password.isEmpty {
+                                viewModel.errorText = "Password must have at least 6 characters."
+                            }else if viewModel.password.count < 6 {
                                 viewModel.errorText = "Password must have at least 6 characters."
                             }else {
                                 viewModel.errorText = "This email address is already being used by another account."
@@ -104,9 +113,6 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                     }
                 })
-                .onSubmit {
-                    showLogOut = true
-                }
                 
                 Button(action: {
                     Task {
@@ -147,5 +153,5 @@ struct SignUpView: View {
 
 
 #Preview {
-    SignUpView(showSignInView: .constant(false), showLogOut: .constant(false))
+    SignUpView(showSignInView: .constant(false))
 }

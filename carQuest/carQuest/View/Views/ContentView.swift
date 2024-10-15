@@ -8,7 +8,8 @@ struct ContentView: View {
     
     static var isAlreadyLaunchedOnce = false // Used to avoid 2 FIRApp configure
     @Binding var showSignInView: Bool
-    
+    @StateObject var viewModel = SignInEmailViewModel()
+        
     var body: some View {
       
         NavigationView {
@@ -18,8 +19,17 @@ struct ContentView: View {
                 topNavigationBar()
                 ScrollView{
                     VStack{
-                        Text("Welcome, Guest!")
-                            .font(Font.custom("Jost-Regular", size:30))
+                        HStack {
+                            if viewModel.displayName == "" {
+                                Text("Welcome User!")
+                                    .font(Font.custom("Jost", size:30))
+                                    .foregroundColor(Color("Foreground"))
+                            }else {
+                                Text("Welcome \(viewModel.displayName)!")
+                                    .font(Font.custom("Jost", size:30))
+                                    .foregroundColor(Color("Foreground"))
+                            }
+                        }
                         HStack{
                             Text("Recently viewed")
                                 .font(Font.custom("Jost-Regular", size:20))
@@ -75,6 +85,9 @@ struct ContentView: View {
                 FirebaseApp.configure()
             }
         }.navigationViewStyle(StackNavigationViewStyle())
+        .task {
+            viewModel.getDisplayName()
+        }
     }
 }
 #Preview {
