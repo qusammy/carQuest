@@ -45,6 +45,21 @@ struct ProfileView: View {
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.black)
+                                }
+                            Text("App Appearance")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(.black)
+                            Text("Privacy")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(.black)
+                    List {
+                        
+                        //settings go here e.g. dark mode
+                        if showSignInView == true {
+                            NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
+                                Text("Profile")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.black)
                             }
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
@@ -105,10 +120,17 @@ struct ProfileView: View {
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color(.background))
                         bottomNavigationBar(showSignInView: .constant(false))
-                    }
-                    .padding()
+                        }
+                }
                 }
             }
+                .foregroundColor(.accentColor)
+                .background(Color.background)
+                .scrollContentBackground(.hidden)
+                .listRowBackground(Color(.background))
+                bottomNavigationBar(showSignInView: .constant(false))
+            }
+            .padding()
         }
     }
 }
