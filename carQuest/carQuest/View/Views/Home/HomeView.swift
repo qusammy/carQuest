@@ -14,7 +14,7 @@ struct HomeView: View {
     
     var body: some View {
         VStack{
-            
+            ContentView(showSignInView: .constant(false))
         }
     }
 }

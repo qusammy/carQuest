@@ -20,18 +20,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView{
             VStack {
-                HStack{
-                    Text("CARQUEST")
-                        .font(Font.custom("ZingRustDemo-Base", size:50))
-                        .foregroundColor(Color("Foreground"))
-                    Spacer()
-                    Image(systemName: "bell.fill")
-                        .resizable()
-                        .frame(width:30, height:30)
-                        .foregroundColor(Color("Foreground"))
-                }
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
+                topNavigationBar()
                 VStack {
                     if showSignInView == true {
                         NavigationLink(destination: SignInView(showSignInView: $showSignInView)){
@@ -48,6 +37,21 @@ struct ProfileView: View {
                             showSignInView = true
                         }
                     }
+                    List{
+                        
+                        //settings go here e.g. dark mode
+                        if showLogOut == true {
+                            NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
+                                Text("Profile")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.black)
+                                }
+                            Text("App Appearance")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(.black)
+                            Text("Privacy")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(.black)
                     List {
                         
                         if showSignInView == false {
@@ -89,6 +93,8 @@ struct ProfileView: View {
                                 Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
                         }
+                        }
+                }.onAppear {
                     }
                 }.task {
                     let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
@@ -96,15 +102,12 @@ struct ProfileView: View {
                     try? await viewModel.loadCurrentUser()
                 
                 }
-
                 .foregroundColor(.accentColor)
                 .background(Color.background)
                 .scrollContentBackground(.hidden)
                 .listRowBackground(Color(.background))
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
                 bottomNavigationBar(showSignInView: .constant(false))
-            }/*.offset(x:0,y:280)*/
+            }
             .padding()
         }
     }

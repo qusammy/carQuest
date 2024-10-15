@@ -22,9 +22,7 @@ struct rentView: View {
                         }
                     }
                 }
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
-                bottomNavigationBar(showSignInView: $showSignInView)
+        bottomNavigationBar(showSignInView: $showSignInView)
             }.frame(width:375)
         }
     }
