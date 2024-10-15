@@ -237,7 +237,7 @@
 		6F2EBC822C948D8F00EF07FC /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6F2EBCB42C94980800EF07FC /* Managing */,
+				6F2EBCB42C94980800EF07FC /* Authentication */,
 				6F2EBCAD2C94979400EF07FC /* FireStore */,
 			);
 			path = Services;
@@ -334,14 +334,14 @@
 			path = FireStore;
 			sourceTree = "<group>";
 		};
-		6F2EBCB42C94980800EF07FC /* Managing */ = {
+		6F2EBCB42C94980800EF07FC /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
 				2287A9802C94825D00EB7D34 /* AuthenticationManager.swift */,
 				001111412CB56DBB001F877D /* LocationManager.swift */,
 				001111432CB58C41001F877D /* ImageManager.swift */,
 			);
-			path = Managing;
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
