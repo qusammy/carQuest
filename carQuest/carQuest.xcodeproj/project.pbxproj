@@ -402,9 +402,7 @@
 				22C6DF372C91EF4F00F41EB3 /* FirebaseVertexAI-Preview */,
 				2287A9782C9474D900EB7D34 /* GoogleSignIn */,
 				2287A97A2C9474D900EB7D34 /* GoogleSignInSwift */,
-<<<<<<< HEAD
 				00D15E7E2CC6B38B00C0E940 /* SDWebImageSwiftUI */,
-=======
 				22BC61A52CBEB3A2001997B6 /* FirebaseAnalytics */,
 				22BC61A72CBEB3A2001997B6 /* FirebaseAnalyticsOnDeviceConversion */,
 				22BC61A92CBEB3A2001997B6 /* FirebaseAnalyticsWithoutAdIdSupport */,
@@ -412,7 +410,6 @@
 				22BC61AD2CBEB3A2001997B6 /* FirebaseAppDistribution-Beta */,
 				22BC61AF2CBEB3F0001997B6 /* GoogleSignIn */,
 				22BC61B12CBEB3F0001997B6 /* GoogleSignInSwift */,
->>>>>>> main
 			);
 			productName = carQuest;
 			productReference = 002ABF672C73A3A100FFCC86 /* carQuest.app */;

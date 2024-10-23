@@ -90,7 +90,7 @@ struct UserProfileView: View {
                     }
                 })
                 }
-            bottomNavigationBar(showSignInView: .constant(false))
+            bottomNavigationBar(showSignInView: $showSignInView)
         }.fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil){
             ImagePicker(image: $image)
         }

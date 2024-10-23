@@ -42,16 +42,12 @@ struct ProfileView: View {
                             if let user = viewModel.user {
                                 Text("UserId: \(user.userId)")
                             }
-<<<<<<< HEAD
-                            NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
-=======
-                            NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
->>>>>>> main
-                                Text("Profile")
-                                    .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
-                            }
-<<<<<<< HEAD
+                                NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
+                                    Text("Profile")
+                                        .font(.custom("Jost-Regular", size:20))
+                                        .foregroundColor(.black)
+                                }
+                            
                             Text("My Listings")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
@@ -62,20 +58,17 @@ struct ProfileView: View {
                             Text("Push Notifications")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
-=======
->>>>>>> main
+
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
                             Text("Privacy")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
-<<<<<<< HEAD
                             Text("About CarQuest")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
-=======
->>>>>>> main
+
                             Button("Log Out") {
                                 Task {
                                     do {
@@ -108,24 +101,18 @@ struct ProfileView: View {
                             }message: {
                                 Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
-<<<<<<< HEAD
-                        
-                        }
-                }.onAppear {
-=======
                         }
                     }.task {
                         let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                         self.showSignInView = currentUser == nil
                         try? await viewModel.loadCurrentUser()
                         
->>>>>>> main
                     }
                     .foregroundColor(.accentColor)
                     .background(Color.background)
                     .scrollContentBackground(.hidden)
                     .listRowBackground(Color(.background))
-                    bottomNavigationBar(showSignInView: .constant(false))
+                    bottomNavigationBar(showSignInView: $showSignInView)
                 }
             }
             .padding()
