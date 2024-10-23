@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-
+import FirebaseStorage
 
 enum userError: Error {
     case runtimeError(String)
@@ -31,6 +31,7 @@ struct AuthDataResultModel {
 final class AuthenticationManager {
 
     static let shared = AuthenticationManager()
+
     private init() {
 
     }
@@ -58,6 +59,20 @@ final class AuthenticationManager {
     func signInUser(email: String, password: String) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
         return AuthDataResultModel(user: authDataResult.user)
+    }
+    
+    func updateProfilePicture(photoURL: URL){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
+            return
+        }
+        
+        let userPhotoData = ["profileImageURL": photoURL.absoluteString]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).updateData(userPhotoData){ err in
+                if let err = err {
+                    print(err)
+                    return
+                }}
     }
     
     func resetPassword(email: String) async throws{

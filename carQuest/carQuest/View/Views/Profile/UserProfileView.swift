@@ -3,17 +3,24 @@
 //  carQuest
 //
 //  Created by beraoud_981215 on 9/13/24.
-//
+//new packages:
+// https://github.com/SDWebImage/SDWebImageSwiftUI.git
 
 import SwiftUI
 import Firebase
 import FirebaseAuth
 import FirebaseStorage
+import SDWebImageSwiftUI
+
+struct CarQuestUser{
+    let uid, email, photoURL, display_name: String
+}
 
 class FirebaseManager: NSObject{
+    
     let auth: Auth
     let storage: Storage
-    
+    let firestore: Firestore
     
     static let shared = FirebaseManager()
   
@@ -21,32 +28,35 @@ class FirebaseManager: NSObject{
         
         self.auth = Auth.auth()
         self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
         
         super.init()
     }
 }
 
+
+
 struct UserProfileView: View {
+    @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
     @State var showLogOut: Bool = false
     
     @State var shouldShowImagePicker = false
+    @ObservedObject var vm = UserProfileViewModel()
+   
     var body: some View {
         VStack{
            
             topNavigationBar()
             ScrollView{
-                if let image = self.image {
-                    Image(uiImage: image)
+                HStack{
+                    WebImage(url: URL(string: vm.carUser?.photoURL ?? "profileIcon"))
                         .resizable()
                         .scaledToFill()
                         .frame(width:200, height:200)
                         .clipShape(Circle())
-                } else {
-                    Image("profileIcon")
-                        .resizable()
-                        .frame(width:200, height:200)
+                    
                 }
                 Button(action: {
                     shouldShowImagePicker.toggle()
@@ -58,12 +68,14 @@ struct UserProfileView: View {
                 Text("User details")
                     .font(.custom("Jost-Regular", size:35))
                     .foregroundColor(.black)
-                
-                Text("$username")
+                Text(vm.carUser?.display_name ?? "$username")
                     .font(.custom("Jost-Regular", size:25))
                     .foregroundColor(.black)
-                Text("$email")
+                Text(vm.carUser?.email ?? "$email")
                     .font(.custom("Jost-Regular", size:25))
+                    .foregroundColor(.black)
+                Text("User ID: \(vm.carUser?.uid ?? "no user logged in")")
+                    .font(.custom("Jost-Regular", size:15))
                     .foregroundColor(.black)
                 Button(action: {
                     persistImageToStorage()
@@ -93,16 +105,20 @@ struct UserProfileView: View {
         ref.putData(imageData, metadata: nil) { metadata, err in
             if let err = err {
                 print("failed to push image to storage \(err)")
+                return
             }
-            
             ref.downloadURL { url, err in
-                print("failed to download URL")
+                if err != nil {
+                    print("failed to download URL")
+                    return
+                }
+                print("URL downloaded")
+                guard let url = url else { return }
+                AuthenticationManager.shared.updateProfilePicture(photoURL: url)
             }
-            print("URL downloaded")
         }
     }
 }
-
 #Preview {
     UserProfileView(showSignInView: .constant(false))
 }

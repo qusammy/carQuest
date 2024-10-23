@@ -23,7 +23,7 @@ struct ProfileView: View {
                 topNavigationBar()
                 VStack {
                     if showSignInView == true {
-                        NavigationLink(destination: SignInView(showSignInView: $showSignInView)){
+                        NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .frame(width:250, height:50)
@@ -39,27 +39,35 @@ struct ProfileView: View {
                     }
                     List{
                         
-                        //settings go here e.g. dark mode
-                        if showLogOut == true {
+                        if showSignInView == false {
+                            
+                            if let user = viewModel.user {
+                                Text("UserId: \(user.userId)")
+                            }
                             NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.black)
-                                }
+                            }
+                            Text("My Listings")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+                            Text("My Purchases")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+                            //extra settings go here
+                            Text("Push Notifications")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
                             Text("Privacy")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
-                    List {
-                        
-                        if showSignInView == false {
-                            
-                            if let user = viewModel.user {
-                                Text("UserId: \(user.userId)")
-                            }
-                            
+                            Text("About CarQuest")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
                             Button("Log Out") {
                                 Task {
                                     do {
@@ -92,7 +100,7 @@ struct ProfileView: View {
                             }message: {
                                 Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
-                        }
+                        
                         }
                 }.onAppear {
                     }

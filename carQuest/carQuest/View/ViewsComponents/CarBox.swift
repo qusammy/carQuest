@@ -5,6 +5,8 @@
 //  Created by beraoud_981215 on 9/13/24.
 //
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 struct imageBox: View {
     var imageName: String
@@ -38,6 +40,7 @@ struct topNavigationBar: View {
 }
 struct bottomNavigationBar: View {
     @Binding var showSignInView: Bool
+    @ObservedObject var vm = UserProfileViewModel()
     var body: some View {
         VStack{
             RoundedRectangle(cornerRadius: 70)
@@ -61,9 +64,12 @@ struct bottomNavigationBar: View {
                     .resizable()
                     .frame(width: 60, height:60)
                 NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    Image("profileIcon")
+                    WebImage(url: URL(string: vm.carUser?.photoURL ?? "profileIcon"))
                         .resizable()
                         .frame(width: 55, height:55)
+                        .scaledToFill()
+                        .clipShape(Circle())
+
                 }
             }
         }
