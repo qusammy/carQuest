@@ -33,22 +33,25 @@ struct ProfileView: View {
                                     .foregroundColor(.white)
                             }
                         }
-                        .onTapGesture {
-                            showSignInView = true
-                        }
+                        
                     }
-                    List{
+                    List {
                         
                         if showSignInView == false {
                             
                             if let user = viewModel.user {
                                 Text("UserId: \(user.userId)")
                             }
+<<<<<<< HEAD
                             NavigationLink(destination: UserProfileView(showSignInView: .constant(false))){
+=======
+                            NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
+>>>>>>> main
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.black)
                             }
+<<<<<<< HEAD
                             Text("My Listings")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
@@ -59,15 +62,20 @@ struct ProfileView: View {
                             Text("Push Notifications")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
+=======
+>>>>>>> main
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
                             Text("Privacy")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
+<<<<<<< HEAD
                             Text("About CarQuest")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
+=======
+>>>>>>> main
                             Button("Log Out") {
                                 Task {
                                     do {
@@ -100,27 +108,30 @@ struct ProfileView: View {
                             }message: {
                                 Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
+<<<<<<< HEAD
                         
                         }
                 }.onAppear {
+=======
+                        }
+                    }.task {
+                        let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                        self.showSignInView = currentUser == nil
+                        try? await viewModel.loadCurrentUser()
+                        
+>>>>>>> main
                     }
-                }.task {
-                    let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                    self.showSignInView = currentUser == nil
-                    try? await viewModel.loadCurrentUser()
-                
+                    .foregroundColor(.accentColor)
+                    .background(Color.background)
+                    .scrollContentBackground(.hidden)
+                    .listRowBackground(Color(.background))
+                    bottomNavigationBar(showSignInView: .constant(false))
                 }
-                .foregroundColor(.accentColor)
-                .background(Color.background)
-                .scrollContentBackground(.hidden)
-                .listRowBackground(Color(.background))
-                bottomNavigationBar(showSignInView: .constant(false))
             }
             .padding()
         }
     }
 }
-
 #Preview {
     ProfileView(showSignInView: .constant(false))
 }

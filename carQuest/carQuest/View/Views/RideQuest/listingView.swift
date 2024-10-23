@@ -87,10 +87,24 @@ struct listingView: View {
                             .font(.custom("Jost-Regular", size: 15))
                             .foregroundColor(.black)
                     }
-                    Text("year make model type")
-                        .font(.custom("Jost-Regular", size: 25))
-                        .frame(maxWidth: 375, alignment: .leading)
-                        .foregroundColor(.black)
+                    HStack {
+                        Text("Year: ")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Make: ")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Model: ")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Type: ")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                    }
                     HStack{
                         Image("profileIcon")
                             .resizable()
