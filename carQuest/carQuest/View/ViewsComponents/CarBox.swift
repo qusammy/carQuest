@@ -5,6 +5,7 @@
 //  Created by beraoud_981215 on 9/13/24.
 //
 import SwiftUI
+import FirebaseAuth
 
 struct imageBox: View {
     var imageName: String
@@ -21,6 +22,11 @@ struct imageBox: View {
 struct topNavigationBar: View {
     var body: some View {
         VStack{
+            if Auth.auth().currentUser?.isEmailVerified == false {
+                Text("Please verify your email address.")
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundColor(.blue)
+            }
             HStack{
                 Text("CARQUEST")
                     .font(Font.custom("ZingRustDemo-Base", size:50))
@@ -51,7 +57,7 @@ struct bottomNavigationBar: View {
                         .resizable()
                         .frame(width: 55, height:55)
                 }
-                NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
+                NavigationLink(destination: HomeView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
                 ) {
                     Image("home")
                         .resizable()

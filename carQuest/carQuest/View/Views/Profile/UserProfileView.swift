@@ -31,6 +31,7 @@ struct UserProfileView: View {
     @Binding var showSignInView: Bool
     @State var showLogOut: Bool = false
     
+    
     @State var shouldShowImagePicker = false
     var body: some View {
         VStack{

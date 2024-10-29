@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var isHeartFilled: Bool = false
     @Binding var showSignInView: Bool
     
+    
     var body: some View {
         VStack{
             ContentView(showSignInView: $showSignInView)

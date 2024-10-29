@@ -9,14 +9,18 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
+
+
 struct ProfileView: View {
     
     @StateObject private var nameViewModel = SignInEmailViewModel()
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
-    @State private var showingAlert: Bool = false
-    
-    
+    @State private var showingDeleteAlert: Bool = false
+    @State private var showingSignOutAlert: Bool = false
+    @State private var showingVerifyAlert: Bool = false
+    @State private var showingVerifyButton: Bool = true
+
     var body: some View {
         NavigationView{
             VStack {
@@ -47,28 +51,66 @@ struct ProfileView: View {
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.black)
                             }
+                            if Auth.auth().currentUser?.isEmailVerified == false {
+                                Button {
+                                    Task {
+                                        do {
+                                            try await AuthenticationManager.shared.verifyEmail()
+                                            showingVerifyAlert = true
+                                        }catch {
+                                            print(error)
+                                        }
+                                    }
+                                }label: {
+                                    Text("Verify Email")
+                                }.alert ("Verify Email", isPresented: $showingVerifyAlert){
+                                    Button("OK") {
+                                        showingVerifyAlert = false
+                                        showingVerifyButton = false
+                                        Task {
+                                            do {
+                                                try await Auth.auth().currentUser?.reload()
+                                            }catch {
+                                                print("error reloading user")
+                                            }
+                                        }
+
+                                    }
+                                }message: {
+                                    Text("You should have received an email with instructions on how to verify your email address.")
+                                }
+                            }
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
                             Text("Privacy")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)
-                            Button("Log Out") {
-                                Task {
-                                    do {
-                                        try viewModel.signOut()
-                                        showSignInView = true
-                                    }catch {
-                                        print(error)
+                            Button {
+                                showingSignOutAlert = true
+                            }label: {
+                                Text("Log Out")
+                                    .foregroundStyle(Color.accentColor)
+                            }.alert("Are you sure you want to log out?", isPresented: $showingSignOutAlert) {
+                                Button(role: .destructive) {
+                                    Task {
+                                        do {
+                                            try viewModel.signOut()
+                                            showSignInView = true
+                                        }catch {
+                                            print(error)
+                                        }
                                     }
+                                }label: {
+                                    Text("Log Out")
                                 }
                             }
                             Button {
-                                showingAlert = true
+                                showingDeleteAlert = true
                             }label: {
                                 Text("Delete Account")
                                     .foregroundColor(.accentColor)
-                            }.alert("Are you sure you want to delete your account?", isPresented: $showingAlert) {
+                            }.alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
                                 Button(role: .destructive) {
                                     Task {
                                         do {
@@ -90,16 +132,18 @@ struct ProfileView: View {
                         let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                         self.showSignInView = currentUser == nil
                         try? await viewModel.loadCurrentUser()
-                        
+                        if Auth.auth().currentUser?.isEmailVerified == true {
+                            showingVerifyButton = false
+                        }
                     }
                     .foregroundColor(.accentColor)
                     .background(Color.background)
                     .scrollContentBackground(.hidden)
                     .listRowBackground(Color(.background))
-                    bottomNavigationBar(showSignInView: .constant(false))
+                    bottomNavigationBar(showSignInView: $showSignInView)
                 }
             }
-            .padding()
+
         }
     }
 }

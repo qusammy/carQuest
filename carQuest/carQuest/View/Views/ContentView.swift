@@ -8,7 +8,8 @@ struct ContentView: View {
     
     static var isAlreadyLaunchedOnce = false // Used to avoid 2 FIRApp configure
     @Binding var showSignInView: Bool
-    @StateObject var viewModel = SignInEmailViewModel()
+    
+    @StateObject private var viewModel = SignInEmailViewModel()
         
     var body: some View {
       

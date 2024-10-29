@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 struct SignUpView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
-    
-    
+    @StateObject private var viewModelProfile = ProfileViewModel()
+
     @Binding var showSignInView: Bool
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
@@ -82,17 +82,18 @@ struct SignUpView: View {
                 .multilineTextAlignment(.center)
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
-
+            
             }
             VStack{
-                Button(action: {
+                Button{
                     Task {
                         do {
                             try await viewModel.signUp()
-                            showSignInView = false
                             viewModel.errorText = ""
+                            showSignInView = false
                         }catch {
-                            if viewModel.email.isEmpty {
+                            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,64}"
+                            if viewModel.email.contains(emailRegEx) == false {
                                 viewModel.errorText = "Please provide a valid email."
                             }else if viewModel.password.isEmpty {
                                 viewModel.errorText = "Password must have at least 6 characters."
@@ -103,7 +104,7 @@ struct SignUpView: View {
                             }
                         }
                     }
-                }, label: {
+                }label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width:250, height:50)
@@ -112,12 +113,13 @@ struct SignUpView: View {
                             .font(.custom("Jost-Regular", size: 25))
                             .foregroundColor(.white)
                     }
-                })
+                }
                 
                 Button(action: {
                     Task {
                         do {
                             try await viewModelGoogle.googleSignIn()
+                            showSignInView = false
                         }catch {
                             print(error)
                         }
@@ -148,6 +150,7 @@ struct SignUpView: View {
             .frame(width:20, height: 20)
     }
     
+
 
     
 
