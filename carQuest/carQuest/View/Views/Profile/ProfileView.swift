@@ -27,7 +27,7 @@ struct ProfileView: View {
                 topNavigationBar()
                 VStack {
                     if showSignInView == true {
-                        NavigationLink(destination: SignInView(showSignInView: $showSignInView)){
+                        NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .frame(width:250, height:50)
@@ -79,7 +79,18 @@ struct ProfileView: View {
                                 }message: {
                                     Text("You should have received an email with instructions on how to verify your email address.")
                                 }
-                            }
+                            
+                            Text("My Listings")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+                            Text("My Purchases")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+                            //extra settings go here
+                            Text("Push Notifications")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+
                             Text("App Appearance")
                                 .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(.black)

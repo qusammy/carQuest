@@ -54,5 +54,4 @@ final class UserManager {
         
         return DBUser(userId: userId, email: email, photoURL: photoURL, dateCreated: dateCreated, displayName: displayName)
     }
-    
 }

@@ -18,31 +18,30 @@ struct SignUpView: View {
     
     var body: some View {
         VStack{
-            Spacer()
-                .navigationBarBackButtonHidden(true)
-                .toolbar(content: {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .frame(width: 90, height: 35)
-                                    .foregroundColor(Color("appColor"))
-                                HStack {
-                                    Image(systemName: "arrow.left")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(.white)
-                                    Text("Back")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                        }
-                        )
-                    }
-                })
+//                .navigationBarBackButtonHidden(true)
+//                .toolbar(content: {
+//                    ToolbarItem(placement: .navigationBarLeading) {
+//                        Button(action: {
+//                            presentationMode.wrappedValue.dismiss()
+//                        }, label: {
+//                            ZStack {
+//                                RoundedRectangle(cornerRadius: 15)
+//                                    .frame(width: 90, height: 35)
+//                                    .foregroundColor(Color("appColor"))
+//                                HStack {
+//                                    Image(systemName: "arrow.left")
+//                                        .resizable()
+//                                        .frame(width: 20, height: 20)
+//                                        .foregroundColor(.white)
+//                                    Text("Back")
+//                                        .font(.system(size: 20))
+//                                        .foregroundColor(.white)
+//                                }
+//                            }
+//                        }
+//                        )
+//                    }
+//                })
             Image("carQuestLogo")
                 .resizable()
                 .renderingMode(.original)
