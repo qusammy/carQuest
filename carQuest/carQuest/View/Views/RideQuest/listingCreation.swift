@@ -194,12 +194,14 @@ struct listingCreation: View {
         }
     }
     func createListing() {
+        let user = AuthenticationManager.shared.getAuthenticatedUser()
         db.collection("carListings").addDocument(data: [
                 "carMake": $carMake,
                 "carDescription": $carDescription,
                 "carModel": $carModel,
                 "carType": $carType,
                 "carYear": $carYear,
+                "userID": user.uid
         ])
     }
 }

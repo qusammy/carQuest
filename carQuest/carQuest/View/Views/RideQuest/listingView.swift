@@ -14,6 +14,7 @@ struct listingView: View {
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
+    @StateObject var userViewModel = UserInfoViewModel()
 
 
     var body: some View {
@@ -111,10 +112,10 @@ struct listingView: View {
                                     .foregroundColor(.black)
                         }
                         HStack{
-                            Image("profileIcon")
+                            Image("\(userViewModel.photoURL)")
                                 .resizable()
                                 .frame(width:55, height:55)
-                            Text("$username")
+                            Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.black)
                                 .frame(maxWidth: 375, alignment: .leading)

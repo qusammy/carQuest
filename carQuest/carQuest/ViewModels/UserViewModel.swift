@@ -43,4 +43,24 @@ class UserProfileViewModel: ObservableObject{
          //   print(data)
         }
     }
+    
+
+}
+
+class UserInfoViewModel: ObservableObject {
+    @Published var displayName: String
+    @Published var photoURL: String
+    
+    func UserListingInfo() {
+        let user = AuthenticationManager.shared.getAuthenticatedUser()
+        let querySnapshot = try await Firestore.firestore().collection("users").whereField("user_id", isEqualTo: user.uid)
+            .getDocuments()
+          for document in querySnapshot.documents {
+              let data = document.get("display_name") as? String
+              self.displayName = data ?? ""
+              let dara2 = document.get("profileImageURL") as? String
+              self.photoURL = data2 ?? ""
+          }
+
+    }
 }
