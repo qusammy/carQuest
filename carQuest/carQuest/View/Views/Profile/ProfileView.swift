@@ -9,13 +9,17 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
+
+
 struct ProfileView: View {
     
     @StateObject private var nameViewModel = SignInEmailViewModel()
     @StateObject private var viewModel = ProfileViewModel()
     @Binding var showSignInView: Bool
-    @State private var showingAlert: Bool = false
-    
+    @State private var showingDeleteAlert: Bool = false
+    @State private var showingSignOutAlert: Bool = false
+    @State private var showingVerifyAlert: Bool = false
+    @State private var showingVerifyButton: Bool = true
     
     var body: some View {
         NavigationView{
@@ -42,83 +46,119 @@ struct ProfileView: View {
                             if let user = viewModel.user {
                                 Text("UserId: \(user.userId)")
                             }
-                                NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
-                                    Text("Profile")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.black)
-                                }
-                            
-                            Text("My Listings")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.black)
-                            Text("My Purchases")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.black)
-                            //extra settings go here
-                            Text("Push Notifications")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.black)
-
-                            Text("App Appearance")
-                                .font(.custom("Jost-Regular", size:20))
-                                .foregroundColor(.black)
-                            Text("Privacy")
-                                .font(.custom("Jost-Regular", size:20))
-                                .foregroundColor(.black)
-                            Text("About CarQuest")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.black)
-
-                            Button("Log Out") {
-                                Task {
-                                    do {
-                                        try viewModel.signOut()
-                                        showSignInView = true
-                                    }catch {
-                                        print(error)
-                                    }
-                                }
+                            NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
+                                Text("Profile")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.black)
                             }
-                            Button {
-                                showingAlert = true
-                            }label: {
-                                Text("Delete Account")
-                                    .foregroundColor(.accentColor)
-                            }.alert("Are you sure you want to delete your account?", isPresented: $showingAlert) {
-                                Button(role: .destructive) {
+                            if Auth.auth().currentUser?.isEmailVerified == false {
+                                Button {
                                     Task {
                                         do {
-                                            try await viewModel.deleteAccount()
-                                            showSignInView = true
+                                            try await AuthenticationManager.shared.verifyEmail()
+                                            showingVerifyAlert = true
                                         }catch {
                                             print(error)
                                         }
                                     }
                                 }label: {
-                                    Text("Delete Account")
-                                        .font(.custom("Jost-Regular", size: 25))
+                                    Text("Verify Email")
+                                }.alert ("Verify Email", isPresented: $showingVerifyAlert){
+                                    Button("OK") {
+                                        showingVerifyAlert = false
+                                        showingVerifyButton = false
+                                        Task {
+                                            do {
+                                                try await Auth.auth().currentUser?.reload()
+                                            }catch {
+                                                print("error reloading user")
+                                            }
+                                        }
+                                        
+                                    }
+                                }message: {
+                                    Text("You should have received an email with instructions on how to verify your email address.")
                                 }
-                            }message: {
-                                Text("This action cannot be undone. \n The info on this account will be unrecoverable")
+                            }
+                                
+                                Text("My Listings")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.black)
+                                Text("My Purchases")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.black)
+                                //extra settings go here
+                                Text("Push Notifications")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.black)
+                                
+                                Text("App Appearance")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.black)
+                                Text("Privacy")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.black)
+                                Button {
+                                    showingSignOutAlert = true
+                                }label: {
+                                    Text("Log Out")
+                                        .foregroundStyle(Color.accentColor)
+                                }.alert("Are you sure you want to log out?", isPresented: $showingSignOutAlert) {
+                                    Button(role: .destructive) {
+                                        Task {
+                                            do {
+                                                try viewModel.signOut()
+                                                showSignInView = true
+                                            }catch {
+                                                print(error)
+                                            }
+                                        }
+                                    }label: {
+                                        Text("Log Out")
+                                    }
+                                }
+                                Button {
+                                    showingDeleteAlert = true
+                                }label: {
+                                    Text("Delete Account")
+                                        .foregroundColor(.accentColor)
+                                }.alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
+                                    Button(role: .destructive) {
+                                        Task {
+                                            do {
+                                                try await viewModel.deleteAccount()
+                                                showSignInView = true
+                                            }catch {
+                                                print(error)
+                                            }
+                                        }
+                                    }label: {
+                                        Text("Delete Account")
+                                            .font(.custom("Jost-Regular", size: 25))
+                                    }
+                                }message: {
+                                    Text("This action cannot be undone. \n The info on this account will be unrecoverable")
+                                }
                             }
                         }
+
                     }.task {
                         let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                         self.showSignInView = currentUser == nil
                         try? await viewModel.loadCurrentUser()
-                        
-                    }
-                    .foregroundColor(.accentColor)
-                    .background(Color.background)
-                    .scrollContentBackground(.hidden)
-                    .listRowBackground(Color(.background))
-                    bottomNavigationBar(showSignInView: $showSignInView)
+                        if Auth.auth().currentUser?.isEmailVerified == true {
+                            showingVerifyButton = false
+                        }
+                    }   .foregroundColor(.accentColor)
+                        .background(Color.background)
+                        .scrollContentBackground(.hidden)
+                        .listRowBackground(Color(.background))
+                        bottomNavigationBar(showSignInView: $showSignInView)
                 }
             }
-            .padding()
         }
     }
-}
+
 #Preview {
     ProfileView(showSignInView: .constant(false))
 }

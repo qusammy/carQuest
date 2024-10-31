@@ -9,9 +9,13 @@ import CoreLocation
 import PhotosUI
 import FirebaseFirestore
 import Combine
+import FirebaseAuth
 import FirebaseAnalytics
 struct listingCreation: View {
     @ObservedObject var locationManager = LocationManager.shared
+    @StateObject private var viewModel = ProfileViewModel()
+    @StateObject private var carViewModel = ListingViewModel()
+
     let db = Firestore.firestore()
     
     @State var carType: String
@@ -30,6 +34,8 @@ struct listingCreation: View {
     @State var previewListing = false
     
     @Binding var showSignInView: Bool
+
+
     var body: some View {
         NavigationView{
             VStack{
@@ -170,29 +176,31 @@ struct listingCreation: View {
                             }
                         }
                     }
-                    Button(action: {
-                        createListing()
-                    }, label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(maxWidth:150, maxHeight:100)
-                                .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                            Text("Post Listing")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.white)
-                        }
-                    }).frame(maxWidth: 375, alignment: .center)
+                    Button {
+                       createListing()
+                    } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .frame(maxWidth:150, maxHeight:100)
+                                    .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                                Text("Post Listing")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.white)
+                            }
+                    }.frame(maxWidth: 375, alignment: .center)
                 }
             }
         }
     }
-    func createListing(){
+    func createListing() {
+        let userID = Auth.auth().currentUser?.uid
         db.collection("carListings").addDocument(data: [
-            "carMake": carMake,
-            "carDescription": carDescription,
-            "carModel": carModel,
-            "carType": carType,
-            "carYear": carYear,
+                "carMake": carMake,
+                "carDescription": carDescription,
+                "carModel": carModel,
+                "carType": carType,
+                "carYear": carYear,
+                "userID": userID ?? ""
         ])
     }
 }

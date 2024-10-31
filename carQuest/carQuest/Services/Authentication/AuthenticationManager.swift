@@ -79,6 +79,10 @@ final class AuthenticationManager {
         try await Auth.auth().sendPasswordReset(withEmail: email)
     }
     
+    func verifyEmail() async throws{
+        try await Auth.auth().currentUser?.sendEmailVerification()
+    }
+    
     func deleteUser() async throws {
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badURL)

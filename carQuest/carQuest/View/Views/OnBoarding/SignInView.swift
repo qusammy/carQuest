@@ -10,8 +10,9 @@ import SwiftUI
 struct SignInView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
-    
+
     @Binding var showSignInView: Bool
+    
     
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     

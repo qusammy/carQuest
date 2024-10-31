@@ -42,6 +42,7 @@ struct UserProfileView: View {
     @Binding var showSignInView: Bool
     @State var showLogOut: Bool = false
     
+    
     @State var shouldShowImagePicker = false
     @ObservedObject var vm = UserProfileViewModel()
    

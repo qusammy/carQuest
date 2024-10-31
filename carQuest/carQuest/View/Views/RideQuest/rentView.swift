@@ -6,9 +6,11 @@ import Firebase
 import FirebaseFirestore
 struct rentView: View {
     @Binding var showSignInView: Bool
+    
     var body: some View {
         NavigationView{
             VStack{
+                Spacer()
                 topNavigationBar()
                 ScrollView(){
                     NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){

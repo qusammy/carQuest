@@ -7,10 +7,16 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestore
+import FirebaseAuth
+
 struct listingView: View {
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
+    @StateObject var viewModel = ListingViewModel()
+    @StateObject var userViewModel = UserInfoViewModel()
+
+
     var body: some View {
         VStack{
             ZStack{
@@ -47,7 +53,7 @@ struct listingView: View {
                 VStack{
                     HStack{
                         Button(action: {
-                        //brings up booking view
+                            //brings up booking view
                         }, label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 15)
@@ -59,7 +65,7 @@ struct listingView: View {
                             }
                         }).offset(x:-40)
                         Button(action: {
-                        //brings up message view
+                            //brings up message view
                         }, label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 15)
@@ -87,43 +93,50 @@ struct listingView: View {
                             .font(.custom("Jost-Regular", size: 15))
                             .foregroundColor(.black)
                     }
-                    HStack {
-                        Text("Year: ")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Make: ")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Model: ")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Type: ")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                    }
-                    HStack{
-                        Image("profileIcon")
-                            .resizable()
-                            .frame(width:55, height:55)
-                        Text("$username")
+                        HStack {
+                            Text("Year: \(viewModel.carYear)")
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .frame(maxWidth: 375, alignment: .leading)
+                                    .foregroundColor(.black)
+                            Text("Make: \(viewModel.carMake)")
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .frame(maxWidth: 375, alignment: .leading)
+                                    .foregroundColor(.black)
+                            Text("Model: \(viewModel.carModel)")
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .frame(maxWidth: 375, alignment: .leading)
+                                    .foregroundColor(.black)
+                            Text("Type: \(viewModel.carType)")
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .frame(maxWidth: 375, alignment: .leading)
+                                    .foregroundColor(.black)
+                        }
+                        HStack{
+                            Image("\(userViewModel.photoURL)")
+                                .resizable()
+                                .frame(width:55, height:55)
+                            Text("\(userViewModel.displayName)")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.black)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        }
+                    Text("Description: \(viewModel.carDescription)")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.black)
                             .frame(maxWidth: 375, alignment: .leading)
-                    }
-                    Text("Description")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.black)
-                        .frame(maxWidth: 375, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                    Text("Listed date")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: 375, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                        Text("Listed date")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: 375, alignment: .leading)
+
                 }
+            }
+        }.task {
+            do {
+                try await viewModel.getListingInfo()
+            }catch {
+                print("Getting Listing Data Failed")
             }
         }
     }
