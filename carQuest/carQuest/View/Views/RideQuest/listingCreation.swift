@@ -9,6 +9,7 @@ import CoreLocation
 import PhotosUI
 import FirebaseFirestore
 import Combine
+import FirebaseAuth
 import FirebaseAnalytics
 struct listingCreation: View {
     @ObservedObject var locationManager = LocationManager.shared
@@ -175,10 +176,9 @@ struct listingCreation: View {
                             }
                         }
                     }
-                    Button(action: {
-                        createListing()
-                    }, label: {
-                        NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
+                    Button {
+                       createListing()
+                    } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 20)
                                     .frame(maxWidth:150, maxHeight:100)
@@ -187,21 +187,20 @@ struct listingCreation: View {
                                     .font(.custom("Jost-Regular", size: 20))
                                     .foregroundColor(.white)
                             }
-                        }
-                    }).frame(maxWidth: 375, alignment: .center)
+                    }.frame(maxWidth: 375, alignment: .center)
                 }
             }
         }
     }
     func createListing() {
-        let user = AuthenticationManager.shared.getAuthenticatedUser()
+        let userID = Auth.auth().currentUser?.uid
         db.collection("carListings").addDocument(data: [
-                "carMake": $carMake,
-                "carDescription": $carDescription,
-                "carModel": $carModel,
-                "carType": $carType,
-                "carYear": $carYear,
-                "userID": user.uid
+                "carMake": carMake,
+                "carDescription": carDescription,
+                "carModel": carModel,
+                "carType": carType,
+                "carYear": carYear,
+                "userID": userID ?? ""
         ])
     }
 }

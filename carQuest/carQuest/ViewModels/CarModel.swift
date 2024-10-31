@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import FirebaseFirestore
 import FirebaseAuth
+import FirebaseFirestore
 
 @MainActor
 final class ListingViewModel: ObservableObject {
@@ -17,7 +17,7 @@ final class ListingViewModel: ObservableObject {
     @Published var carMake: String = ""
     @Published var carDescription: String = ""
     
-    func getListingInfo() throws{
+    func getListingInfo() async throws{
         guard let userID = Auth.auth().currentUser?.uid else { return }
         let querySnapshot = try await Firestore.firestore().collection("carListings").whereField("userID", isEqualTo: userID)
             .getDocuments()

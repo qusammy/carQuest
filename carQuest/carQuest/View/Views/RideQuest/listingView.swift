@@ -134,7 +134,7 @@ struct listingView: View {
             }
         }.task {
             do {
-                try viewModel.getListingInfo()
+                try await viewModel.getListingInfo()
             }catch {
                 print("Getting Listing Data Failed")
             }
