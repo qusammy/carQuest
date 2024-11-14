@@ -29,6 +29,7 @@ struct imageBox: View {
 }
 
 struct topNavigationBar: View {
+    @Binding var showSignInView: Bool
     var body: some View {
         VStack{
             if Auth.auth().currentUser?.isEmailVerified == false {
@@ -41,10 +42,17 @@ struct topNavigationBar: View {
                     .font(Font.custom("ZingRustDemo-Base", size:50))
                     .foregroundColor(Color("Foreground"))
                 Spacer()
+                NavigationLink(destination: MainChatView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                    Image(systemName: "envelope.fill")
+                        .resizable()
+                        .frame(width:40, height:30)
+                        .foregroundColor(Color("Foreground"))
+                }
                 Image(systemName: "bell.fill")
                     .resizable()
                     .frame(width:30, height:30)
                     .foregroundColor(Color("Foreground"))
+                
             }
             RoundedRectangle(cornerRadius: 70)
                 .frame(width:345, height:1)
@@ -59,9 +67,11 @@ struct bottomNavigationBar: View {
             RoundedRectangle(cornerRadius: 70)
                 .frame(width:345, height:1)
             HStack{
-                Image("gavel")
-                    .resizable()
-                    .frame(width: 60, height:60)
+                NavigationLink(destination: AuctionView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
+                    Image("gavel")
+                        .resizable()
+                        .frame(width: 60, height:60)
+                }
                 NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     Image("rent")
                         .resizable()
@@ -77,12 +87,19 @@ struct bottomNavigationBar: View {
                     .resizable()
                     .frame(width: 60, height:60)
                 NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    WebImage(url: URL(string: vm.carUser?.photoURL ?? "profileIcon"))
-                        .resizable()
-                        .frame(width: 55, height:55)
-                        .scaledToFill()
-                        .clipShape(Circle())
-
+                    if vm.carUser?.profileImageURL == nil {
+                        Image("profileIcon")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:45, height:45)
+                            .clipShape(Circle())
+                    } else {
+                        WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
+                            .resizable()
+                            .frame(width: 55, height:55)
+                            .scaledToFill()
+                            .clipShape(Circle())
+                    }
                 }
             }
         }
@@ -180,5 +197,30 @@ struct listingTextField: View {
             .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
             .cornerRadius(10)
             .multilineTextAlignment(.leading)
+    }
+}
+
+struct recentMessageTextBox: View{
+    @State var carUser: CarQuestUser?
+    @ObservedObject var vm = CreateNewMessageViewModel()
+    var body: some View {
+        NavigationLink(destination: ChatView(carUser: carUser)){
+            VStack(alignment: .leading){
+                HStack{
+                    Image("profileIcon")
+                        .resizable()
+                        .frame(width:60, height:60)
+                    VStack{
+                        Text("$username")
+                            .font(Font.custom("Jost-Regular", size:25))
+                            .foregroundColor(.black)
+                        Text("recent message")
+                            .font(Font.custom("Jost-Regular", size:17))
+                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                    }
+                }
+                Divider()
+            }
+        }
     }
 }

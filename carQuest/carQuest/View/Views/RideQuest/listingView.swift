@@ -78,7 +78,6 @@ struct listingView: View {
                         })
                         Button(action: {
                             isLiked.toggle()
-                            likeTapped.toggle()
                         }, label: {
                             ZStack{
                                 Image(systemName: isLiked ? "heart.fill" : "heart")
@@ -87,11 +86,6 @@ struct listingView: View {
                                     .frame(width:40, height:35)
                             }
                         }).offset(x:40)
-                    }
-                    if likeTapped == true {
-                        Text("added to liked vehicles")
-                            .font(.custom("Jost-Regular", size: 15))
-                            .foregroundColor(.black)
                     }
                         HStack {
                             Text("Year: \(viewModel.carYear)")

@@ -14,6 +14,10 @@
 		002ABF6F2C73A3A300FFCC86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002ABF6E2C73A3A300FFCC86 /* Assets.xcassets */; };
 		002ABF722C73A3A300FFCC86 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */; };
 		0042038F2C7622EA00B7FFCD /* Jost-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0042038E2C7622E900B7FFCD /* Jost-Regular.ttf */; };
+		004B33C22CDBB85100571C1C /* MainChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004B33C12CDBB85100571C1C /* MainChatView.swift */; };
+		004B33C42CDBBC2100571C1C /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004B33C32CDBBC2100571C1C /* ChatView.swift */; };
+		005577832CDE777C00E9A69A /* AuctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005577822CDE777C00E9A69A /* AuctionView.swift */; };
+		005577852CDE7CC300E9A69A /* AuctionListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005577842CDE7CC300E9A69A /* AuctionListingView.swift */; };
 		00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BB2DDE2C91E1D7003379DA /* settingsView.swift */; };
 		00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF079B2C80D21E000404AA /* listingCreation.swift */; };
 		00CF05332CA313B900E53D2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00CF05322CA313B900E53D2F /* GoogleService-Info.plist */; };
@@ -92,6 +96,10 @@
 		002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0042038E2C7622E900B7FFCD /* Jost-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Jost-Regular.ttf"; sourceTree = "<group>"; };
 		004203902C76233000B7FFCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		004B33C12CDBB85100571C1C /* MainChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChatView.swift; sourceTree = "<group>"; };
+		004B33C32CDBBC2100571C1C /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		005577822CDE777C00E9A69A /* AuctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionView.swift; sourceTree = "<group>"; };
+		005577842CDE7CC300E9A69A /* AuctionListingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionListingView.swift; sourceTree = "<group>"; };
 		00BB2DDE2C91E1D7003379DA /* settingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsView.swift; sourceTree = "<group>"; };
 		00BF079B2C80D21E000404AA /* listingCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingCreation.swift; sourceTree = "<group>"; };
 		00CF05322CA313B900E53D2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -334,9 +342,13 @@
 		6F2EBC912C94923A00EF07FC /* RideQuest */ = {
 			isa = PBXGroup;
 			children = (
-				00BF079B2C80D21E000404AA /* listingCreation.swift */,
-				00CF05342CA3144000E53D2F /* listingView.swift */,
+				005577822CDE777C00E9A69A /* AuctionView.swift */,
 				00F5C0C02CAB07B900856E1E /* rentView.swift */,
+				00CF05342CA3144000E53D2F /* listingView.swift */,
+				005577842CDE7CC300E9A69A /* AuctionListingView.swift */,
+				00BF079B2C80D21E000404AA /* listingCreation.swift */,
+				004B33C12CDBB85100571C1C /* MainChatView.swift */,
+				004B33C32CDBBC2100571C1C /* ChatView.swift */,
 			);
 			path = RideQuest;
 			sourceTree = "<group>";
@@ -488,6 +500,7 @@
 				001111442CB58C41001F877D /* ImageManager.swift in Sources */,
 				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
 				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
+				004B33C42CDBBC2100571C1C /* ChatView.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
 				227AF15B2CAD86D2005A23F0 /* ResetPassword.swift in Sources */,
 				6F2EBCA22C94949800EF07FC /* LocationSearchBar.swift in Sources */,
@@ -496,6 +509,7 @@
 				00CF05352CA3144000E53D2F /* listingView.swift in Sources */,
 				2287A9812C94825D00EB7D34 /* AuthenticationManager.swift in Sources */,
 				00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */,
+				004B33C22CDBB85100571C1C /* MainChatView.swift in Sources */,
 				6F2EBC862C948E9100EF07FC /* Helpers.swift in Sources */,
 				6F2EBC9E2C9493F900EF07FC /* WelcomeView.swift in Sources */,
 				2287A97E2C94799C00EB7D34 /* Utilities.swift in Sources */,
@@ -506,8 +520,10 @@
 				6F2EBCA42C9494C200EF07FC /* Shared.swift in Sources */,
 				6F2EBCB32C94980200EF07FC /* Ride.swift in Sources */,
 				002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */,
+				005577832CDE777C00E9A69A /* AuctionView.swift in Sources */,
 				6F2EBCAC2C94973400EF07FC /* FireStoreService.swift in Sources */,
 				00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */,
+				005577852CDE7CC300E9A69A /* AuctionListingView.swift in Sources */,
 				6F2EBC9A2C94937700EF07FC /* UserProfileView.swift in Sources */,
 				6F2EBC882C948EB700EF07FC /* Extensions.swift in Sources */,
 				6F2EBC942C94933400EF07FC /* RideDetails.swift in Sources */,

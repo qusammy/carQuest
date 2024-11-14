@@ -8,6 +8,28 @@
 import Foundation
 import FirebaseFirestore
 
+struct CarQuestUser: Identifiable{
+    var id: String { uid }
+    
+    let uid, email, profileImageURL, display_name: String
+    
+    init(data: [String: Any]) {
+        self.uid = data["uid"] as? String ?? ""
+        self.email = data["email"] as? String ?? ""
+        self.display_name = data["display_name"] as? String ?? ""
+        self.profileImageURL = data["profileImageURL"] as? String ?? ""
+        
+    }
+}
+
+struct CarQuestUser2: Identifiable{
+    var id: String
+    var display_name: String
+    var email: String
+    var user_id: String
+    var profileImageURL: String
+}
+
 struct DBUser {
     let userId: String
     let email: String?

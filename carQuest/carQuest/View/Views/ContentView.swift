@@ -17,7 +17,7 @@ struct ContentView: View {
             VStack {
                 Spacer()
                     .navigationBarBackButtonHidden(true)
-                topNavigationBar()
+                topNavigationBar(showSignInView: $showSignInView)
                 ScrollView{
                     VStack{
                         HStack {
