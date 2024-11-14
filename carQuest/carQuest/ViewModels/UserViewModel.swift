@@ -38,9 +38,8 @@ class UserProfileViewModel: ObservableObject{
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let display_name = data["display_name"] as? String ?? ""
-            let profileImageURL = data["profileImageURL"] as? String ?? "profileIcon"
-            self.carUser = CarQuestUser(uid: uid, email: email, photoURL: profileImageURL ?? "profileIcon", display_name: display_name)
-         //   print(data)
+            let photoURL = data["photoURL"] as? String ?? "profileIcon"
+            self.carUser = CarQuestUser(data: data)
         }
     }
     

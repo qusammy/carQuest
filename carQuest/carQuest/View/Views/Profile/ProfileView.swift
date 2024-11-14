@@ -24,7 +24,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView{
             VStack {
-                topNavigationBar()
+                topNavigationBar(showSignInView: $showSignInView)
                 VStack {
                     if showSignInView == true {
                         NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){

@@ -12,10 +12,6 @@ import FirebaseAuth
 import FirebaseStorage
 import SDWebImageSwiftUI
 
-struct CarQuestUser{
-    let uid, email, photoURL, display_name: String
-}
-
 class FirebaseManager: NSObject{
     
     let auth: Auth
@@ -49,15 +45,30 @@ struct UserProfileView: View {
     var body: some View {
         VStack{
            
-            topNavigationBar()
+            topNavigationBar(showSignInView: $showSignInView)
             ScrollView{
                 HStack{
-                    WebImage(url: URL(string: vm.carUser?.photoURL ?? "profileIcon"))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:200, height:200)
-                        .clipShape(Circle())
                     
+                    if let image = self.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:200, height:200)
+                            .clipShape(Circle())
+                    } else if vm.carUser?.profileImageURL == nil {
+                        Image("profileIcon")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:200, height:200)
+                            .clipShape(Circle())
+                    }
+                    else {
+                        WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon.png"))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:200, height:200)
+                            .clipShape(Circle())
+                    }
                 }
                 Button(action: {
                     shouldShowImagePicker.toggle()

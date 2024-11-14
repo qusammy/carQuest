@@ -11,7 +11,7 @@ struct rentView: View {
         NavigationView{
             VStack{
                 Spacer()
-                topNavigationBar()
+                topNavigationBar(showSignInView: $showSignInView)
                 ScrollView(){
                     NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
                         ZStack{
