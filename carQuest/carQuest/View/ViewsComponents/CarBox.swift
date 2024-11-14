@@ -10,13 +10,20 @@ import FirebaseAuth
 
 
 struct imageBox: View {
-    var imageName: String
+    var imageName: UIImage
+    var carYear: String
+    var carMake: String
+    var carModel: String
     var body: some View {
         VStack{
-            Image(imageName)
+            Image(uiImage: imageName)
                 .resizable()
-                .frame(width:200, height:200)
+                .frame(width:250, height:250)
+                .scaledToFill()
                 .clipped()
+            Text("\(carYear) \(carMake) \(carModel)")
+                .font(Font.custom("Jost-Regular", size:17))
+                .frame(maxWidth:250, maxHeight:40)
         }
     }
 }
@@ -88,7 +95,7 @@ struct carListingLink: View {
         VStack{
         NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
             VStack{
-                imageBox(imageName: "carQuestLogo")
+//                imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "", carMake: "", carModel: "")
                 Text("")
                 .font(.custom("Jost-Regular", size:17))
                 .frame(maxWidth:370, maxHeight:15)
@@ -116,8 +123,7 @@ struct previewListing: View {
     @Binding var description: String
     @Binding var typeOfCar: String
     @Binding var date: Date
-    @Binding var listedPhoto1: Image?
-    @Binding var listedPhoto2: Image?
+    @Binding var listedPhoto1: UIImage?
     var body: some View{
         VStack{
             RoundedRectangle(cornerRadius: 70)
@@ -130,14 +136,10 @@ struct previewListing: View {
                 ScrollView(.horizontal, showsIndicators: false)
                 {
                     HStack{
-                        listedPhoto1?
+                        Image(uiImage: listedPhoto1!)
                             .resizable()
                             .clipped()
-                            .frame(width:300, height:300)
-                        listedPhoto2?
-                            .resizable()
-                            .clipped()
-                            .frame(width:300, height:300)
+                            .frame(width: 300, height: 300)
                     }
                 }
                 
