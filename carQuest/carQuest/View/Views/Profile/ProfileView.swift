@@ -44,7 +44,7 @@ struct ProfileView: View {
                         if showSignInView == false {
                             
                             if let user = viewModel.user {
-                                Text("UserId: \(user.userId)")
+                                Text("User ID: \(user.userId)")
                             }
                             NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
                                 Text("Profile")

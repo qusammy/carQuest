@@ -38,7 +38,6 @@ struct UserProfileView: View {
     @Binding var showSignInView: Bool
     @State var showLogOut: Bool = false
     
-    
     @State var shouldShowImagePicker = false
     @ObservedObject var vm = UserProfileViewModel()
    
@@ -86,9 +85,15 @@ struct UserProfileView: View {
                 Text(vm.carUser?.email ?? "$email")
                     .font(.custom("Jost-Regular", size:25))
                     .foregroundColor(.black)
-                Text("User ID: \(vm.carUser?.uid ?? "no user logged in")")
-                    .font(.custom("Jost-Regular", size:15))
-                    .foregroundColor(.black)
+                if let user = viewModel.user {
+                    Text("User ID: \(user.userId)")
+                        .font(.custom("Jost-Regular", size:15))
+                        .foregroundColor(.black)
+                } else {
+                    Text("No user logged in")
+                        .font(.custom("Jost-Regular", size:15))
+                        .foregroundColor(.black)
+                }
                 Button(action: {
                     persistImageToStorage()
                 }, label: {
