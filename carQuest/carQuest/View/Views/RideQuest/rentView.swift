@@ -10,11 +10,13 @@ struct rentView: View {
     @ObservedObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
     @State private var retrievedImages = [UIImage]()
+    
+    
     var body: some View {
         NavigationView{
             VStack{
                 Spacer()
-                topNavigationBar()
+                topNavigationBar(showSignInView: $showSignInView)
                 NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
@@ -25,11 +27,15 @@ struct rentView: View {
                             .font(.custom("Jost-Regular", size: 30))
                     }
                 }
-                List(viewModel.rentListingList) { listing in
-                    ForEach(retrievedImages, id: \.self) { image in
-                        imageBox(imageName: image, carYear: listing.carYear, carMake: listing.carMake, carModel: listing.carModel)
+                List(viewModel.allListings) { listing in
+                    if listing.listingType == "renting" {
+                        ForEach(retrievedImages, id: \.self) { image in
+                            NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
+                                imageBox(imageName: image, carYear: listing.carYear, carMake: listing.carMake, carModel: listing.carModel, width: 250, height: 250)
+                                viewModel.listingIndex = viewModel.allListings.firstIndex(of: listing)
+                            }
+                        }
                     }
-
                 }.foregroundStyle(Color.foreground)
                     .background(Color.background)
                     .scrollContentBackground(.hidden)
@@ -39,13 +45,14 @@ struct rentView: View {
             }.frame(width:375)
                 .onAppear {
                     loadPhotos()
+                    viewModel.generateListings()
                 }
         }
     }
     init(showSignInView: Binding<Bool>) {
         self._showSignInView = showSignInView
-        viewModel.generateListingsRenting()
     }
+
     
     func loadPhotos() {
         let db = Firestore.firestore()
@@ -64,9 +71,7 @@ struct rentView: View {
                     fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
                         if error == nil && data != nil {
                             if let image = UIImage(data: data!) {
-                                DispatchQueue.main.async {
                                     retrievedImages.append(image)
-                                }
                             }
                         }
                     }

@@ -16,7 +16,6 @@ struct listingView: View {
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
 
-
     var body: some View {
         VStack{
             ZStack{
@@ -125,12 +124,6 @@ struct listingView: View {
                             .frame(maxWidth: 375, alignment: .leading)
 
                 }
-            }
-        }.task {
-            do {
-                try await viewModel.getListingInfo()
-            }catch {
-                print("Getting Listing Data Failed")
             }
         }
     }

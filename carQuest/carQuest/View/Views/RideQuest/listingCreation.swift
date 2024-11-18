@@ -36,7 +36,6 @@ struct listingCreation: View {
     
     @Binding var showSignInView: Bool
 
-
     var body: some View {
         NavigationView{
             VStack{

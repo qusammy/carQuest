@@ -14,11 +14,13 @@ struct imageBox: View {
     var carYear: String
     var carMake: String
     var carModel: String
+    var width: CGFloat
+    var height: CGFloat
     var body: some View {
         VStack{
             Image(uiImage: imageName)
                 .resizable()
-                .frame(width:250, height:250)
+                .frame(width: width, height: height)
                 .scaledToFill()
                 .clipped()
             Text("\(carYear) \(carMake) \(carModel)")
@@ -112,7 +114,7 @@ struct carListingLink: View {
         VStack{
         NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
             VStack{
-//                imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "", carMake: "", carModel: "")
+                imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "", carMake: "", carModel: "", width: 100, height: 100)
                 Text("")
                 .font(.custom("Jost-Regular", size:17))
                 .frame(maxWidth:370, maxHeight:15)

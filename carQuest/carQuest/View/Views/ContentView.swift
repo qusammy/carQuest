@@ -41,20 +41,21 @@ struct ContentView: View {
                         }
                         HStack{
                             VStack{
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                                NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
                                     VStack{
-                                        //                                imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "", carMake: "", carModel: "")
-                                                                            }
+                                        imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "", carMake: "", carModel: "", width: 200, height: 200)
+                                        
                                     }
-                                    
                                 }
-                                VStack{
-                                    //                            imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "2019", carMake: "Honda", carModel: "Civic")
-                                }
+                                
                             }
+                            VStack{
+                                imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "2019", carMake: "Honda", carModel: "Civic", width: 200, height: 200)
+                            }
+                        }
                             HStack{
-                                //                            imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "", carMake: "", carModel: "")
-                                //                            imageBox(imageName: UIImage(imageLiteralResourceName: "carquestLogo"), carYear: "", carMake: "", carModel: "")
+                                imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "", carMake: "", carModel: "", width: 200, height: 200)
+                                imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "", carMake: "", carModel: "", width: 200, height: 200)
                             }
                             RoundedRectangle(cornerRadius: 70)
                                 .frame(width:345, height:1)

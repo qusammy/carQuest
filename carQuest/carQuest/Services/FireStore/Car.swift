@@ -16,6 +16,7 @@ struct carListing: Codable, Identifiable {
     var carYear: String
     var userID: String
     var imageName: String
+    var listingType: String
 }
 //extension carListing {
 //    static var empty: carListing {
