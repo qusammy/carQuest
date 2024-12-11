@@ -25,14 +25,9 @@ struct topNavigationBar: View {
     @Binding var showSignInView: Bool
     var body: some View {
         VStack{
-            if Auth.auth().currentUser?.isEmailVerified == false {
-                Text("Please verify your email address.")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.blue)
-            }
             HStack{
                 Text("CARQUEST")
-                    .font(Font.custom("ZingRustDemo-Base", size:50))
+                    .font(Font.custom("ZingRustDemo-Base", size:45))
                     .foregroundColor(Color("Foreground"))
                 Spacer()
                 NavigationLink(destination: MainChatView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
@@ -45,11 +40,14 @@ struct topNavigationBar: View {
                     .resizable()
                     .frame(width:30, height:30)
                     .foregroundColor(Color("Foreground"))
-                
             }
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-        }
+            if Auth.auth().currentUser?.isEmailVerified == false {
+                Text("Please verify your email address.")
+                    .font(.custom("Jost-Regular", size: 15))
+                    .foregroundColor(.blue)
+                    .multilineTextAlignment(.leading)
+            }
+        }.frame(width:375)
     }
 }
 struct bottomNavigationBar: View {
@@ -135,6 +133,8 @@ struct previewListing: View {
     @Binding var date: Date
     @Binding var listedPhoto1: Image?
     @Binding var listedPhoto2: Image?
+    @ObservedObject var vm = UserProfileViewModel()
+
     var body: some View{
         VStack{
             RoundedRectangle(cornerRadius: 70)
@@ -162,10 +162,12 @@ struct previewListing: View {
                     .font(.custom("Jost-Regular", size: 25))
                     .foregroundColor(.black)
                 HStack{
-                    Image("profileIcon")
+                    WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon.png"))
                         .resizable()
+                        .scaledToFill()
                         .frame(width:55, height:55)
-                    Text("$username")
+                        .clipShape(Circle())
+                    Text(vm.carUser?.display_name ?? "$username")
                         .font(.custom("Jost-Regular", size: 20))
                         .foregroundColor(.black)
                         .frame(maxWidth: 375, alignment: .leading)
@@ -198,27 +200,27 @@ struct listingTextField: View {
     }
 }
 
-struct recentMessageTextBox: View{
-    @State var carUser: CarQuestUser?
-    @ObservedObject var vm = CreateNewMessageViewModel()
-    var body: some View {
-        NavigationLink(destination: ChatView(carUser: carUser)){
-            VStack(alignment: .leading){
-                HStack{
-                    Image("profileIcon")
-                        .resizable()
-                        .frame(width:60, height:60)
-                    VStack{
-                        Text("$username")
-                            .font(Font.custom("Jost-Regular", size:25))
-                            .foregroundColor(.black)
-                        Text("recent message")
-                            .font(Font.custom("Jost-Regular", size:17))
-                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
-                    }
-                }
-                Divider()
-            }
-        }
-    }
-}
+//struct recentMessageTextBox: View{
+//    @State var carUser: CarQuestUser?
+//    @ObservedObject var vm = CreateNewMessageViewModel()
+//    var body: some View {
+//        NavigationLink(destination: ChatView(carUser: carUser)){
+//            VStack(alignment: .leading){
+//                HStack{
+//                    Image("profileIcon")
+//                        .resizable()
+//                        .frame(width:60, height:60)
+//                    VStack{
+//                        Text("recentMessage.display_name")
+//                            .font(Font.custom("Jost-Regular", size:25))
+//                            .foregroundColor(.black)
+//                        Text("recent message")
+//                            .font(Font.custom("Jost-Regular", size:17))
+//                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+//                    }
+//                }
+//                Divider()
+//            }
+//        }
+//    }
+//}

@@ -77,7 +77,7 @@ struct ContentView: View {
                         }
                         HStack{
                         }
-                    }.frame(width:375)
+                    }.frame(width:385)
                 }
                bottomNavigationBar(showSignInView: $showSignInView)
             }

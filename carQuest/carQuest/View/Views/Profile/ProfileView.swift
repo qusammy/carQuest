@@ -140,7 +140,7 @@ struct ProfileView: View {
                                     Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                                 }
                             }
-                        }
+                    }.frame(width:395)
 
                     }.task {
                         let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
