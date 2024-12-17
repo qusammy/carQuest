@@ -18,19 +18,20 @@ struct ContentView: View {
                 Spacer()
                     .navigationBarBackButtonHidden(true)
                 topNavigationBar(showSignInView: $showSignInView)
-                ScrollView{
+                ScrollView(showsIndicators: false){
                     VStack{
                         HStack {
                             if viewModel.displayName == "" {
-                                Text("Welcome User!")
+                                Text("Welcome, $displayname!")
                                     .font(Font.custom("Jost", size:30))
                                     .foregroundColor(Color("Foreground"))
                             }else {
-                                Text("Welcome \(viewModel.displayName)!")
+                                Text("Welcome, \(viewModel.displayName)!")
                                     .font(Font.custom("Jost", size:30))
                                     .foregroundColor(Color("Foreground"))
                             }
                         }
+                        Divider()
                         HStack{
                             Text("Recently viewed")
                                 .font(Font.custom("Jost-Regular", size:20))
@@ -38,49 +39,42 @@ struct ContentView: View {
                             Text("See all")
                                 .font(Font.custom("Jost-Regular", size:15))
                                 .underline()
-                        }
-                        HStack{
-                            VStack{
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
-                                    VStack{
-                                        imageBox(carYear: "", carMake: "", carModel: "", width: 200, height: 200)
-                                        
-                                    }
-                                }
-                                
-                            }
-                            VStack{
-                                imageBox(carYear: "2019", carMake: "Honda", carModel: "Civic", width: 200, height: 200)
-                            }
-                        }
+                        }.padding(.horizontal, 10.0)
                             HStack{
-                                imageBox(carYear: "", carMake: "", carModel: "", width: 200, height: 200)
-                                imageBox(carYear: "", carMake: "", carModel: "", width: 200, height: 200)
-                            }
-                            RoundedRectangle(cornerRadius: 70)
-                                .frame(width:345, height:1)
-                            HStack{
-                                Text("Liked vehicles")
-                                    .font(Font.custom("Jost-Regular", size:20))
+                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
                                 Spacer()
-                                Text("See all")
-                                    .font(Font.custom("Jost-Regular", size:15))
-                                    .underline()
+                                carListingLink(showSignInView: $showSignInView, imageName: "carExample2", text: "1995 NSX-T Coupe")
                             }
                             HStack{
+                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                                Spacer()
+                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
                             }
-                        }.frame(width:375)
-                    }
-                    bottomNavigationBar(showSignInView: $showSignInView)
+                        Divider()
+                        HStack{
+                            Text("Liked vehicles")
+                                .font(Font.custom("Jost-Regular", size:20))
+                            Spacer()
+                            Text("See all")
+                                .font(Font.custom("Jost-Regular", size:15))
+                                .underline()
+                        }.padding(.horizontal, 10.0)
+                        HStack{
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                            Spacer()
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                        }
+                    }.padding()
                 }
-            }.onAppear{
-                if FirebaseApp.app() == nil {
-                    FirebaseApp.configure()
-                }
-            }.navigationViewStyle(StackNavigationViewStyle())
-                .task {
-                    viewModel.getDisplayName()
-                }
+               bottomNavigationBar(showSignInView: $showSignInView)
+            }
+        }.onAppear{
+            if FirebaseApp.app() == nil {
+                FirebaseApp.configure()
+            }
+        }.navigationViewStyle(StackNavigationViewStyle())
+        .task {
+            viewModel.getDisplayName()
         }
     }
 #Preview {

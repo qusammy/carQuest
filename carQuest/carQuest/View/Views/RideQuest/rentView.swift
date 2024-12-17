@@ -11,23 +11,26 @@ import SDWebImageSwiftUI
 struct rentView: View {
     @ObservedObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
-    @State var retrievedImages = [UIImage]()
-    @State var paths = [String]()
+    @State var userPreferences = ""
     
     var body: some View {
-        
-        NavigationView{
+        NavigationStack{
             VStack{
-                Spacer()
                 topNavigationBar(showSignInView: $showSignInView)
-                NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(width:220, height:50)
-                            .foregroundColor(Color("appColor"))
-                        Text("List a Rental")
-                            .foregroundColor(.white)
-                            .font(.custom("Jost-Regular", size: 30))
+                HStack{
+                    Text("Rental services")
+                        .foregroundColor(Color.foreground)
+                        .font(.custom("ZingRustDemo-Base", size: 35))
+                    Spacer()
+                    NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 20)
+                                    .frame(width:125, height:35)
+                                    .foregroundColor(Color("appColor"))
+                                Text("List a Rental")
+                                    .foregroundColor(.white)
+                                    .font(.custom("Jost-Regular", size: 20))
+                        }
                     }
                 }
                 

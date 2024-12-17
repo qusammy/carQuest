@@ -9,21 +9,46 @@ import SwiftUI
 
 struct AuctionView: View {
     @Binding var showSignInView: Bool
+    @State var userPreferences = ""
     var body: some View {
-        VStack{
-            topNavigationBar(showSignInView: $showSignInView)
-            ScrollView(){
-                VStack{
-                    NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width:275, height:50)
-                                .foregroundColor(Color("appColor"))
-                            Text("List a car for auction")
-                                .foregroundColor(.white)
-                                .font(.custom("Jost-Regular", size: 30))
+        NavigationStack{
+            VStack{
+                topNavigationBar(showSignInView: $showSignInView)
+                HStack{
+                        Text("Auction services")
+                            .foregroundColor(Color.foreground)
+                            .font(.custom("ZingRustDemo-Base", size: 35))
+                        Spacer()
+                        NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .frame(width:135, height:35)
+                                        .foregroundColor(Color("appColor"))
+                                    Text("Auction a car")
+                                        .foregroundColor(.white)
+                                        .font(.custom("Jost-Regular", size: 20))
+                            }
                         }
                     }
+                    HStack{
+                        Image(systemName: "list.bullet.circle.fill")
+                            .resizable()
+                            .foregroundColor(Color.accentColor)
+                            .frame(width:30, height:30)
+                        Spacer()
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "magnifyingglass.circle.fill")
+                                .resizable()
+                                .foregroundColor(Color.accentColor)
+                                .frame(width:30, height:30)
+                        })
+                        TextField("Search for a dream car...", text: $userPreferences)
+                            .frame(width:200, height:30)
+                            .font(.custom("Jost-Regular", size: 18))
+                    }
+                ScrollView{
                     Divider()
                     HStack{
                         //carBox elements will go here. links to auction view in separate HStack lines! still being built
@@ -41,7 +66,7 @@ struct AuctionView: View {
                 }
             }
             bottomNavigationBar(showSignInView: $showSignInView)
-        }
+        }.frame(width:375)
     }
 }
 

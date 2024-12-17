@@ -9,35 +9,7 @@ import SwiftUI
 import Firebase
 import SDWebImageSwiftUI
 
-class CreateNewMessageViewModel: ObservableObject {
-    
-    @Published var users = [CarQuestUser]()
-    @Published var errorMessage = ""
-    func fetchUsers() {
-        let db = Firestore.firestore()
-        
-        db.collection("users").getDocuments { snapshot, error in
-            if error == nil {
-                self.errorMessage = "Fetched users successfully."
-                if let snapshot = snapshot{
-                    
-                    DispatchQueue.main.async {
-                        self.users = snapshot.documents.map { d in
-                            
-                            return CarQuestUser(id: d.documentID,
-                                display_name: d["display_name"] as? String ?? "",
-                                email: d["email"] as? String ?? "",
-                                user_id: d["user_id"] as? String ?? "",
-                                profileImageURL: d["profileImageURL"] as? String ?? "")
-                        }
-                    }
-                }
-            } else {
-                self.errorMessage = "Failed to fetch users."
-            }
-        }
-    }
-}
+
 struct CreateNewMessage: View{
     
     let didSelectNewUser: (CarQuestUser?) -> ()
@@ -65,7 +37,7 @@ struct CreateNewMessage: View{
                                     .clipShape(Circle())
                                 Text(user.display_name)
                                     .font(Font.custom("Jost-Regular", size: 23))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(Color.foreground)
                                 Spacer()
                             }
                         }
@@ -85,20 +57,20 @@ struct CreateNewMessage: View{
                 ToolbarItem(placement: .navigationBarLeading){
                     Text("New Message")
                         .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color.foreground)
                 }
             }
             .onAppear{
                 vm.fetchUsers()
             }
-        }
+        }.background(Color.background)
     }
 }
 
 #Preview {
-    MainChatView(showSignInView: .constant(false))
-//    CreateNewMessage(didSelectNewUser: {
-//        user in
-//        print(user.email)
-//    })
+    //MainChatView(showSignInView: .constant(false))
+    CreateNewMessage(didSelectNewUser: {
+        user in
+        print(user?.email)
+    })
 }

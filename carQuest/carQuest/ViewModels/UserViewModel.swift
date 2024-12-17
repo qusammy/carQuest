@@ -18,6 +18,40 @@ class UserProfileViewModel: ObservableObject{
     
     init(){
         fetchCurrentUser()
+        
+        fetchRecentMessages()
+    }
+    
+    @Published var recentMessages = [ChatMessage]()
+    
+    private func fetchRecentMessages(){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .order(by: "timestamp")
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    self.errorMessage = "Failed to listen for recent messages \(error)"
+                    return
+                }
+                querySnapshot?.documentChanges.forEach({ change in
+                        let docId = change.document.documentID
+                        
+                        if let index = self.recentMessages.firstIndex(where: { 
+                            rm in
+                            return rm.documentId == docId
+                        }) {
+                            self.recentMessages.remove(at: index)
+                        }
+                        self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
+                        
+                      //  self.recentMessages.append(.init(documentId: docId, data: change.document.data()))
+                    
+                    })
+            }
     }
     private func fetchCurrentUser(){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
