@@ -280,7 +280,7 @@ struct recentMessageTextBox: View{
                     VStack{
                         Text("recentMessage.display_name")
                             .font(Font.custom("Jost-Regular", size:25))
-                            .foregroundColor(.black)
+                            .foregroundColor(Color.foreground)
                         Text("recent message")
                             .font(Font.custom("Jost-Regular", size:17))
                             .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))

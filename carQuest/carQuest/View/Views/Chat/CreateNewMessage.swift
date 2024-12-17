@@ -37,7 +37,7 @@ struct CreateNewMessage: View{
                                     .clipShape(Circle())
                                 Text(user.display_name)
                                     .font(Font.custom("Jost-Regular", size: 23))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(Color.foreground)
                                 Spacer()
                             }
                         }
@@ -57,13 +57,13 @@ struct CreateNewMessage: View{
                 ToolbarItem(placement: .navigationBarLeading){
                     Text("New Message")
                         .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color.foreground)
                 }
             }
             .onAppear{
                 vm.fetchUsers()
             }
-        }
+        }.background(Color.background)
     }
 }
 

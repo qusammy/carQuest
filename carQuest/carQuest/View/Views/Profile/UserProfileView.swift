@@ -43,11 +43,8 @@ struct UserProfileView: View {
    
     var body: some View {
         VStack{
-           
-            topNavigationBar(showSignInView: $showSignInView)
             ScrollView{
                 HStack{
-                    
                     if let image = self.image {
                         Image(uiImage: image)
                             .resizable()
@@ -74,25 +71,25 @@ struct UserProfileView: View {
                 }, label: {
                     Text("Change picture")
                         .font(.custom("Jost-Regular", size: 15))
-                        .foregroundColor(Color("appColor"))
+                        .foregroundColor(Color.accentColor)
                 })
                 Text("User details")
                     .font(.custom("Jost-Regular", size:35))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.foreground)
                 Text(vm.carUser?.display_name ?? "$username")
                     .font(.custom("Jost-Regular", size:25))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.foreground)
                 Text(vm.carUser?.email ?? "$email")
                     .font(.custom("Jost-Regular", size:25))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.foreground)
                 if let user = viewModel.user {
                     Text("User ID: \(user.userId)")
                         .font(.custom("Jost-Regular", size:15))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color.foreground)
                 } else {
                     Text("No user logged in")
                         .font(.custom("Jost-Regular", size:15))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color.foreground)
                 }
                 Button(action: {
                     persistImageToStorage()

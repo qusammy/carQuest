@@ -1,0 +1,122 @@
+//
+//  SettingsViews.swift
+//  carQuest
+//
+//  Created by Maddy Quinn on 12/11/24.
+//
+
+import Foundation
+import SwiftUI
+
+struct NavigateToSetting: View {
+    
+    @State var destination: AnyView
+    @State var shouldNavigateToSettingView: Bool = false
+    @State var title: String
+    
+    var body: some View {
+        VStack{
+            NavigationLink(destination: destination, isActive: $shouldNavigateToSettingView) {
+                Text(title)
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundColor(Color.foreground)
+            }
+        }
+    }
+}
+
+struct PushNotificationView: View {
+    // to exit view
+    @Environment(\.presentationMode) var presentationMode
+    
+    // to toggle button
+    @State var pushNotification: Bool = true
+    var body: some View {
+        ScrollView{
+            VStack{
+                HStack{
+                    Text("Push Notifications")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+                Toggle(isOn: $pushNotification) {
+                    Text("Enable push notifications")
+                        .font(Font.custom("Jost-Regular", size: 20))
+                        .foregroundColor(Color.foreground)
+                }.toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                Spacer()
+                Divider()
+            }.padding()
+        }
+    }
+}
+
+struct MyListingsView: View {
+    // to exit view
+    @Environment(\.presentationMode) var presentationMode
+    var body: some View {
+        ScrollView{
+            VStack{
+                HStack{
+                    Text("My Listings")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+            }.padding()
+        }
+    }
+}
+
+struct AboutCarQuest: View {
+    // to exit view
+    @Environment(\.presentationMode) var presentationMode
+    var body: some View {
+        ScrollView{
+            VStack{
+                HStack{
+                    Text("About Car Quest")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+               Text("Hi")
+            }.padding()
+        }
+    }
+}
+
+struct PrivacyView: View {
+    // to exit view
+    @Environment(\.presentationMode) var presentationMode
+    var body: some View {
+        ScrollView{
+            VStack{
+                HStack{
+                    Text("Privacy")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+            }.padding()
+        }
+    }
+}
+
+struct PurchasesView: View {
+    // to exit view
+    @Environment(\.presentationMode) var presentationMode
+    var body: some View {
+        ScrollView{
+            VStack{
+                HStack{
+                    Text("Purchases & Payment")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+            }.padding()
+        }
+    }
+}

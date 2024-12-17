@@ -18,7 +18,9 @@
 		004B33C42CDBBC2100571C1C /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004B33C32CDBBC2100571C1C /* ChatView.swift */; };
 		005577832CDE777C00E9A69A /* AuctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005577822CDE777C00E9A69A /* AuctionView.swift */; };
 		005577852CDE7CC300E9A69A /* AuctionListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005577842CDE7CC300E9A69A /* AuctionListingView.swift */; };
-		00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BB2DDE2C91E1D7003379DA /* settingsView.swift */; };
+		00A723692D09E47700AF6CEC /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A723682D09E47700AF6CEC /* SettingsViews.swift */; };
+		00A7236B2D09FC2F00AF6CEC /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7236A2D09FC2F00AF6CEC /* NotificationsView.swift */; };
+		00A7236E2D0A014400AF6CEC /* BuyingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7236D2D0A014400AF6CEC /* BuyingView.swift */; };
 		00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF079B2C80D21E000404AA /* listingCreation.swift */; };
 		00CF05332CA313B900E53D2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00CF05322CA313B900E53D2F /* GoogleService-Info.plist */; };
 		00CF05352CA3144000E53D2F /* listingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF05342CA3144000E53D2F /* listingView.swift */; };
@@ -102,7 +104,9 @@
 		004B33C32CDBBC2100571C1C /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		005577822CDE777C00E9A69A /* AuctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionView.swift; sourceTree = "<group>"; };
 		005577842CDE7CC300E9A69A /* AuctionListingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionListingView.swift; sourceTree = "<group>"; };
-		00BB2DDE2C91E1D7003379DA /* settingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsView.swift; sourceTree = "<group>"; };
+		00A723682D09E47700AF6CEC /* SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViews.swift; sourceTree = "<group>"; };
+		00A7236A2D09FC2F00AF6CEC /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		00A7236D2D0A014400AF6CEC /* BuyingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyingView.swift; sourceTree = "<group>"; };
 		00BF079B2C80D21E000404AA /* listingCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingCreation.swift; sourceTree = "<group>"; };
 		00CF05322CA313B900E53D2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		00CF05342CA3144000E53D2F /* listingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingView.swift; sourceTree = "<group>"; };
@@ -225,6 +229,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		00A7236C2D0A012800AF6CEC /* Buying */ = {
+			isa = PBXGroup;
+			children = (
+				00A7236D2D0A014400AF6CEC /* BuyingView.swift */,
+			);
+			path = Buying;
+			sourceTree = "<group>";
+		};
 		00E32F022C763E9300840AAA /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -334,6 +346,7 @@
 			children = (
 				6F2EBC972C94936700EF07FC /* ProfileView.swift */,
 				6F2EBC992C94937700EF07FC /* UserProfileView.swift */,
+				00A7236A2D09FC2F00AF6CEC /* NotificationsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -350,7 +363,7 @@
 		6F2EBC902C94921600EF07FC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				00BB2DDE2C91E1D7003379DA /* settingsView.swift */,
+				00A723682D09E47700AF6CEC /* SettingsViews.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -358,6 +371,7 @@
 		6F2EBC912C94923A00EF07FC /* RideQuest */ = {
 			isa = PBXGroup;
 			children = (
+				00A7236C2D0A012800AF6CEC /* Buying */,
 				005577822CDE777C00E9A69A /* AuctionView.swift */,
 				00F5C0C02CAB07B900856E1E /* rentView.swift */,
 				00CF05342CA3144000E53D2F /* listingView.swift */,
@@ -511,9 +525,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				22CB13652CA5A63A00BACD8F /* AuthenticationViewModels.swift in Sources */,
+				00A7236B2D09FC2F00AF6CEC /* NotificationsView.swift in Sources */,
 				001111442CB58C41001F877D /* ImageManager.swift in Sources */,
 				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
-				00BB2DDF2C91E1D7003379DA /* settingsView.swift in Sources */,
 				004B33C42CDBBC2100571C1C /* ChatView.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
 				227AF15B2CAD86D2005A23F0 /* ResetPassword.swift in Sources */,
@@ -524,6 +538,7 @@
 				2287A9812C94825D00EB7D34 /* AuthenticationManager.swift in Sources */,
 				00FB293D2C7E2A1600A67EF1 /* SignInView.swift in Sources */,
 				004B33C22CDBB85100571C1C /* MainChatView.swift in Sources */,
+				00A723692D09E47700AF6CEC /* SettingsViews.swift in Sources */,
 				6F2EBC862C948E9100EF07FC /* Helpers.swift in Sources */,
 				6F2EBC9E2C9493F900EF07FC /* WelcomeView.swift in Sources */,
 				2287A97E2C94799C00EB7D34 /* Utilities.swift in Sources */,
@@ -533,6 +548,7 @@
 				22C6DF092C91D31A00F41EB3 /* RootView.swift in Sources */,
 				002ABF6D2C73A3A100FFCC86 /* ContentView.swift in Sources */,
 				00F494862CE644E40047BC56 /* CreateNewMessage.swift in Sources */,
+				00A7236E2D0A014400AF6CEC /* BuyingView.swift in Sources */,
 				6F2EBCA42C9494C200EF07FC /* Shared.swift in Sources */,
 				6F2EBCB32C94980200EF07FC /* Ride.swift in Sources */,
 				002ABF6B2C73A3A100FFCC86 /* carQuestApp.swift in Sources */,
@@ -687,6 +703,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Car Quest";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = 1.0;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -720,6 +737,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Car Quest";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = 1.0;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

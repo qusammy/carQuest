@@ -15,7 +15,8 @@ struct imageBox: View {
         VStack{
             Image(imageName)
                 .resizable()
-                .frame(width:200, height:200)
+                .aspectRatio(contentMode: .fill)
+                .frame(width:178, height:178)
                 .clipped()
         }
     }
@@ -28,18 +29,21 @@ struct topNavigationBar: View {
             HStack{
                 Text("CARQUEST")
                     .font(Font.custom("ZingRustDemo-Base", size:45))
-                    .foregroundColor(Color("Foreground"))
+                    .foregroundColor(Color.foreground)
                 Spacer()
                 NavigationLink(destination: MainChatView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     Image(systemName: "envelope.fill")
                         .resizable()
                         .frame(width:40, height:30)
-                        .foregroundColor(Color("Foreground"))
+                        .foregroundColor(Color.foreground)
                 }
-                Image(systemName: "bell.fill")
-                    .resizable()
-                    .frame(width:30, height:30)
-                    .foregroundColor(Color("Foreground"))
+                NavigationLink(destination: NotificationsView()) {
+                    Image(systemName: "bell.fill")
+                        .resizable()
+                        .frame(width:30, height:30)
+                        .foregroundColor(Color.foreground)
+                }
+                
             }
             if Auth.auth().currentUser?.isEmailVerified == false {
                 Text("Please verify your email address.")
@@ -47,7 +51,9 @@ struct topNavigationBar: View {
                     .foregroundColor(.blue)
                     .multilineTextAlignment(.leading)
             }
-        }.frame(width:375)
+        }
+        .frame(width:375)
+        
     }
 }
 struct bottomNavigationBar: View {
@@ -61,52 +67,66 @@ struct bottomNavigationBar: View {
                 NavigationLink(destination: AuctionView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
                     Image("gavel")
                         .resizable()
-                        .frame(width: 60, height:60)
+                        .frame(width: 62, height:62)
                 }
-                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                Spacer()
+                NavigationLink(destination: rentView(showSignInView: $showSignInView, userPreferences: "").navigationBarBackButtonHidden(true)) {
                     Image("rent")
                         .resizable()
-                        .frame(width: 55, height:55)
+                        .frame(width: 57, height:57)
                 }
+                Spacer()
                 NavigationLink(destination: HomeView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
                 ) {
                     Image("home")
                         .resizable()
-                        .frame(width: 55, height:55)
+                        .frame(width: 57, height:57)
                 }
-                Image("buy")
-                    .resizable()
-                    .frame(width: 60, height:60)
+                Spacer()
+                NavigationLink(destination: BuyingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
+                ) {
+                    Image("buy")
+                        .resizable()
+                        .frame(width: 62, height:62)
+                }
+                Spacer()
                 NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     if vm.carUser?.profileImageURL == nil {
                         Image("profileIcon")
                             .resizable()
                             .scaledToFill()
-                            .frame(width:45, height:45)
+                            .frame(width:47, height:47)
+                            .aspectRatio(contentMode: .fit)
                             .clipShape(Circle())
                     } else {
                         WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
                             .resizable()
-                            .frame(width: 55, height:55)
+                            .frame(width: 47, height:47)
                             .scaledToFill()
+                            .aspectRatio(contentMode: .fit)
                             .clipShape(Circle())
                     }
                 }
             }
         }
+        .background(Color.background)
+        .padding()
     }
 }
 
 struct carListingLink: View {
     @Binding var showSignInView: Bool
+    var imageName: String
+    var text: String
     var body: some View {
         VStack{
-        NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+        NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
             VStack{
-                imageBox(imageName: "carQuestLogo")
-                Text("")
+                imageBox(imageName: imageName)
+                Text(text)
                 .font(.custom("Jost-Regular", size:17))
-                .frame(maxWidth:370, maxHeight:15)
+                .foregroundColor(Color.foreground)
+                .lineLimit(1)
                 .multilineTextAlignment(.leading)
                     }
                 }

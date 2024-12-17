@@ -29,7 +29,7 @@ struct MainChatView: View {
                         Text("Recent Messages")
                             .font(Font.custom("ZingRustDemo-Base", size:40))
                             .multilineTextAlignment(.leading)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color.foreground)
                         Spacer()
                         
                         NavigationLink("", isActive: $shouldNavigateToChatView){
@@ -75,7 +75,7 @@ struct MainChatView: View {
                             VStack{
                                 Text(message.display_name)
                                     .font(Font.custom("Jost-Regular", size:25))
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color.foreground)
                                 Text(message.text)
                                     .font(Font.custom("Jost-Regular", size:17))
                                     .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))

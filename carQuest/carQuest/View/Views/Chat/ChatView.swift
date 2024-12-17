@@ -44,7 +44,7 @@ struct ChatView: View {
                         .frame(width:300)
                 }
             }
-            .background(Color(.init(white:0.95, alpha:1)))
+            .background(Color.chatBackground)
             HStack(spacing:16){
                 Button(action: {
                     //sending pictures

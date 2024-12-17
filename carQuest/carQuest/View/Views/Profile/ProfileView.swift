@@ -20,7 +20,10 @@ struct ProfileView: View {
     @State private var showingSignOutAlert: Bool = false
     @State private var showingVerifyAlert: Bool = false
     @State private var showingVerifyButton: Bool = true
-    
+    // Variables to navigate to a different setting
+    @State var showNewMessageScreen = false
+    @State var shouldNavigateToSettingView = false
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationView{
             VStack {
@@ -37,20 +40,23 @@ struct ProfileView: View {
                                     .foregroundColor(.white)
                             }
                         }
-                        
                     }
                     List {
-                        
                         if showSignInView == false {
-                            
                             if let user = viewModel.user {
                                 Text("User ID: \(user.userId)")
                             }
                             NavigationLink(destination: UserProfileView(showSignInView: $showSignInView)){
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
-                            }
+                                .foregroundColor(Color.foreground) }
+
+                        
+                        NavigateToSetting(destination: AnyView.init(MyListingsView()), title: "Listings")
+                        NavigateToSetting(destination: AnyView.init(PurchasesView()), title: "Purchases & Payment")
+                        NavigateToSetting(destination: AnyView.init(PushNotificationView()), title: "Push Notifications")
+                        NavigateToSetting(destination: AnyView.init(PrivacyView()), title: "Privacy")
+                        NavigateToSetting(destination: AnyView.init(AboutCarQuest()), title: "About Car Quest")
                             if Auth.auth().currentUser?.isEmailVerified == false {
                                 Button {
                                     Task {
@@ -63,6 +69,8 @@ struct ProfileView: View {
                                     }
                                 }label: {
                                     Text("Verify Email")
+                                        .font(Font.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.accentColor)
                                 }.alert ("Verify Email", isPresented: $showingVerifyAlert){
                                     Button("OK") {
                                         showingVerifyAlert = false
@@ -80,48 +88,32 @@ struct ProfileView: View {
                                     Text("You should have received an email with instructions on how to verify your email address.")
                                 }
                             }
-                                
-                                Text("My Listings")
-                                    .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
-                                Text("My Purchases")
-                                    .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
-                                //extra settings go here
-                                Text("Push Notifications")
-                                    .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
-                                
-                                Text("App Appearance")
-                                    .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
-                                Text("Privacy")
-                                    .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
-                                Button {
-                                    showingSignOutAlert = true
-                                }label: {
-                                    Text("Log Out")
-                                        .foregroundStyle(Color.accentColor)
-                                }.alert("Are you sure you want to log out?", isPresented: $showingSignOutAlert) {
-                                    Button(role: .destructive) {
-                                        Task {
-                                            do {
-                                                try viewModel.signOut()
-                                                showSignInView = true
-                                            }catch {
-                                                print(error)
+                        Button {
+                            showingSignOutAlert = true
+                            }label: {
+                                Text("Log Out")
+                                    .font(Font.custom("Jost-Regular", size: 20))
+                                    .foregroundStyle(Color.accentColor)
+                            }.alert("Are you sure you want to log out?", isPresented: $showingSignOutAlert) {
+                        Button(role: .destructive) {
+                                Task {
+                                    do {
+                                    try viewModel.signOut()
+                                        showSignInView = true
+                                    }catch {
+                                        print(error)
                                             }
                                         }
-                                    }label: {
-                                        Text("Log Out")
-                                    }
-                                }
-                                Button {
-                                    showingDeleteAlert = true
                                 }label: {
-                                    Text("Delete Account")
-                                        .foregroundColor(.accentColor)
+                                    Text("Log Out")
+                                }
+                            }
+                        Button {
+                            showingDeleteAlert = true
+                            }label: {
+                            Text("Delete Account")
+                                .font(Font.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
                                 }.alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
                                     Button(role: .destructive) {
                                         Task {
@@ -134,13 +126,13 @@ struct ProfileView: View {
                                         }
                                     }label: {
                                         Text("Delete Account")
-                                            .font(.custom("Jost-Regular", size: 25))
+                                            .font(Font.custom("Jost-Regular", size: 20))
                                     }
                                 }message: {
                                     Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                                 }
                             }
-                    }.frame(width:395)
+                    }.padding()
 
                     }.task {
                         let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
