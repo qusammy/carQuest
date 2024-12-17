@@ -10,22 +10,24 @@ import FirebaseAuth
 
 
 struct imageBox: View {
-    var imageName: UIImage
-    var carYear: String
-    var carMake: String
-    var carModel: String
+    var imageName: URL?
+    var carYear: String?
+    var carMake: String?
+    var carModel: String?
     var width: CGFloat
     var height: CGFloat
     var body: some View {
         VStack{
-            Image(uiImage: imageName)
+            WebImage(url: imageName ?? URL(string: "4.png"))
                 .resizable()
                 .frame(width: width, height: height)
                 .scaledToFill()
                 .clipped()
-            Text("\(carYear) \(carMake) \(carModel)")
-                .font(Font.custom("Jost-Regular", size:17))
-                .frame(maxWidth:250, maxHeight:40)
+            if carYear != nil && carModel != nil && carMake != nil {
+                Text("\(carYear!) \(carMake!) \(carModel!)")
+                    .font(Font.custom("Jost-Regular", size:17))
+                    .frame(maxWidth:250, maxHeight:40)
+            }
         }
     }
 }
@@ -114,7 +116,7 @@ struct carListingLink: View {
         VStack{
         NavigationLink(destination: listingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
             VStack{
-                imageBox(imageName: UIImage(named: "carQuestLogo")!, carYear: "", carMake: "", carModel: "", width: 100, height: 100)
+                imageBox(carYear: "", carMake: "", carModel: "", width: 100, height: 100)
                 Text("")
                 .font(.custom("Jost-Regular", size:17))
                 .frame(maxWidth:370, maxHeight:15)

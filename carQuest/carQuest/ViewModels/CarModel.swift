@@ -18,27 +18,23 @@ import FirebaseStorage
     @Published var carMake: String = ""
     @Published var carDescription: String = ""
     @Published var imageName: String = ""
-    @Published var allListings = [carListing]()
+    @Published var rentListings = [carListing]()
     @Published var userID: String = ""
-    @Published var listingType: String = ""
-     @Published var listingIndex: Int = 0
-     func getLisitngInfo() {
-         
-     }
+    @Published var listingFromList: Int = 0
+     
 
-    func generateListings(){
-        Firestore.firestore().collection("carListings").getDocuments() {snapshot, error in
-                if error == nil {
+    func generateRentListings(){
+        Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").getDocuments() {snapshot, error in
+            if error == nil && snapshot != nil {
+                self.rentListings = snapshot!.documents.map { doc in
                     
-                    if let snapshot = snapshot {
-                        
-                        self.allListings = snapshot.documents.map { doc in
-                            
-                            return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "")
-                        }
-                    }
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "")
+
                 }
             }
-
+        }
     }
+     
+     
+
 }

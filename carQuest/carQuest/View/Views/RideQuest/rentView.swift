@@ -5,14 +5,17 @@ import Combine
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
+import SDWebImage
+import SDWebImageSwiftUI
 
 struct rentView: View {
     @ObservedObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
-    @State private var retrievedImages = [UIImage]()
-    
+    @State var retrievedImages = [UIImage]()
+    @State var paths = [String]()
     
     var body: some View {
+        
         NavigationView{
             VStack{
                 Spacer()
@@ -27,61 +30,52 @@ struct rentView: View {
                             .font(.custom("Jost-Regular", size: 30))
                     }
                 }
-                List(viewModel.allListings) { listing in
-                    if listing.listingType == "renting" {
-                        ForEach(retrievedImages, id: \.self) { image in
-                            NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
-                                imageBox(imageName: image, carYear: listing.carYear, carMake: listing.carMake, carModel: listing.carModel, width: 250, height: 250)
-                                viewModel.listingIndex = viewModel.allListings.firstIndex(of: listing)
-                            }
+                
+                List(viewModel.rentListings) { listing in
+
+                    NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
+                        Button{
+                            print(viewModel.rentListings)
+                            viewModel.listingFromList = viewModel.rentListings.firstIndex(of: listing) ?? 0
+                        }label: {
+                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", width: 250, height: 250)
                         }
                     }
                 }.foregroundStyle(Color.foreground)
                     .background(Color.background)
                     .scrollContentBackground(.hidden)
                     .listRowBackground(Color(.background))
+                    .onAppear {
+                        viewModel.generateRentListings()
+                    }
                 
                 bottomNavigationBar(showSignInView: $showSignInView)
             }.frame(width:375)
-                .onAppear {
-                    loadPhotos()
-                    viewModel.generateListings()
-                }
         }
     }
+    
     init(showSignInView: Binding<Bool>) {
         self._showSignInView = showSignInView
     }
-
     
-    func loadPhotos() {
-        let db = Firestore.firestore()
-        db.collection("carListings").whereField("listingType", isEqualTo: "renting").getDocuments { snapshot, error in
-            if error == nil && snapshot != nil {
-                var paths = [String]()
-                
-                for document in snapshot!.documents {
-                    paths.append(document["imageName"] as! String)
-                }
-                
-                for path in paths {
-                    let storageRef = Storage.storage().reference()
-                    let fileRef = storageRef.child(path)
-                    
-                    fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-                        if error == nil && data != nil {
-                            if let image = UIImage(data: data!) {
-                                    retrievedImages.append(image)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+
+//    func loadPhoto(imageName: String){
+//        let storageRef = Storage.storage().reference()
+//        let fileRef = storageRef.child(imageName)
+//        var downloadFinished = false
+//        var downloadStatus = ""
+//        
+//        
+//        let downloadTask = fileRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+//            if error == nil && data != nil {
+//                let image = UIImage(data: data!)
+//            }
+//            
+//        }
+//    }
 }
 
 
-#Preview {
-    rentView(showSignInView: .constant(false))
-}
+//#Preview {
+//    rentView(showSignInView: .constant(false))
+//}

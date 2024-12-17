@@ -13,42 +13,15 @@ struct listingView: View {
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
-    @StateObject var viewModel = ListingViewModel()
+    @ObservedObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
+    @State private var listing: carListing = carListing()
 
+    
     var body: some View {
         VStack{
-            ZStack{
-                NavigationLink(destination: ContentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .frame(width: 90, height: 35)
-                            .foregroundColor(Color("appColor"))
-                        HStack {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                            Text("Back")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-            }.offset(x:-140)
             ScrollView{
-                ScrollView(.horizontal, showsIndicators: false){
-                    HStack{
-                        Image("carQuestLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300, height: 300)
-                        Image("carQuestLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300, height: 300)
-                    }
-                }
+                        imageBox(imageName: URL(string: listing.imageName ?? "4.png"), width: 250, height: 250)
                 VStack{
                     HStack{
                         Button(action: {
@@ -86,23 +59,30 @@ struct listingView: View {
                             }
                         }).offset(x:40)
                     }
-                        HStack {
-                            Text("Year: \(viewModel.carYear)")
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .frame(maxWidth: 375, alignment: .leading)
-                                    .foregroundColor(.black)
-                            Text("Make: \(viewModel.carMake)")
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .frame(maxWidth: 375, alignment: .leading)
-                                    .foregroundColor(.black)
-                            Text("Model: \(viewModel.carModel)")
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .frame(maxWidth: 375, alignment: .leading)
-                                    .foregroundColor(.black)
-                            Text("Type: \(viewModel.carType)")
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .frame(maxWidth: 375, alignment: .leading)
-                                    .foregroundColor(.black)
+                    HStack {
+                        Text("Year: \(listing.carYear ?? "No Data")")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Make: \(listing.carMake ?? "No Data")")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Model: \(listing.carModel ?? "No Data")")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                        Text("Type: \(listing.carType ?? "No Data")")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(.black)
+                    }
+                    .task{
+                        viewModel.generateRentListings()
+                            if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
+                                listing = viewModel.rentListings[viewModel.listingFromList]
+                                print("\(listing.carYear ?? "uh oh")")
+                            }
                         }
                         HStack{
                             Image("\(userViewModel.photoURL)")
@@ -113,7 +93,7 @@ struct listingView: View {
                                 .foregroundColor(.black)
                                 .frame(maxWidth: 375, alignment: .leading)
                         }
-                    Text("Description: \(viewModel.carDescription)")
+                    Text("Description: \(listing.carDescription ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.black)
                             .frame(maxWidth: 375, alignment: .leading)

@@ -63,6 +63,7 @@ struct ProfileView: View {
                                     }
                                 }label: {
                                     Text("Verify Email")
+                                        .foregroundStyle(Color("Foreground"))
                                 }.alert ("Verify Email", isPresented: $showingVerifyAlert){
                                     Button("OK") {
                                         showingVerifyAlert = false
@@ -83,21 +84,21 @@ struct ProfileView: View {
                                 
                                 Text("My Listings")
                                     .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(Color("Foreground"))
                                 Text("My Purchases")
                                     .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(Color("Foreground"))
                                 //extra settings go here
                                 Text("Push Notifications")
                                     .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.black)
-                                
+                                    .foregroundStyle(Color("Foreground"))
+
                                 Text("App Appearance")
                                     .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(Color("Foreground"))
                                 Text("Privacy")
                                     .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(.black)
+                                    .foregroundStyle(Color("Foreground"))
                                 Button {
                                     showingSignOutAlert = true
                                 }label: {

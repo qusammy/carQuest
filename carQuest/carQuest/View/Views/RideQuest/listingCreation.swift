@@ -158,25 +158,27 @@ struct listingCreation: View {
                             }
                         }
                     }
-                    Button {
-                        Task{
-                            do{
-                                try await createListingRenting()
-                            }catch {
-                                print(error)
+                    NavigationLink(destination: rentView(showSignInView: $showSignInView)) {
+                        Button {
+                            Task{
+                                do{
+                                    try await createListingRenting()
+                                    photo1Data = Data()
+                                }catch {
+                                    print(error)
+                                }
                             }
-                        }
-                        
-                    } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .frame(maxWidth:150, maxHeight:100)
-                                    .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                Text("Post Listing")
-                                    .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.white)
-                            }
-                    }.frame(maxWidth: 375, alignment: .center)
+                        } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .frame(maxWidth:150, maxHeight:100)
+                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                                    Text("Post Listing")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(.white)
+                                }
+                        }.frame(maxWidth: 375, alignment: .center)
+                    }
                     Text(successText)
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
@@ -190,25 +192,25 @@ struct listingCreation: View {
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
-        let document = try await Firestore.firestore().collection("carListings").document("\(additionalListing)\(userID)").getDocument()
+        let document = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
         
         if document.exists {
             additionalListing += 1
         }
         
-        let document1 = try await Firestore.firestore().collection("carListings").document("\(additionalListing)\(userID)").getDocument()
+        let document1 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
         
         if document1.exists {
             additionalListing += 1
         }
         
-        let document2 = try await Firestore.firestore().collection("carListings").document("\(additionalListing)\(userID)").getDocument()
+        let document2 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
         
         if document2.exists {
             print("Users are only allowed to create three listings of each type.")
         }
 
-        try await db.collection("carListings").document("\(additionalListing)\(userID)").setData([
+        try await db.collection("carListings").document("R\(additionalListing)\(userID)").setData([
                 "carMake": carMake,
                 "carDescription": carDescription,
                 "carModel": carModel,
@@ -216,7 +218,8 @@ struct listingCreation: View {
                 "carYear": carYear,
                 "userID": userID,
                 "listingType" : "renting",
-                "imageName" : "carQuestLogo"
+                "imageName" : "4.png",
+                "listingID" : "\(additionalListing)\(userID)"
         ])
         
         if let photo1Data,
@@ -236,13 +239,21 @@ struct listingCreation: View {
             print("Problem turning photo into data")
             return
         }
-        let path = "listingImages/\(UUID().uuidString).jpeg"
+        
+        let path = "listingImages/R\(additionalListing)\(userID).jpeg"
         let fileRef = storageRef.child(path)
         
-        let uploadTask = fileRef.putData(imageData!, metadata: nil) { (metadata, error) in
+        fileRef.putData(imageData!, metadata: nil) { (metadata, error) in
             if error == nil && metadata != nil {
-                let db = Firestore.firestore()
-                db.collection("carListings").document("\(additionalListing)\(userID)").setData(["imageName": path], merge: true)
+                let ref = Storage.storage().reference(withPath: path)
+                ref.downloadURL { url, err in
+                    if err != nil {
+                        print("failed to download URL")
+                        return
+                    }
+                    guard let url = url else { return }
+                    AuthenticationManager.shared.updateImage(imageURL: url, additionalListing: additionalListing)
+                }
             }
         }
     }

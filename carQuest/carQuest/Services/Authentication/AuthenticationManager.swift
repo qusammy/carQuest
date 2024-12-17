@@ -75,6 +75,20 @@ final class AuthenticationManager {
                 }}
     }
     
+    func updateImage(imageURL: URL, additionalListing: Int) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
+            return
+        }
+        
+        let postingImageData = ["imageName": imageURL.absoluteString]
+        FirebaseManager.shared.firestore.collection("carListings")
+            .document("R\(additionalListing)\(uid)").updateData(postingImageData){ err in
+                if let err = err {
+                    print(err)
+                    return
+                }}
+    }
+    
     func resetPassword(email: String) async throws{
         try await Auth.auth().sendPasswordReset(withEmail: email)
     }
