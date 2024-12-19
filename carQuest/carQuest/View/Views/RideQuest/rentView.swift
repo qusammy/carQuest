@@ -9,7 +9,7 @@ import SDWebImage
 import SDWebImageSwiftUI
 
 struct rentView: View {
-    @ObservedObject var viewModel = ListingViewModel()
+    @StateObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
     @State var userPreferences = ""
     
@@ -36,14 +36,14 @@ struct rentView: View {
                 
                 List(viewModel.rentListings) { listing in
 
-                    NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
+                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                         Button{
-                            print(viewModel.rentListings)
                             viewModel.listingFromList = viewModel.rentListings.firstIndex(of: listing) ?? 0
                         }label: {
                             imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", width: 250, height: 250)
                         }
                     }
+                    
                 }.foregroundStyle(Color.foreground)
                     .background(Color.background)
                     .scrollContentBackground(.hidden)

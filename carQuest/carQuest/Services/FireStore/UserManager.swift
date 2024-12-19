@@ -49,10 +49,10 @@ final class UserManager {
             "date_created" : Timestamp(),
 
         ]
-        if let email = auth.email {
+        if auth.email != nil {
             userData["email"] = auth.email
         }
-        if let photoURL = auth.photoURL {
+        if auth.photoURL != nil {
             userData["photoURL"] = auth.photoURL
         }
         if let displayName = auth.displayName {

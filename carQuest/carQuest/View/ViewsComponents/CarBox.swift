@@ -80,7 +80,7 @@ struct bottomNavigationBar: View {
                         .frame(width: 62, height:62)
                 }
                 Spacer()
-                NavigationLink(destination: rentView(showSignInView: $showSignInView, userPreferences: "").navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     Image("rent")
                         .resizable()
                         .frame(width: 57, height:57)
@@ -130,7 +130,7 @@ struct carListingLink: View {
     var text: String
     var body: some View {
         VStack{
-        NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
+            NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
             VStack{
                 imageBox(carYear: "", carMake: "", carModel: "", width: 100, height: 100)
                 Text("")
@@ -162,6 +162,8 @@ struct previewListing: View {
     @Binding var typeOfCar: String
     @Binding var date: Date
     @Binding var listedPhoto1: UIImage?
+    
+    @ObservedObject var vm = UserProfileViewModel()
     var body: some View{
         VStack{
             RoundedRectangle(cornerRadius: 70)

@@ -15,7 +15,7 @@ import FirebaseStorage
 struct listingCreation: View {
     @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var viewModel = ProfileViewModel()
-    @StateObject private var carViewModel = ListingViewModel()
+    @StateObject var carViewModel = ListingViewModel()
 
     let db = Firestore.firestore()
     
@@ -39,7 +39,7 @@ struct listingCreation: View {
     var body: some View {
         NavigationView{
             VStack{
-                NavigationLink(destination: rentView(showSignInView: $showSignInView, userPreferences: "").navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .frame(width: 180, height: 35)

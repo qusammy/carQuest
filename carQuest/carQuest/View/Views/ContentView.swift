@@ -40,16 +40,16 @@ struct ContentView: View {
                                 .font(Font.custom("Jost-Regular", size:15))
                                 .underline()
                         }.padding(.horizontal, 10.0)
-                            HStack{
-                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                                Spacer()
-                                carListingLink(showSignInView: $showSignInView, imageName: "carExample2", text: "1995 NSX-T Coupe")
-                            }
-                            HStack{
-                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                                Spacer()
-                                carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            }
+                        HStack{
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                            Spacer()
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample2", text: "1995 NSX-T Coupe")
+                        }
+                        HStack{
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                            Spacer()
+                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
+                        }
                         Divider()
                         HStack{
                             Text("Liked vehicles")
@@ -66,17 +66,18 @@ struct ContentView: View {
                         }
                     }.padding()
                 }
-               bottomNavigationBar(showSignInView: $showSignInView)
+                bottomNavigationBar(showSignInView: $showSignInView)
             }
         }.onAppear{
             if FirebaseApp.app() == nil {
                 FirebaseApp.configure()
             }
         }.navigationViewStyle(StackNavigationViewStyle())
-        .task {
-            viewModel.getDisplayName()
-        }
+            .task {
+                viewModel.getDisplayName()
+            }
     }
+}
 #Preview {
     ContentView(showSignInView: .constant(false))
 }
