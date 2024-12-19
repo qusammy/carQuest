@@ -14,6 +14,7 @@ struct imageBox: View {
     var carYear: String?
     var carMake: String?
     var carModel: String?
+    var carType: String?
     var width: CGFloat
     var height: CGFloat
     var body: some View {
@@ -23,10 +24,12 @@ struct imageBox: View {
                 .frame(width: width, height: height)
                 .scaledToFill()
                 .clipped()
-            if carYear != nil && carModel != nil && carMake != nil {
-                Text("\(carYear!) \(carMake!) \(carModel!)")
-                    .font(Font.custom("Jost-Regular", size:17))
-                    .frame(maxWidth:250, maxHeight:40)
+            if carYear != nil && carModel != nil && carMake != nil && carType != nil {
+                Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
+                    .font(.custom("Jost-Regular", size:20))
+                    .foregroundColor(Color.foreground)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
             }
         }
     }
@@ -80,7 +83,7 @@ struct bottomNavigationBar: View {
                         .frame(width: 62, height:62)
                 }
                 Spacer()
-                NavigationLink(destination: rentView(showSignInView: $showSignInView, userPreferences: "").navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
                     Image("rent")
                         .resizable()
                         .frame(width: 57, height:57)
@@ -162,6 +165,8 @@ struct previewListing: View {
     @Binding var typeOfCar: String
     @Binding var date: Date
     @Binding var listedPhoto1: UIImage?
+    
+    @ObservedObject var vm = UserProfileViewModel()
     var body: some View{
         VStack{
             RoundedRectangle(cornerRadius: 70)
