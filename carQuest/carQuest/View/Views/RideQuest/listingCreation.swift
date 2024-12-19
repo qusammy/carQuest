@@ -13,6 +13,8 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseStorage
 struct listingCreation: View {
+    @Environment(\.dismiss) var dismiss
+
     @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var viewModel = ProfileViewModel()
     @StateObject var carViewModel = ListingViewModel()
