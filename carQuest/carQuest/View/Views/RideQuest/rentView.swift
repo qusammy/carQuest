@@ -13,6 +13,10 @@ struct rentView: View {
     @Binding var showSignInView: Bool
     @State var userPreferences = ""
 
+    @Environment(\.presentationMode) var presentationMode
+    @State var showListingScreen = false
+    
+    @State var shouldNavigateToListingView = false
     var body: some View {
         NavigationStack{
             VStack{
@@ -55,15 +59,16 @@ struct rentView: View {
                         Button{
                         print(viewModel.rentListings)
                         viewModel.listingFromList = viewModel.rentListings.firstIndex(of: listing) ?? 0
-                    }label: {
+                            showListingScreen.toggle()
+                    } label: {
                         imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", carType: listing.carType ?? "", width: 250, height: 250)
                     }
-                        NavigationLink(destination: listingView(showSignInView: $showSignInView).opacity(0)){
+                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: carListing()).opacity(0)){
                             // empty NavigationLink label to get rid of the arrows in the list
                            Text("Empty")
                         }.opacity(0.0)
 
-                    }
+                        }
                     }.foregroundStyle(Color.foreground)
                         .background(Color.background)
                         .listStyle(.inset)
@@ -73,22 +78,16 @@ struct rentView: View {
                         .onAppear {
                             viewModel.generateRentListings()
                         }
-                    }
-                    
-                }.foregroundStyle(Color.foreground)
-                    .background(Color.background)
-                    .scrollContentBackground(.hidden)
-                    .listRowBackground(Color(.background))
-                    .onAppear {
-                        viewModel.generateRentListings()
-                    }
-                
-                bottomNavigationBar(showSignInView: $showSignInView)
-            }.padding()
-                .navigationBarTitleDisplayMode(.inline)
-        }
+                    bottomNavigationBar(showSignInView: $showSignInView)
 
+                    }.padding()
+        }.fullScreenCover(isPresented: $showListingScreen){
+            listingView(showSignInView: $showSignInView, listing: carListing())
+        }
     }
+}
+
+    
     
 //    init(showSignInView: Binding<Bool>) {
 //        self._showSignInView = showSignInView
@@ -109,7 +108,7 @@ struct rentView: View {
 //            
 //        }
 //    }
-}
+
 
 
 //#Preview {

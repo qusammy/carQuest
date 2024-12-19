@@ -15,9 +15,12 @@ struct listingView: View {
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
-    @State var listing: carListing = carListing()
+    @State var listing: carListing
     
+ //   @State var carListing: (carListing) -> ()
     
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         VStack{
             ScrollView{
@@ -60,19 +63,19 @@ struct listingView: View {
                         }).offset(x:40)
                     }
                     HStack {
-                        Text("Year: \(listing.carYear ?? "No Data")")
+                        Text("\(listing.carYear ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
                             .foregroundColor(.black)
-                        Text("Make: \(listing.carMake ?? "No Data")")
+                        Text("\(listing.carMake ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
                             .foregroundColor(.black)
-                        Text("Model: \(listing.carModel ?? "No Data")")
+                        Text("\(listing.carModel ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
                             .foregroundColor(.black)
-                        Text("Type: \(listing.carType ?? "No Data")")
+                        Text("\(listing.carType ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
                             .foregroundColor(.black)
@@ -107,9 +110,10 @@ struct listingView: View {
                     print("fail")
                 }
             }
-        }
+        }.padding()
+            
     }
 }
-#Preview {
-    listingView(showSignInView: .constant(false))
-}
+//#Preview {
+//    listingView(showSignInView: .constant(false))
+//}
