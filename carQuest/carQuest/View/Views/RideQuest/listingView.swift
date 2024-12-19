@@ -10,18 +10,26 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct listingView: View {
+    @Environment(\.dismiss) var dismiss
+    
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
-    @State var listing: carListing = carListing()
+    @State var listing: carListing?
     
     
     var body: some View {
         VStack{
+            //ui customizable
+            Button {
+                dismiss()
+            }label: {
+                Text("Back")
+            }
             ScrollView{
-                imageBox(imageName: URL(string: listing.imageName ?? "4.png"), width: 250, height: 250)
+                imageBox(imageName: URL(string: listing?.imageName ?? "4.png"), width: 250, height: 250)
                 VStack{
                     HStack{
                         Button(action: {
@@ -30,7 +38,7 @@ struct listingView: View {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 15)
                                     .frame(width: 80, height: 35)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.foreground)
                                 Text("Book")
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(.white)
@@ -54,28 +62,28 @@ struct listingView: View {
                             ZStack{
                                 Image(systemName: isLiked ? "heart.fill" : "heart")
                                     .resizable()
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.foreground)
                                     .frame(width:40, height:35)
                             }
                         }).offset(x:40)
                     }
                     HStack {
-                        Text("Year: \(listing.carYear ?? "No Data")")
+                        Text("Year: \(listing?.carYear ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Make: \(listing.carMake ?? "No Data")")
+                            .foregroundColor(.foreground)
+                        Text("Make: \(listing?.carMake ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Model: \(listing.carModel ?? "No Data")")
+                            .foregroundColor(.foreground)
+                        Text("Model: \(listing?.carModel ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("Type: \(listing.carType ?? "No Data")")
+                            .foregroundColor(.foreground)
+                        Text("Type: \(listing?.carType ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
+                            .foregroundColor(.foreground)
                     }
                     HStack{
                         Image("\(userViewModel.photoURL)")
@@ -83,12 +91,12 @@ struct listingView: View {
                             .frame(width:55, height:55)
                         Text("\(userViewModel.displayName)")
                             .font(.custom("Jost-Regular", size: 20))
-                            .foregroundColor(.black)
+                            .foregroundColor(.foreground)
                             .frame(maxWidth: 375, alignment: .leading)
                     }
-                    Text("Description: \(listing.carDescription ?? "No Data")")
+                    Text("Description: \(listing?.carDescription ?? "No Data")")
                         .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.black)
+                        .foregroundColor(.foreground)
                         .frame(maxWidth: 375, alignment: .leading)
                         .multilineTextAlignment(.leading)
                     Text("Listed date")
@@ -102,7 +110,7 @@ struct listingView: View {
                 viewModel.generateRentListings()
                 if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
                     listing = viewModel.rentListings[viewModel.listingFromList]
-                    print("\(listing.carYear ?? "uh oh")")
+                    print("\(listing?.carYear ?? "uh oh")")
                 }else {
                     print("fail")
                 }
