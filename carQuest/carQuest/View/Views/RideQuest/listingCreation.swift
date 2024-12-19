@@ -15,7 +15,7 @@ import FirebaseStorage
 struct listingCreation: View {
     @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var viewModel = ProfileViewModel()
-    @StateObject private var carViewModel = ListingViewModel()
+    @StateObject var carViewModel = ListingViewModel()
 
     let db = Firestore.firestore()
     

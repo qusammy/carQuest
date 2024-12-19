@@ -13,15 +13,15 @@ struct listingView: View {
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
-    @ObservedObject var viewModel = ListingViewModel()
+    @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
-    @State private var listing: carListing = carListing()
-
+    @State var listing: carListing = carListing()
+    
     
     var body: some View {
         VStack{
             ScrollView{
-                        imageBox(imageName: URL(string: listing.imageName ?? "4.png"), width: 250, height: 250)
+                imageBox(imageName: URL(string: listing.imageName ?? "4.png"), width: 250, height: 250)
                 VStack{
                     HStack{
                         Button(action: {
@@ -77,32 +77,34 @@ struct listingView: View {
                             .frame(maxWidth: 375, alignment: .leading)
                             .foregroundColor(.black)
                     }
-                    .task{
-                        viewModel.generateRentListings()
-                            if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
-                                listing = viewModel.rentListings[viewModel.listingFromList]
-                                print("\(listing.carYear ?? "uh oh")")
-                            }
-                        }
-                        HStack{
-                            Image("\(userViewModel.photoURL)")
-                                .resizable()
-                                .frame(width:55, height:55)
-                            Text("\(userViewModel.displayName)")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.black)
-                                .frame(maxWidth: 375, alignment: .leading)
-                        }
-                    Text("Description: \(listing.carDescription ?? "No Data")")
+                    HStack{
+                        Image("\(userViewModel.photoURL)")
+                            .resizable()
+                            .frame(width:55, height:55)
+                        Text("\(userViewModel.displayName)")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.black)
                             .frame(maxWidth: 375, alignment: .leading)
-                            .multilineTextAlignment(.leading)
-                        Text("Listed date")
-                            .font(.custom("Jost-Regular", size: 20))
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: 375, alignment: .leading)
-
+                    }
+                    Text("Description: \(listing.carDescription ?? "No Data")")
+                        .font(.custom("Jost-Regular", size: 20))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: 375, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                    Text("Listed date")
+                        .font(.custom("Jost-Regular", size: 20))
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: 375, alignment: .leading)
+                    
+                }
+            }
+            .onAppear{
+                viewModel.generateRentListings()
+                if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
+                    listing = viewModel.rentListings[viewModel.listingFromList]
+                    print("\(listing.carYear ?? "uh oh")")
+                }else {
+                    print("fail")
                 }
             }
         }
