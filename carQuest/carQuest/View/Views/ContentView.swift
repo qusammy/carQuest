@@ -7,7 +7,7 @@ import Combine
 struct ContentView: View {
     @Binding var showSignInView: Bool
     
-    @State private var selection = 3
+    @State var selection: Int
     
     var body: some View {
         NavigationStack{
@@ -37,13 +37,13 @@ struct ContentView: View {
                     ProfileView(showSignInView: $showSignInView)
                         .tabItem{
                             Image(systemName: "person.circle.fill")
-                        }
+                        }.tag(5)
                 }
             }
         }
     }
 }
 #Preview {
-    ContentView(showSignInView: .constant(false))
+    ContentView(showSignInView: .constant(false), selection: 3)
 }
 

@@ -27,34 +27,22 @@ struct NavigateToSetting: View {
 
 struct PushNotificationView: View {
     // to exit view
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Binding var showSignInView: Bool
+
     // to toggle button
     @State var pushNotification: Bool = true
     var body: some View {
-        ScrollView{
+        ScrollView(showsIndicators: false){
             VStack{
-                HStack{
-                    Text("Push Notifications")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
-                Toggle(isOn: $pushNotification) {
-                    Text("Enable push notifications")
-                        .font(Font.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color.foreground)
-                }.toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                Spacer()
-                Divider()
-            }.padding()
+                
+            }
         }
     }
 }
 
 struct MyListingsView: View {
-    // to exit view
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var showSignInView: Bool
+
     var body: some View {
         ScrollView{
             VStack{
@@ -64,14 +52,14 @@ struct MyListingsView: View {
                         .foregroundColor(Color.foreground)
                     Spacer()
                 }
-            }.padding()
+            }
         }
     }
 }
 
 struct AboutCarQuest: View {
-    // to exit view
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var showSignInView: Bool
+
     var body: some View {
         ScrollView{
             VStack{
@@ -88,8 +76,8 @@ struct AboutCarQuest: View {
 }
 
 struct PrivacyView: View {
-    // to exit view
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var showSignInView: Bool
+    
     var body: some View {
         ScrollView{
             VStack{
@@ -105,8 +93,8 @@ struct PrivacyView: View {
 }
 
 struct PurchasesView: View {
-    // to exit view
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var showSignInView: Bool
+
     var body: some View {
         ScrollView{
             VStack{
@@ -120,3 +108,4 @@ struct PurchasesView: View {
         }
     }
 }
+

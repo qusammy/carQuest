@@ -17,6 +17,7 @@ struct imageBox: View {
     var carType: String?
     var width: CGFloat
     var height: CGFloat
+    var userID: String?
     var body: some View {
         VStack{
             WebImage(url: imageName ?? URL(string: "4.png"))
@@ -228,6 +229,19 @@ struct listingTextField: View {
     }
 }
 
+struct backButton: View {
+    var body: some View {
+        HStack{
+            Image(systemName: "chevron.backward")
+                .resizable()
+                .frame(width:10, height:20)
+                .foregroundColor(Color.accentColor)
+            Text("Back")
+                .font(Font.custom("Jost-Regular", size: 20))
+                .foregroundColor(Color.accentColor)
+        }
+    }
+}
 //struct recentMessageTextBox: View{
 //    @State var carUser: CarQuestUser?
 //    @ObservedObject var vm = CreateNewMessageViewModel()

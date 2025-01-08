@@ -41,22 +41,12 @@ struct listingCreation: View {
     var body: some View {
         NavigationView{
             VStack{
-                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .frame(width: 180, height: 35)
-                            .foregroundColor(Color("appColor"))
-                        HStack {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                            Text("Back to renting")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
-                        }
+                NavigationLink(destination: ContentView(showSignInView: $showSignInView, selection: 2).navigationBarBackButtonHidden(true)) {
+                    HStack{
+                        backButton()
+                        Spacer()
                     }
-                }
+                }.navigationBarTitleDisplayMode(.inline)
                 HStack{
                     Text("List a Rental")
                         .font(Font.custom("Jost-Regular", size:40))
@@ -186,7 +176,7 @@ struct listingCreation: View {
                         .frame(maxWidth: 275)
                         .foregroundStyle(Color.accentColor)
                 }
-            }
+            }.padding()
         }
     }
     func createListingRenting() async throws {

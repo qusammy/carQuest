@@ -49,11 +49,11 @@ struct ProfileView: View {
                                 .foregroundColor(Color.foreground) }
 
                         
-                        NavigateToSetting(destination: AnyView.init(MyListingsView()), title: "Listings")
-                        NavigateToSetting(destination: AnyView.init(PurchasesView()), title: "Purchases & Payment")
-                        NavigateToSetting(destination: AnyView.init(PushNotificationView()), title: "Push Notifications")
-                        NavigateToSetting(destination: AnyView.init(PrivacyView()), title: "Privacy")
-                        NavigateToSetting(destination: AnyView.init(AboutCarQuest()), title: "About Car Quest")
+                            NavigateToSetting(destination: AnyView.init(MyListingsView( showSignInView: $showSignInView)), title: "Listings")
+                        NavigateToSetting(destination: AnyView.init(PurchasesView(showSignInView: $showSignInView)), title: "Purchases & Payment")
+                            NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Push Notifications")
+                        NavigateToSetting(destination: AnyView.init(PrivacyView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)), title: "Privacy")
+                        NavigateToSetting(destination: AnyView.init(AboutCarQuest(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)), title: "About Car Quest")
                             if Auth.auth().currentUser?.isEmailVerified == false {
                                 Button {
                                     Task {
@@ -142,7 +142,7 @@ struct ProfileView: View {
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color(.background))
                 }
-            }
+            }.navigationBarTitleDisplayMode(.inline)
         }
     }
 

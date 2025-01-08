@@ -58,14 +58,17 @@ struct rentView: View {
                         .font(.custom("Jost-Regular", size: 18))
                 }
                 List(viewModel.rentListings) { listing in
+                    HStack{
+                        Spacer()
                         Button{
                             listingIsPresented.toggle()
                         }label: {
-                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", carType: listing.carType ?? "", width: 250, height: 250)
+                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", carType: listing.carType ?? "", width: 275, height: 275)
                         }.fullScreenCover(isPresented: $listingIsPresented) {
                             listingView(showSignInView: $showSignInView, listing: listing)
                         }
-
+                        Spacer()
+                    }
                 }.foregroundStyle(Color.foreground)
                     .background(Color.background)
                     .listStyle(.inset)
@@ -76,7 +79,6 @@ struct rentView: View {
                         viewModel.generateRentListings()
                     }
             }.padding()
-            
         }.foregroundStyle(Color.foreground)
             .background(Color.background)
             .scrollContentBackground(.hidden)
@@ -111,6 +113,6 @@ struct rentView: View {
 
 
 
-//#Preview {
-//    rentView(showSignInView: .constant(false))
-//}
+#Preview {
+    rentView(showSignInView: .constant(false))
+}
