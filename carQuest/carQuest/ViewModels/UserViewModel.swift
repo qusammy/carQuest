@@ -96,4 +96,16 @@ class UserInfoViewModel: ObservableObject {
           }
 
     }
+    
+    func getUserInfo(listing: carListing) async throws{
+        let db = Firestore.firestore()
+        if listing.userID != nil {
+            let document = try await db.collection("users").document(listing.userID!).getDocument()
+            if document.exists {
+                self.displayName = document.get("display_name") as! String
+                self.photoURL = document.get("profileImageURL") as! String
+            }
+        }
+    }
 }
+
