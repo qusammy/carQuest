@@ -5,77 +5,42 @@ import FirebaseAuth
 import FirebaseAnalytics
 import Combine
 struct ContentView: View {
-    
-    static var isAlreadyLaunchedOnce = false // Used to avoid 2 FIRApp configure
     @Binding var showSignInView: Bool
     
-    @StateObject private var viewModel = SignInEmailViewModel()
+    @State private var selection = 3
     
     var body: some View {
-        
-        NavigationView {
-            VStack {
-                Spacer()
-                    .navigationBarBackButtonHidden(true)
+        NavigationStack{
+            VStack{
                 topNavigationBar(showSignInView: $showSignInView)
-                ScrollView(showsIndicators: false){
-                    VStack{
-                        HStack {
-                            if viewModel.displayName == "" {
-                                Text("Welcome, $displayname!")
-                                    .font(Font.custom("Jost", size:30))
-                                    .foregroundColor(Color("Foreground"))
-                            }else {
-                                Text("Welcome, \(viewModel.displayName)!")
-                                    .font(Font.custom("Jost", size:30))
-                                    .foregroundColor(Color("Foreground"))
-                            }
+                TabView(selection: $selection){
+                    
+                    AuctionView(showSignInView: $showSignInView)
+                        .tabItem{
+                            Label("", systemImage:("dollarsign.circle.fill"))
+                        }.tag(1)
+                    
+                    rentView(showSignInView: $showSignInView)
+                        .tabItem{
+                            Image(systemName: "key.horizontal.fill")
+                        }.tag(2)
+                    
+                    HomeView(showSignInView: $showSignInView)
+                        .tabItem{
+                            Label("", systemImage: "house.fill")
+                        }.tag(3)
+                    
+                    BuyingView(showSignInView: $showSignInView)
+                        .tabItem{
+                            Label("", systemImage: "dollarsign")
+                        }.tag(4)
+                    ProfileView(showSignInView: $showSignInView)
+                        .tabItem{
+                            Image(systemName: "person.circle.fill")
                         }
-                        Divider()
-                        HStack{
-                            Text("Recently viewed")
-                                .font(Font.custom("Jost-Regular", size:20))
-                            Spacer()
-                            Text("See all")
-                                .font(Font.custom("Jost-Regular", size:15))
-                                .underline()
-                        }.padding(.horizontal, 10.0)
-                        HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample2", text: "1995 NSX-T Coupe")
-                        }
-                        HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                        }
-                        Divider()
-                        HStack{
-                            Text("Liked vehicles")
-                                .font(Font.custom("Jost-Regular", size:20))
-                            Spacer()
-                            Text("See all")
-                                .font(Font.custom("Jost-Regular", size:15))
-                                .underline()
-                        }.padding(.horizontal, 10.0)
-                        HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                        }
-                    }.padding()
                 }
-                bottomNavigationBar(showSignInView: $showSignInView)
             }
-        }.onAppear{
-            if FirebaseApp.app() == nil {
-                FirebaseApp.configure()
-            }
-        }.navigationViewStyle(StackNavigationViewStyle())
-            .task {
-                viewModel.getDisplayName()
-            }
+        }
     }
 }
 #Preview {

@@ -15,10 +15,10 @@ struct rentView: View {
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
     
+    @State var shouldNavigateToListingView = false
     var body: some View {
         NavigationStack{
             VStack{
-                topNavigationBar(showSignInView: $showSignInView)
                 HStack{
                     Text("Rental services")
                         .foregroundColor(Color.foreground)
@@ -75,11 +75,21 @@ struct rentView: View {
                     .onAppear {
                         viewModel.generateRentListings()
                     }
-            }
+            }.padding()
             
+<<<<<<< HEAD:carQuest/carQuest/View/Views/RideQuest/rentView.swift
         }
         
         bottomNavigationBar(showSignInView: $showSignInView)
+=======
+        }.foregroundStyle(Color.foreground)
+            .background(Color.background)
+            .scrollContentBackground(.hidden)
+            .listRowBackground(Color(.background))
+            .onAppear {
+                viewModel.generateRentListings()
+            }
+>>>>>>> main:carQuest/carQuest/View/Views/RideQuest/Renting/rentView.swift
     }
 }
 

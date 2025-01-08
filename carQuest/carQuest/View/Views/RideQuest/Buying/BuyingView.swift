@@ -11,7 +11,6 @@ struct BuyingView: View {
     @Binding var showSignInView: Bool
     var body: some View {
         VStack{
-            topNavigationBar(showSignInView: $showSignInView)
             ScrollView{
                 
             }

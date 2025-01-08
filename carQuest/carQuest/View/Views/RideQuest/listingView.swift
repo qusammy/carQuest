@@ -72,22 +72,10 @@ struct listingView: View {
                         }).offset(x:40)
                     }
                     HStack {
-                        Text("Year: \(listing?.carYear ?? "No Data")")
+                        Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.foreground)
-                        Text("Make: \(listing?.carMake ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.foreground)
-                        Text("Model: \(listing?.carModel ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.foreground)
-                        Text("Type: \(listing?.carType ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.foreground)
+                            .foregroundColor(Color.foreground)
                     }
                     HStack{
                         WebImage(url: URL(string: userViewModel.photoURL))
@@ -124,12 +112,19 @@ struct listingView: View {
                     }
                 }
             }
-        }
+        }.padding()
+            
     }
 }
+<<<<<<< HEAD
 
 
 
 #Preview {
     listingView(showSignInView: .constant(false))
 }
+=======
+//#Preview {
+//    listingView(showSignInView: .constant(false))
+//}
+>>>>>>> main
