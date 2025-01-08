@@ -8,8 +8,6 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
-import SDWebImageSwiftUI
-
 
 struct listingView: View {
     @Environment(\.dismiss) var dismiss
@@ -20,8 +18,6 @@ struct listingView: View {
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
     @State var listing: carListing?
-    @State var listingImage: String?
-    @State var listingID: String?
     
     
     var body: some View {
@@ -33,7 +29,7 @@ struct listingView: View {
                 Text("Back")
             }
             ScrollView{
-                imageBox(imageName: URL(string: listing?.imageName ?? "carQuestLogo.png"), width: 250, height: 250)
+                imageBox(imageName: URL(string: listing?.imageName ?? "4.png"), width: 250, height: 250)
                 VStack{
                     HStack{
                         Button(action: {
@@ -78,11 +74,9 @@ struct listingView: View {
                             .foregroundColor(Color.foreground)
                     }
                     HStack{
-                        WebImage(url: URL(string: userViewModel.photoURL))
+                        Image("\(userViewModel.photoURL)")
                             .resizable()
-                            .scaledToFill()
                             .frame(width:55, height:55)
-                            .clipShape(Circle())
                         Text("\(userViewModel.displayName)")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.foreground)
@@ -101,30 +95,18 @@ struct listingView: View {
                 }
             }
             .onAppear{
-                Task{
-                    do{
-
-                        if listing != nil {
-                            try await userViewModel.getUserInfo(listing: listing!)
-                        }
-                    } catch {
-                        print("error getting user info")
-                    }
+                viewModel.generateRentListings()
+                if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
+                    listing = viewModel.rentListings[viewModel.listingFromList]
+                    print("\(listing?.carYear ?? "uh oh")")
+                }else {
+                    print("fail")
                 }
             }
         }.padding()
             
     }
 }
-<<<<<<< HEAD
-
-
-
-#Preview {
-    listingView(showSignInView: .constant(false))
-}
-=======
 //#Preview {
 //    listingView(showSignInView: .constant(false))
 //}
->>>>>>> main
