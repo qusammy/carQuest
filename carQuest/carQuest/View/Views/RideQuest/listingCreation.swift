@@ -35,6 +35,8 @@ struct listingCreation: View {
     @State private var successText: String = ""
     
     @State var previewListing = false
+    @State private var errorText = ""
+    @State private var showError: Bool = false
     
     @Binding var showSignInView: Bool
 
@@ -160,14 +162,19 @@ struct listingCreation: View {
                             }
                         }
                     }
-                    NavigationLink(destination: rentView(showSignInView: $showSignInView)) {
+                    Text(errorText)
+                        .font(Font.custom("Jost-Regular", size:20))
+                        .frame(maxWidth: 275)
+                        .foregroundStyle(Color.blue)
                         Button {
                             Task{
                                 do{
                                     try await createListingRenting()
                                     photo1Data = Data()
+                                    showError = false
+                                    dismiss()
                                 }catch {
-                                    print(error)
+                                    showError.toggle()
                                 }
                             }
                         } label: {
@@ -180,7 +187,6 @@ struct listingCreation: View {
                                         .foregroundColor(.white)
                                 }
                         }.frame(maxWidth: 375, alignment: .center)
-                    }
                     Text(successText)
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
@@ -209,7 +215,7 @@ struct listingCreation: View {
         let document2 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
         
         if document2.exists {
-            print("Users are only allowed to create three listings of each type.")
+            errorText = "Users are only allowed to create three listings of each type"
         }
 
         try await db.collection("carListings").document("R\(additionalListing)\(userID)").setData([
@@ -221,7 +227,7 @@ struct listingCreation: View {
                 "userID": userID,
                 "listingType" : "renting",
                 "imageName" : "4.png",
-                "listingID" : "\(additionalListing)\(userID)"
+                "listingID" : "R\(additionalListing)\(userID)"
         ])
         
         if let photo1Data,

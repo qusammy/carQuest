@@ -77,13 +77,7 @@ struct rentView: View {
                     }
             }
             
-        }.foregroundStyle(Color.foreground)
-            .background(Color.background)
-            .scrollContentBackground(.hidden)
-            .listRowBackground(Color(.background))
-            .onAppear {
-                viewModel.generateRentListings()
-            }
+        }
         
         bottomNavigationBar(showSignInView: $showSignInView)
     }
