@@ -207,6 +207,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0016A1112D2EC84900474CBD /* Renting */ = {
+			isa = PBXGroup;
+			children = (
+				00F5C0C02CAB07B900856E1E /* rentView.swift */,
+			);
+			path = Renting;
+			sourceTree = "<group>";
+		};
 		002ABF5E2C73A3A100FFCC86 = {
 			isa = PBXGroup;
 			children = (
@@ -391,9 +399,9 @@
 		6F2EBC912C94923A00EF07FC /* RideQuest */ = {
 			isa = PBXGroup;
 			children = (
+				0016A1112D2EC84900474CBD /* Renting */,
 				00A7236C2D0A012800AF6CEC /* Buying */,
 				005577822CDE777C00E9A69A /* AuctionView.swift */,
-				00F5C0C02CAB07B900856E1E /* rentView.swift */,
 				00CF05342CA3144000E53D2F /* listingView.swift */,
 				005577842CDE7CC300E9A69A /* AuctionListingView.swift */,
 				00BF079B2C80D21E000404AA /* listingCreation.swift */,

@@ -19,7 +19,6 @@ struct rentView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                topNavigationBar(showSignInView: $showSignInView)
                 HStack{
                     Text("Rental services")
                         .foregroundColor(Color.foreground)
@@ -76,7 +75,7 @@ struct rentView: View {
                     .onAppear {
                         viewModel.generateRentListings()
                     }
-            }
+            }.padding()
             
         }.foregroundStyle(Color.foreground)
             .background(Color.background)
@@ -85,8 +84,6 @@ struct rentView: View {
             .onAppear {
                 viewModel.generateRentListings()
             }
-        
-        bottomNavigationBar(showSignInView: $showSignInView)
     }
 }
 

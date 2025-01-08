@@ -13,7 +13,6 @@ struct AuctionView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                topNavigationBar(showSignInView: $showSignInView)
                 HStack{
                         Text("Auction services")
                             .foregroundColor(Color.foreground)
@@ -65,7 +64,6 @@ struct AuctionView: View {
                     }
                 }
             }
-            bottomNavigationBar(showSignInView: $showSignInView)
         }.frame(width:375)
     }
 }

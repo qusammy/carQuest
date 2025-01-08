@@ -9,8 +9,6 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
-
-
 struct ProfileView: View {
     
     @StateObject private var nameViewModel = SignInEmailViewModel()
@@ -27,7 +25,6 @@ struct ProfileView: View {
     var body: some View {
         NavigationView{
             VStack {
-                topNavigationBar(showSignInView: $showSignInView)
                 VStack {
                     if showSignInView == true {
                         NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
@@ -144,7 +141,6 @@ struct ProfileView: View {
                         .background(Color.background)
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color(.background))
-                        bottomNavigationBar(showSignInView: $showSignInView)
                 }
             }
         }

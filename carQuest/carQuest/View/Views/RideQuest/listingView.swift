@@ -68,22 +68,10 @@ struct listingView: View {
                         }).offset(x:40)
                     }
                     HStack {
-                        Text("\(listing.carYear ?? "No Data")")
+                        Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 25))
                             .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("\(listing.carMake ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("\(listing.carModel ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
-                        Text("\(listing.carType ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 25))
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color.foreground)
                     }
                     HStack{
                         Image("\(userViewModel.photoURL)")
