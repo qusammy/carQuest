@@ -37,6 +37,7 @@ struct listingCreation: View {
     @State var previewListing = false
     @State private var errorText = ""
     @State private var showError: Bool = false
+    @State private var carPhoto: UIImage?
     
     @Binding var showSignInView: Bool
 
@@ -64,7 +65,7 @@ struct listingCreation: View {
                     }.onTapGesture {
                         previewListing = true}
                     .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: $carYear, make: $carMake, model: $carModel, description: $carDescription, typeOfCar: $carType, date: $date, listedPhoto1: $listedPhoto1)
+                        carQuest.previewListing(carYear: $carYear, make: $carMake, model: $carModel, description: $carDescription, typeOfCar: $carType, date: $date, listedPhoto1: $carPhoto)
                     }
                 }
                 Text("Users are only allowed to create three listings of each type!")
@@ -130,7 +131,7 @@ struct listingCreation: View {
                                     .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
                                 PhotosPicker("Select image", selection: $photoItem1, matching: .images)
                                     .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/Color(red: 0.723, green: 0.717, blue: 0.726)/*@END_MENU_TOKEN@*/)
+                                    .foregroundColor(Color.foreground)
                                 if let photo1Data,
                                    let uiImage = UIImage(data: photo1Data) {
                                     Image(uiImage: uiImage)
@@ -139,6 +140,9 @@ struct listingCreation: View {
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 200, height: 200)
                                         .clipped()
+                                        .task {
+                                            carPhoto = uiImage
+                                        }
                                 }
                             }
                             .onChange(of: photoItem1) {
