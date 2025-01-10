@@ -8,7 +8,6 @@ import SwiftUI
 import SDWebImageSwiftUI
 import FirebaseAuth
 
-
 struct imageBox: View {
     var imageName: URL?
     var carYear: String?
@@ -45,7 +44,7 @@ struct topNavigationBar: View {
                     .font(Font.custom("ZingRustDemo-Base", size:45))
                     .foregroundColor(Color.foreground)
                 Spacer()
-                NavigationLink(destination: MainChatView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: MainChatView(showSignInView: $showSignInView)) {
                     Image(systemName: "envelope.fill")
                         .resizable()
                         .frame(width:40, height:30)
@@ -68,63 +67,6 @@ struct topNavigationBar: View {
         }
         .frame(width:375)
         
-    }
-}
-struct bottomNavigationBar: View {
-    @Binding var showSignInView: Bool
-    @ObservedObject var vm = UserProfileViewModel()
-    var body: some View {
-        VStack{
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:1)
-            HStack{
-                NavigationLink(destination: AuctionView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
-                    Image("gavel")
-                        .resizable()
-                        .frame(width: 62, height:62)
-                }
-                Spacer()
-                NavigationLink(destination: rentView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    Image("rent")
-                        .resizable()
-                        .frame(width: 57, height:57)
-                }
-                Spacer()
-                NavigationLink(destination: HomeView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
-                ) {
-                    Image("home")
-                        .resizable()
-                        .frame(width: 57, height:57)
-                }
-                Spacer()
-                NavigationLink(destination: BuyingView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)        .navigationBarTitleDisplayMode(.inline)
-                ) {
-                    Image("buy")
-                        .resizable()
-                        .frame(width: 62, height:62)
-                }
-                Spacer()
-                NavigationLink(destination: ProfileView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    if vm.carUser?.profileImageURL == nil {
-                        Image("profileIcon")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width:47, height:47)
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(Circle())
-                    } else {
-                        WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
-                            .resizable()
-                            .frame(width: 47, height:47)
-                            .scaledToFill()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(Circle())
-                    }
-                }
-            }
-        }
-        .background(Color.background)
-        .padding()
     }
 }
 

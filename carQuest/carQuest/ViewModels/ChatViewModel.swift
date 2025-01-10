@@ -223,6 +223,9 @@ struct ChatLogs: View {
 
     @ObservedObject var vm: chatViewModel
     @ObservedObject var userVM = UserProfileViewModel()
+    
+    @State private var isPresented = false
+
     var body: some View {
             VStack{
                 if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
@@ -245,11 +248,16 @@ struct ChatLogs: View {
                     .padding(.horizontal)
                 } else {
                     HStack{
-                        WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width:35, height:35)
-                            .clipShape(Circle())
+                        Button(action: {
+                            isPresented.toggle()
+                        }, label: {
+                            WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width:35, height:35)
+                                .clipShape(Circle())
+                        })
+                        
                         HStack{
                             Text(message.text)
                                 .font(Font.custom("Jost-Regular", size: 15))
@@ -263,7 +271,11 @@ struct ChatLogs: View {
                     }
                     .padding(.horizontal)
                 }
-        }
+            }
+            .fullScreenCover(isPresented: $isPresented, content: {
+                OtherUserProfile(vm: chatViewModel(carUser: self.carUser), carUser: self.carUser)
+            })
+
     }
 }
 

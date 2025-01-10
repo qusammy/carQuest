@@ -30,8 +30,6 @@ class FirebaseManager: NSObject{
     }
 }
 
-
-
 struct UserProfileView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = ProfileViewModel()

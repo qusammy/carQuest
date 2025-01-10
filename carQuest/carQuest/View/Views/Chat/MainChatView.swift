@@ -47,7 +47,6 @@ struct MainChatView: View {
                     }
                 }
                 messagesView
-                bottomNavigationBar(showSignInView: $showSignInView)
             }.frame(width:375)
         }.fullScreenCover(isPresented: $showNewMessageScreen){
             CreateNewMessage(didSelectNewUser: { user

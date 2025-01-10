@@ -10,7 +10,8 @@ struct HomeView: View {
     @Binding var showSignInView: Bool
     
     @StateObject private var viewModel = SignInEmailViewModel()
-    
+    @StateObject var viewModel2 = ListingViewModel()
+
     var body: some View {
         
         NavigationView {
@@ -40,9 +41,7 @@ struct HomeView: View {
                                 .underline()
                         }.padding(.horizontal, 10.0)
                         HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample2", text: "1995 NSX-T Coupe")
+                           
                         }
                         HStack{
                             carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")

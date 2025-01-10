@@ -16,6 +16,8 @@ struct ChatView: View {
     @ObservedObject var vm: chatViewModel
     @ObservedObject var userVM = UserProfileViewModel()
     
+    @State private var isPresented = false
+
     var body: some View {
         VStack{
             ScrollView{
@@ -63,6 +65,7 @@ struct ChatView: View {
                     ZStack{
                         RoundedRectangle(cornerRadius: 25)
                             .frame(width:60, height:45)
+                            .foregroundStyle(Color.accentColor)
                         Text("Send")
                             .foregroundColor(.white)
                             .font(.custom("Jost-Regular", size: 17))
