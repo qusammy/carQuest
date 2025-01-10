@@ -32,10 +32,22 @@ struct PushNotificationView: View {
     // to toggle button
     @State var pushNotification: Bool = true
     var body: some View {
-        ScrollView(showsIndicators: false){
-            VStack{
-                
-            }
+        VStack{
+            ScrollView(showsIndicators: false){
+                HStack{
+                    Text("Push Notifications")
+                        .font(Font.custom("ZingRustDemo-Base", size: 40))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                    }
+                    Toggle(isOn: $pushNotification) {
+                        Text("Enable push notifications")
+                            .font(Font.custom("Jost-Regular", size: 20))
+                            .foregroundColor(Color.foreground)
+                    }.toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                    Spacer()
+                Divider()
+            }.padding()
         }
     }
 }
@@ -52,7 +64,7 @@ struct MyListingsView: View {
                         .foregroundColor(Color.foreground)
                     Spacer()
                 }
-            }
+            }.padding()
         }
     }
 }
@@ -93,19 +105,20 @@ struct PrivacyView: View {
 }
 
 struct PurchasesView: View {
+    
     @Binding var showSignInView: Bool
 
     var body: some View {
-        ScrollView{
-            VStack{
-                HStack{
-                    Text("Purchases & Payment")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
-            }.padding()
+            ScrollView{
+                VStack{
+                    HStack{
+                        Text("Purchases & Payment")
+                            .font(Font.custom("ZingRustDemo-Base", size: 40))
+                            .foregroundColor(Color.foreground)
+                        Spacer()
+                    }
+                }.padding()
+            }
         }
     }
-}
 
