@@ -54,6 +54,7 @@ struct PushNotificationView: View {
 
 struct MyListingsView: View {
     @Binding var showSignInView: Bool
+    @StateObject private var viewModel = ListingViewModel()
 
     var body: some View {
         ScrollView{
@@ -63,6 +64,91 @@ struct MyListingsView: View {
                         .font(Font.custom("ZingRustDemo-Base", size: 40))
                         .foregroundColor(Color.foreground)
                     Spacer()
+                }
+                    Text("Auction")
+                        .font(Font.custom("Jost", size: 30))
+                        .foregroundStyle(Color.accentColor)
+                Text("No Listings")
+                    .font(Font.custom("Jost", size: 15))
+                    .foregroundStyle(Color.foreground)
+                if viewModel.myauctionListings.isEmpty {
+                    Rectangle()
+                        .frame(width: 200, height: 200)
+                        .foregroundStyle(Color.background)
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack{
+                        Spacer()
+                        ForEach(viewModel.myauctionListings) { listing in
+                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                .task{
+                    do{
+                        try viewModel.generateMyAuctionListings()
+                    }catch {
+                        
+                    }
+                }
+                    Text("Renting")
+                        .font(Font.custom("Jost", size: 30))
+                        .foregroundStyle(Color.accentColor)
+                if viewModel.myrentListings.isEmpty {
+                    Rectangle()
+                        .frame(width: 200, height: 200)
+                        .foregroundStyle(Color.background)
+                    Text("No Listings")
+                        .font(Font.custom("Jost", size: 15))
+                        .foregroundStyle(Color.foreground)
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack{
+                        ForEach(viewModel.myrentListings) { listing in
+                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                            }
+                        }
+                    }
+                }
+                .task{
+                    do{
+                        try viewModel.generateMyRentListings()
+                    }catch {
+                        
+                    }
+                }
+                    Text("Buying")
+                        .font(Font.custom("Jost", size: 30))
+                        .foregroundStyle(Color.accentColor)
+                if viewModel.mybuyListings.isEmpty {
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 200, height: 200)
+                            .foregroundStyle(Color.background)
+                        Text("No Listings")
+                            .font(Font.custom("Jost", size: 15))
+                            .foregroundStyle(Color.foreground)
+                    }
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack{
+                        ForEach(viewModel.mybuyListings) { listing in
+                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                            }
+                        }
+                    }
+                }
+                .task{
+                    do{
+                        try viewModel.generateMyBuyListings()
+                    }catch {
+                        
+                    }
                 }
             }.padding()
         }

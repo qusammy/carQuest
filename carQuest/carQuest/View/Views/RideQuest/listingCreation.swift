@@ -40,6 +40,7 @@ struct listingCreation: View {
     @State private var carPhoto: UIImage?
     
     @Binding var showSignInView: Bool
+    @State var listingType: String?
 
     var body: some View {
         NavigationView{
@@ -191,28 +192,36 @@ struct listingCreation: View {
     }
     func createListingRenting() async throws {
         var additionalListing: Int = 0
+        var listingLetter: String = ""
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
-        let document = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        if listingType == "renting" {
+            listingLetter = "R"
+        }else if listingType == "auction" {
+            listingLetter = "A"
+        }else if listingType == "buying" {
+            listingLetter = "B"
+        }
+        let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document.exists {
             additionalListing += 1
         }
         
-        let document1 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        let document1 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document1.exists {
             additionalListing += 1
         }
         
-        let document2 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        let document2 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document2.exists {
             errorText = "Users are only allowed to create three listings of each type"
         }
 
-        try await db.collection("carListings").document("R\(additionalListing)\(userID)").setData([
+        try await db.collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").setData([
                 "carMake": carMake,
                 "carDescription": carDescription,
                 "carModel": carModel,
@@ -221,7 +230,7 @@ struct listingCreation: View {
                 "userID": userID,
                 "listingType" : "renting",
                 "imageName" : "4.png",
-                "listingID" : "R\(additionalListing)\(userID)"
+                "listingID" : "\(listingLetter)\(additionalListing)\(userID)"
         ])
         
         if let photo1Data,
@@ -242,7 +251,7 @@ struct listingCreation: View {
             return
         }
         
-        let path = "listingImages/R\(additionalListing)\(userID).jpeg"
+        let path = "listingImages/\(listingLetter)\(additionalListing)\(userID).jpeg"
         let fileRef = storageRef.child(path)
         
         fileRef.putData(imageData!, metadata: nil) { (metadata, error) in

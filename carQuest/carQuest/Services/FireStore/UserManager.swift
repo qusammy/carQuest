@@ -28,6 +28,7 @@ struct CarQuestUser: Identifiable{
     var email: String
     var user_id: String
     var profileImageURL: String
+    var description: String?
 }
 
 struct DBUser {
@@ -36,6 +37,7 @@ struct DBUser {
     let photoURL: String?
     let dateCreated: Date?
     let displayName: String?
+    var description: String?
 }
 
 final class UserManager {
@@ -58,6 +60,10 @@ final class UserManager {
         if let displayName = auth.displayName {
             userData["display_name"] = displayName
         }
+        if let description = auth.description {
+            userData["description"] = description
+            
+        }
 
         try await Firestore.firestore().collection("users").document(auth.uid).setData(userData, merge: false)
     }
@@ -73,7 +79,8 @@ final class UserManager {
         let photoURL = data["photoURL"] as? String
         let dateCreated = data["date_created"] as? Date
         let displayName = data["display_name"] as? String
+        let description = data["description"] as? String
         
-        return DBUser(userId: userId, email: email, photoURL: photoURL, dateCreated: dateCreated, displayName: displayName)
+        return DBUser(userId: userId, email: email, photoURL: photoURL, dateCreated: dateCreated, displayName: displayName, description: description)
     }
 }
