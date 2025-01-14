@@ -48,7 +48,6 @@ class UserProfileViewModel: ObservableObject{
                         }
                         self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
                         
-                      //  self.recentMessages.append(.init(documentId: docId, data: change.document.data()))
                     
                     })
             }
@@ -72,8 +71,10 @@ class UserProfileViewModel: ObservableObject{
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let display_name = data["display_name"] as? String ?? ""
+            let description = data["description"] as? String ?? ""
             let profileImageURL = data["profileImageURL"] as? String ?? "profileIcon"
-            self.carUser = CarQuestUser(id: "", display_name: display_name, email: email, user_id: uid, profileImageURL: profileImageURL)
+
+            self.carUser = CarQuestUser(id: "", display_name: display_name, email: email, user_id: uid, profileImageURL: profileImageURL, description: description)
         }
     }
     

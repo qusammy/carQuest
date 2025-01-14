@@ -21,7 +21,7 @@ struct RootView: View {
         }
         .fullScreenCover(isPresented: $showSignInView) {
 
-            HomeView(showSignInView: $showSignInView)
+            ProfileView(showSignInView: $showSignInView)
             
         }
     }
