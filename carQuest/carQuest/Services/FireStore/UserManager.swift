@@ -63,6 +63,7 @@ final class UserManager {
         }
         if let description = auth.description {
             userData["description"] = description
+            
         }
        
 

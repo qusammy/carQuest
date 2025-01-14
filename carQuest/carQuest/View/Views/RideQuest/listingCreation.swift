@@ -37,8 +37,10 @@ struct listingCreation: View {
     @State var previewListing = false
     @State private var errorText = ""
     @State private var showError: Bool = false
+    @State private var carPhoto: UIImage?
     
     @Binding var showSignInView: Bool
+    @State var listingType: String?
 
     var body: some View {
         NavigationView{
@@ -64,7 +66,7 @@ struct listingCreation: View {
                     }.onTapGesture {
                         previewListing = true}
                     .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: $carYear, make: $carMake, model: $carModel, description: $carDescription, typeOfCar: $carType, date: $date, listedPhoto1: $listedPhoto1)
+                        carQuest.previewListing(carYear: $carYear, make: $carMake, model: $carModel, description: $carDescription, typeOfCar: $carType, date: $date, listedPhoto1: $carPhoto)
                     }
                 }
                 Text("Users are only allowed to create three listings of each type!")
@@ -130,7 +132,7 @@ struct listingCreation: View {
                                     .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
                                 PhotosPicker("Select image", selection: $photoItem1, matching: .images)
                                     .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/Color(red: 0.723, green: 0.717, blue: 0.726)/*@END_MENU_TOKEN@*/)
+                                    .foregroundColor(Color.foreground)
                                 if let photo1Data,
                                    let uiImage = UIImage(data: photo1Data) {
                                     Image(uiImage: uiImage)
@@ -139,6 +141,9 @@ struct listingCreation: View {
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 200, height: 200)
                                         .clipped()
+                                        .task {
+                                            carPhoto = uiImage
+                                        }
                                 }
                             }
                             .onChange(of: photoItem1) {
@@ -187,28 +192,36 @@ struct listingCreation: View {
     }
     func createListingRenting() async throws {
         var additionalListing: Int = 0
+        var listingLetter: String = ""
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
-        let document = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        if listingType == "renting" {
+            listingLetter = "R"
+        }else if listingType == "auction" {
+            listingLetter = "A"
+        }else if listingType == "buying" {
+            listingLetter = "B"
+        }
+        let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document.exists {
             additionalListing += 1
         }
         
-        let document1 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        let document1 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document1.exists {
             additionalListing += 1
         }
         
-        let document2 = try await Firestore.firestore().collection("carListings").document("R\(additionalListing)\(userID)").getDocument()
+        let document2 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
         
         if document2.exists {
             errorText = "Users are only allowed to create three listings of each type"
         }
 
-        try await db.collection("carListings").document("R\(additionalListing)\(userID)").setData([
+        try await db.collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").setData([
                 "carMake": carMake,
                 "carDescription": carDescription,
                 "carModel": carModel,
@@ -217,7 +230,7 @@ struct listingCreation: View {
                 "userID": userID,
                 "listingType" : "renting",
                 "imageName" : "4.png",
-                "listingID" : "R\(additionalListing)\(userID)"
+                "listingID" : "\(listingLetter)\(additionalListing)\(userID)"
         ])
         
         if let photo1Data,
@@ -238,7 +251,7 @@ struct listingCreation: View {
             return
         }
         
-        let path = "listingImages/R\(additionalListing)\(userID).jpeg"
+        let path = "listingImages/\(listingLetter)\(additionalListing)\(userID).jpeg"
         let fileRef = storageRef.child(path)
         
         fileRef.putData(imageData!, metadata: nil) { (metadata, error) in

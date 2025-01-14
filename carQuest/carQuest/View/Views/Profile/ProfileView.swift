@@ -26,18 +26,24 @@ struct ProfileView: View {
         NavigationView{
             VStack {
                 VStack {
+                    
                     if showSignInView == true {
-                        NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 20)
-                                    .frame(width:250, height:50)
-                                    .foregroundColor(Color("appColor"))
-                                Text("Sign In")
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .foregroundColor(.white)
+                        VStack{
+                            Spacer()
+                            NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .frame(width:250, height:50)
+                                        .foregroundColor(Color("appColor"))
+                                    Text("Sign In")
+                                        .font(.custom("Jost-Regular", size: 25))
+                                        .foregroundColor(.white)
+                                }
                             }
+                            Spacer()
                         }
                     }
+                    
                     List {
                         if showSignInView == false {
                             if let user = viewModel.user {

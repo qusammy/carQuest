@@ -11,13 +11,13 @@ import FirebaseAuth
 import SDWebImageSwiftUI
 
 struct listingView: View {
-    @Environment(\.dismiss) var dismiss
     
     @State private var isLiked: Bool = false
     @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
+    @State var listingName: String?
     @State var listing: carListing?
     
     var body: some View {
@@ -78,12 +78,15 @@ struct listingView: View {
                                 .foregroundColor(Color.foreground)
                         }
                         HStack{
-                            Image("\(userViewModel.photoURL)")
+                            WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
+                                .scaledToFill()
                                 .frame(width:55, height:55)
+                                .clipShape(Circle())
                             Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
+                            Spacer()
                         }
                         Text("\(listing?.carDescription ?? "No Data")")
                             .font(.custom("Jost-Regular", size: 20))
@@ -98,24 +101,17 @@ struct listingView: View {
                     }
                 }
                 .onAppear{
-                    viewModel.generateRentListings()
-                    if viewModel.rentListings.count > 0 && viewModel.listingFromList < viewModel.rentListings.count {
-                        listing = viewModel.rentListings[viewModel.listingFromList]
-                        print("\(listing?.carYear ?? "uh oh")")
-                    }else {
-                        print("fail")
+                    print(listing!)
+                    Task {
+                        do{
+                            try await userViewModel.getUserInfo(listing: listing!)
+                        }catch {
+                            print("error getting listing")
+                        }
                     }
                 }
             }.padding()
-            .toolbar{
-                ToolbarItem(placement:.navigationBarLeading){
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                       backButton()
-                    })
-                }
-            }
+
         }
     }
 }
