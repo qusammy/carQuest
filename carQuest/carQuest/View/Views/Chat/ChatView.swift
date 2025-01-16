@@ -74,8 +74,21 @@ struct ChatView: View {
             }
             .padding(.horizontal)
         }
-        .navigationTitle(carUser?.display_name ?? "$username")
-        .navigationBarTitleDisplayMode(.inline)
+        
+        .toolbar{
+            ToolbarItem(placement: .principal){
+                Button(action: {
+                    isPresented.toggle()
+
+                }, label: {
+                    Text(carUser?.display_name ?? "$username")
+                        .foregroundStyle(Color.foreground)
+                        .font(Font.custom("Jost-Regular", size: 25))
+                })
+            }
+        }.fullScreenCover(isPresented: $isPresented, content: {
+            OtherUserProfile(vm: chatViewModel(carUser: self.carUser), carUser: self.carUser)
+        })
     }
 }
 struct ChatView_Previews: PreviewProvider {

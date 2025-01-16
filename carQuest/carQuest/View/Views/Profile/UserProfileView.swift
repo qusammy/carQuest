@@ -38,10 +38,15 @@ struct UserProfileView: View {
     
     @State var shouldShowImagePicker = false
     @ObservedObject var vm = UserProfileViewModel()
-   
+       
+    @State private var descriptionEditor = false
+
     var body: some View {
-        VStack{
-            ScrollView{
+        NavigationStack{
+            VStack{
+                Text("User details")
+                    .font(.custom("Jost-Regular", size:35))
+                    .foregroundColor(Color.foreground)
                 HStack{
                     if let image = self.image {
                         Image(uiImage: image)
@@ -71,24 +76,33 @@ struct UserProfileView: View {
                         .font(.custom("Jost-Regular", size: 15))
                         .foregroundColor(Color.accentColor)
                 })
-                Text("User details")
-                    .font(.custom("Jost-Regular", size:35))
-                    .foregroundColor(Color.foreground)
-                Text(vm.carUser?.display_name ?? "$username")
-                    .font(.custom("Jost-Regular", size:25))
-                    .foregroundColor(Color.foreground)
-                Text(vm.carUser?.email ?? "$email")
-                    .font(.custom("Jost-Regular", size:25))
-                    .foregroundColor(Color.foreground)
-                if let user = viewModel.user {
-                    Text("User ID: \(user.userId)")
+                
+                List{
+                    Text(vm.carUser?.display_name ?? "$username")
+                        .font(.custom("Jost-Regular", size:25))
+                        .foregroundColor(Color.foreground)
+                    Text(vm.carUser?.email ?? "$email")
+                        .font(.custom("Jost-Regular", size:25))
+                        .foregroundColor(Color.foreground)
+                    NavigationLink(destination: AddDescriptionView(), isActive: $descriptionEditor) {
+                            Text(vm.carUser?.description ?? "$description")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(Color.foreground)
+                                .lineLimit(1)
+                        }
+                    
+                    
+                }.listStyle(.plain)
+                if let user = vm.carUser {
+                    Text("User ID: \(user.user_id)")
                         .font(.custom("Jost-Regular", size:15))
                         .foregroundColor(Color.foreground)
                 } else {
-                    Text("No user logged in")
-                        .font(.custom("Jost-Regular", size:15))
-                        .foregroundColor(Color.foreground)
+                    HStack{
+                        
+                    }
                 }
+                Spacer()
                 Button(action: {
                     persistImageToStorage()
                 }, label: {
@@ -101,12 +115,17 @@ struct UserProfileView: View {
                             .foregroundColor(.white)
                     }
                 })
-                }
-        }.fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil){
+            }
+        }.onAppear{
+            print(vm.carUser?.description ?? "default")
+        }.padding()
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil){
             ImagePicker(image: $image)
         }
     }
     @State var image: UIImage?
+    
+
     
     func persistImageToStorage(){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid
@@ -133,3 +152,64 @@ struct UserProfileView: View {
 #Preview {
     UserProfileView(showSignInView: .constant(false))
 }
+
+struct AddDescriptionView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var vm = UserProfileViewModel()
+    @State var userDescription: String = ""
+    @State var wordLimit = 25
+    var body: some View {
+        VStack{
+            HStack{
+                Text("Write a description")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+                }
+            
+            TextField("My epic description...", text: $userDescription)
+                    .font(Font.custom("Jost-Regular", size: 25))
+                    .foregroundColor(Color.foreground)
+                    .textFieldStyle(.roundedBorder)
+            Text(vm.carUser?.description ?? "")
+                .font(Font.custom("Jost-Regular", size: 20))
+                .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.leading)
+            
+                Spacer()
+            Divider()
+        }.padding()
+            .toolbar{
+                ToolbarItem {
+                    Button(action: {
+                        updateUserDescription(userDescription: userDescription)
+                        dismiss()
+
+                    }, label: {
+                        Image(systemName:"checkmark")
+                            .resizable()
+                            .foregroundStyle(Color.accentColor)
+                            .frame(width:25, height:25)
+                    }).toolbarTitleDisplayMode(.inline)
+                }
+            }
+    }
+    func updateUserDescription(userDescription: String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
+            return
+        }
+        
+        let userDescriptionData = [
+            "description": userDescription
+        ]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userDescriptionData, merge: true){ err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+            }
+    }
+}
+

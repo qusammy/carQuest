@@ -22,7 +22,7 @@ struct ChatMessage: Identifiable {
     var id: String { documentId }
     
     let documentId: String
-    let fromId, toId, text, display_name, profileImageURL: String
+    let fromId, toId, text, display_name, profileImageURL, description: String
     let timestamp: Date
     
     var timeAgo: String {
@@ -39,7 +39,7 @@ struct ChatMessage: Identifiable {
         self.display_name = data["display_name"] as? String ?? ""
         self.profileImageURL = data["profileImageURL"] as? String ?? ""
         self.timestamp = data["timestamp"] as? Date ?? Date()
-
+        self.description = data["description"] as? String ?? ""
 
     }
 }
@@ -172,7 +172,9 @@ class chatViewModel: ObservableObject {
             FirebaseConstants.fromId: fromId,
             FirebaseConstants.toId: toId,
             "profileImageURL": carUser.profileImageURL,
-            "display_name": carUser.display_name
+            "display_name": carUser.display_name,
+            "description": carUser.description
+            
         ] as [ String : Any ]
         
         document.setData(data) { error in

@@ -49,13 +49,13 @@ struct CreateNewMessage: View{
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
-                        Text("Cancel")
+                        Text("Back")
                             .foregroundColor(Color.accentColor)
                             .font(Font.custom("Jost-Regular", size:20))
                     })
                 } 
                 ToolbarItem(placement: .navigationBarLeading){
-                    Text("New Message")
+                    Text("Messages")
                         .font(Font.custom("ZingRustDemo-Base", size: 40))
                         .foregroundColor(Color.foreground)
                 }

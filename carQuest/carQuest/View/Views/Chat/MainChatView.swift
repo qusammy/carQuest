@@ -26,15 +26,13 @@ struct MainChatView: View {
             VStack{
                 VStack(alignment:.leading){
                     HStack{
-                        Text("Recent Messages")
+                        Text("Messages")
                             .font(Font.custom("ZingRustDemo-Base", size:40))
                             .multilineTextAlignment(.leading)
                             .foregroundColor(Color.foreground)
                         Spacer()
-                        
                         NavigationLink("", isActive: $shouldNavigateToChatView){
                             ChatView(carUser: self.carUser)
-
                         }
                         Button(action: {
                             showNewMessageScreen.toggle()

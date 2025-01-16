@@ -39,6 +39,14 @@ struct imageBox: View {
 
 struct topNavigationBar: View {
     @Binding var showSignInView: Bool
+    @ObservedObject var vm = UserProfileViewModel()
+    
+    @State var showNewMessageScreen = false
+    
+    @State var shouldNavigateToChatView = false
+
+
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         VStack{
             HStack{
@@ -46,12 +54,17 @@ struct topNavigationBar: View {
                     .font(Font.custom("ZingRustDemo-Base", size:45))
                     .foregroundColor(Color.foreground)
                 Spacer()
-                NavigationLink(destination: MainChatView(showSignInView: $showSignInView)) {
+                NavigationLink("", isActive: $shouldNavigateToChatView){
+                    ChatView(carUser: self.carUser)
+                }
+                Button(action: {
+                    showNewMessageScreen.toggle()
+                }, label: {
                     Image(systemName: "envelope.fill")
                         .resizable()
                         .frame(width:40, height:30)
                         .foregroundColor(Color.foreground)
-                }
+                })
                 NavigationLink(destination: NotificationsView()) {
                     Image(systemName: "bell.fill")
                         .resizable()
@@ -66,10 +79,17 @@ struct topNavigationBar: View {
                     .foregroundColor(.blue)
                     .multilineTextAlignment(.leading)
             }
-        }
-        .frame(width:375)
-        
+        }.fullScreenCover(isPresented: $showNewMessageScreen){
+                        CreateNewMessage(didSelectNewUser: { user
+                            in
+                            print(user?.email ?? "")
+                            self.shouldNavigateToChatView.toggle()
+                            self.carUser = user
+                        })
+                    }
+       .padding()
     }
+    @State var carUser: CarQuestUser?
 }
 
 struct carListingLink: View {

@@ -34,10 +34,13 @@ struct OtherUserProfile: View {
                 Spacer()
                 }
             HStack{
-                Text(vm.carUser?.display_name ?? "$username")
+                Text(vm.carUser?.description ?? "Hi, I'm new to Car Quest.")
                     .foregroundStyle(Color.foreground)
                     .font(Font.custom("Jost-Regular", size: 20))
-                Text("'s listings")
+                    .multilineTextAlignment(.leading)
+            }
+            HStack{
+                Text(vm.carUser?.display_name ?? "$username" + "'s listings")
                     .foregroundStyle(Color.foreground)
                     .font(Font.custom("Jost-Regular", size: 20))
                 Spacer()
