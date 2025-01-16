@@ -6,6 +6,7 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
+import FirebaseCore
 struct carListing: Codable, Identifiable, Equatable {
     var id: String?
     
@@ -19,27 +20,15 @@ struct carListing: Codable, Identifiable, Equatable {
     var listingType: String?
     var imageData: Data?
     var listingID: String?
+    var dateCreated: Date?
+    var timeAccessed: Date?
+
     
-//    init(carDescription: String, carMake: String, carModel: String, carType: String, carYear: String, userID: String, imageName: String, listingType: String) {
-//        self.carDescription = carDescription
-//        self.carMake = carMake
-//        self.carModel = carModel
-//        self.carType = carType
-//        self.carYear = carYear
-//        self.userID = userID
-//        self.imageName = imageName
-//        self.listingType = listingType
-//    }
+
+}
+
+struct userClicked: Codable, Equatable {
+    var id: String?
+    var timeAccessed: Date?
     
 }
-//extension carListing {
-//    static var empty: carListing {
-//        carListing(carDescription: "",
-//                   carMake: "",
-//                   carModel: "",
-//                   carType: "",
-//                   carYear: "",
-//                   userID: "",
-//                   imageName: "")
-//    }
-//}

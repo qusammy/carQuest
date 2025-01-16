@@ -27,7 +27,7 @@ struct listingCreation: View {
     @State var carMake: String
     @State var carDescription: String
     @State var carYear = "2024"
-    let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+    let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
     @State var date = Date()
     @State private var photoItem1: PhotosPickerItem?
     @State private var listedPhoto1: UIImage?
@@ -38,14 +38,17 @@ struct listingCreation: View {
     @State private var errorText = ""
     @State private var showError: Bool = false
     @State private var carPhoto: UIImage?
+    @State var listingLetter: String?
+
     
     @Binding var showSignInView: Bool
     @State var listingType: String?
+    @State var selection: Int?
 
     var body: some View {
         NavigationView{
             VStack{
-                NavigationLink(destination: ContentView(showSignInView: $showSignInView, selection: 2).navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: ContentView(showSignInView: $showSignInView, selection: selection ?? 3).navigationBarBackButtonHidden(true)) {
                     HStack{
                         backButton()
                         Spacer()
@@ -75,6 +78,7 @@ struct listingCreation: View {
                     .foregroundStyle(Color.blue)
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
+
                 ScrollView(showsIndicators:false){
                     headline(headerText: "Year")
                     Picker("Select year of vehicle", selection: $carYear){
@@ -192,7 +196,6 @@ struct listingCreation: View {
     }
     func createListingRenting() async throws {
         var additionalListing: Int = 0
-        var listingLetter: String = ""
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
@@ -203,25 +206,27 @@ struct listingCreation: View {
         }else if listingType == "buying" {
             listingLetter = "B"
         }
-        let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
+        let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
         
         if document.exists {
             additionalListing += 1
         }
         
-        let document1 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
+        let document1 = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
         
         if document1.exists {
             additionalListing += 1
         }
         
-        let document2 = try await Firestore.firestore().collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").getDocument()
+        let document2 = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
         
         if document2.exists {
             errorText = "Users are only allowed to create three listings of each type"
         }
+        
+        date = Date.now
 
-        try await db.collection("carListings").document("\(listingLetter)\(additionalListing)\(userID)").setData([
+        try await db.collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").setData([
                 "carMake": carMake,
                 "carDescription": carDescription,
                 "carModel": carModel,
@@ -230,7 +235,8 @@ struct listingCreation: View {
                 "userID": userID,
                 "listingType" : "renting",
                 "imageName" : "4.png",
-                "listingID" : "\(listingLetter)\(additionalListing)\(userID)"
+                "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
+                "dateCreated" : date
         ])
         
         if let photo1Data,
@@ -251,8 +257,9 @@ struct listingCreation: View {
             return
         }
         
-        let path = "listingImages/\(listingLetter)\(additionalListing)\(userID).jpeg"
+        let path = "listingImages/\(listingLetter!)\(additionalListing)\(userID).jpeg"
         let fileRef = storageRef.child(path)
+        
         
         fileRef.putData(imageData!, metadata: nil) { (metadata, error) in
             if error == nil && metadata != nil {

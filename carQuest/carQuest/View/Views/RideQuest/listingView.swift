@@ -19,6 +19,7 @@ struct listingView: View {
     @StateObject var userViewModel = UserInfoViewModel()
     @State var listingName: String?
     @State var listing: carListing?
+    @State var user: String?
     
     var body: some View {
         NavigationStack{
@@ -101,12 +102,16 @@ struct listingView: View {
                     }
                 }
                 .onAppear{
-                    print(listing!)
-                    Task {
-                        do{
-                            try await userViewModel.getUserInfo(listing: listing!)
-                        }catch {
-                            print("error getting listing")
+                    if listing != nil {
+                        Task {
+                            do{
+                                try await userViewModel.getUserInfo(listing: listing!)
+                                user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                                try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
+                                
+                            }catch {
+                                print("error getting listing")
+                            }
                         }
                     }
                 }

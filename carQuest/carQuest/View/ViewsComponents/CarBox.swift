@@ -7,6 +7,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import FirebaseAuth
+import FirebaseCore
 
 struct imageBox: View {
     var imageName: URL?
@@ -17,6 +18,7 @@ struct imageBox: View {
     var width: CGFloat
     var height: CGFloat
     var userID: String?
+    var textSize: CGFloat?
     var body: some View {
         VStack{
             WebImage(url: imageName ?? URL(string: "4.png"))
@@ -26,7 +28,7 @@ struct imageBox: View {
                 .clipped()
             if carYear != nil && carModel != nil && carMake != nil && carType != nil {
                 Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
-                    .font(.custom("Jost-Regular", size:20))
+                    .font(.custom("Jost-Regular", size: textSize ?? 20))
                     .foregroundColor(Color.foreground)
                     .lineLimit(1)
                     .multilineTextAlignment(.leading)
@@ -76,9 +78,9 @@ struct carListingLink: View {
     var text: String
     var body: some View {
         VStack{
-            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: carListing())) {
+            NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
             VStack{
-                imageBox(carYear: "", carMake: "", carModel: "", width: 100, height: 100)
+                imageBox(carYear: "", carMake: "", carModel: "", width: 100, height: 100, textSize: 10)
                 Text("")
                 .font(.custom("Jost-Regular", size:17))
                 .foregroundColor(Color.foreground)

@@ -14,6 +14,7 @@ struct rentView: View {
     @State var userPreferences = ""
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
+    @State private var shuffledList: [carListing] = [carListing]()
     
     @State var shouldNavigateToListingView = false
     var body: some View {
@@ -37,7 +38,7 @@ struct rentView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", showSignInView: $showSignInView)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -58,36 +59,15 @@ struct rentView: View {
                         .font(.custom("Jost-Regular", size: 18))
                 }
                 ScrollView{
-                    ForEach(viewModel.rentListings) { listing in
+                    ForEach(shuffledList) { listing in
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250)
+                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
                         }
                     }
-//                List(viewModel.rentListings) { listing in
-//                    var listingIndex: Int = 0
-//                    var listingFromList: carListing = carListing()
-//                    HStack{
-//                        Spacer()
-//                        Button{
-//                            listingIsPresented.toggle()
-//                            listingIndex = viewModel.rentListings.firstIndex(of: listing)!
-//                            listingFromList = viewModel.rentListings[listingIndex]
-//                            print(listingFromList)
-//                        }label: {
-//                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", carType: listing.carType ?? "", width: 275, height: 275)
-//                        }.fullScreenCover(isPresented: $listingIsPresented) {
-//                            listingView(showSignInView: $showSignInView, listing: listingFromList)
-//                        }
-//                        Spacer()
-//                    }
                 }.foregroundStyle(Color.foreground)
-//                    .background(Color.background)
-//                    .listStyle(.inset)
-//                    .scrollContentBackground(.hidden)
-//                    .scrollIndicators(.hidden)
-//                    .listRowBackground(Color(.background))
                     .onAppear {
                         viewModel.generateRentListings()
+                        shuffledList = viewModel.rentListings.shuffled()
                     }
             }.padding()
         }.foregroundStyle(Color.foreground)
