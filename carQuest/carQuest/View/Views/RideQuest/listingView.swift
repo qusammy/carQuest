@@ -21,6 +21,7 @@ struct listingView: View {
     @State var listing: carListing?
     @State var user: String?
     
+
     var body: some View {
         NavigationStack{
             VStack{
@@ -64,8 +65,19 @@ struct listingView: View {
                                 }
                             })
                             Spacer()
+//                            if listing?.usersLiked != nil && listing?.usersLiked.contains(AuthenticationManager.shared.getAuthenticatedUser())
+                      //      if listing?.usersLiked.contains("2") {
+                                
+                            //}
                             Button(action: {
                                 isLiked.toggle()
+                                Task{
+                                    do{
+                                        try await appendLikedUser(usersLiked: user ?? "")
+                                    }catch {
+                                        
+                                    }
+                                }
                             }, label: {
                                 ZStack{
                                     Image(systemName: isLiked ? "heart.fill" : "heart")
@@ -111,7 +123,8 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
-                                
+                                try await appendLikedUser(usersLiked: user ?? "")
+
                             }catch {
                                 print("error getting listing")
                             }
@@ -122,7 +135,20 @@ struct listingView: View {
 
         }
     }
+    func appendLikedUser(usersLiked: String) async throws {
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        let usersLikedData = [
+            "usersLiked": [usersLiked]
+        ]
+        try await FirebaseManager.shared.firestore.collection("carListings")
+            .document((listing?.listingID)!).setData(usersLikedData, merge: true)
+        
+        
+    }
 }
 #Preview {
     listingView(showSignInView: .constant(false))
 }
+
+

@@ -22,7 +22,7 @@ struct carListing: Codable, Identifiable, Equatable {
     var listingID: String?
     var dateCreated: Date?
     var timeAccessed: Date?
-
+    var usersLiked: [String?]
     
 
 }
