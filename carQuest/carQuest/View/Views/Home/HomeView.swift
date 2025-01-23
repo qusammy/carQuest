@@ -11,10 +11,9 @@ struct HomeView: View {
     
     @StateObject private var viewModel = SignInEmailViewModel()
     @StateObject var viewModel2 = ListingViewModel()
-    @State var date = Date()
+    @State var date: Date = Date()
     @State var user = ""
-    @State var listingDate = Date()
-
+    
     var body: some View {
         
         NavigationView {
@@ -43,11 +42,8 @@ struct HomeView: View {
                                     HStack{
                                         Spacer()
                                         ForEach(viewModel2.recentListings) { listing in
-                                            
-                                            if (listing.timeAccessed!.addingTimeInterval(604800)) >= date {
-                                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                                    imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                                }
+                                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                             }
                                             
                                         }
@@ -60,7 +56,7 @@ struct HomeView: View {
                                 .underline()
                         }.padding(.horizontal, 10.0)
                         HStack{
-                           
+                            
                         }
                         HStack{
                             carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
@@ -94,7 +90,6 @@ struct HomeView: View {
                     
                 }
             }
-            date = Date.now
             if FirebaseApp.app() == nil {
                 FirebaseApp.configure()
             }
@@ -104,12 +99,7 @@ struct HomeView: View {
             }
     }
     
-    func recentlyViewed(listing: carListing) async throws {
-        let document = try await  FirebaseManager.shared.firestore.collection("carListings").document(listing.listingID!).collection("usersClicked").document("\(user)").getDocument()
-        let data = document.data()
-        let timeAccessed = data!["timeAccessed"] as? Date ?? Date()
-        
-    }
+    
 }
 #Preview {
     HomeView(showSignInView: .constant(false))

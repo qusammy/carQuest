@@ -27,8 +27,10 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.allListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                     
                 }
             }
@@ -39,8 +41,10 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.rentListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                     
                 }
             }
@@ -51,8 +55,10 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.auctionListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                     
                 }
             }
@@ -63,8 +69,10 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "buying").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.buyListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                 }
             }
         }
@@ -75,21 +83,25 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.myrentListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                 }
             }
         }
     }
-
+    
     
     func generateMyBuyListings() throws {
         let user = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "buying").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.mybuyListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                 }
                 
             }
@@ -101,8 +113,10 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.myauctionListings = snapshot!.documents.map { doc in
-                    
-                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: doc["dateCreated"] as? Date ?? Date())
+                    //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create)
                 }
             }
             
@@ -113,7 +127,7 @@ class ListingViewModel: ObservableObject {
         let user = Auth.auth().currentUser
         let userID = user!.uid
         let ref = Firestore.firestore().collection("carListings")
-        
+        self.recentListings = [carListing]()
         
         ref.getDocuments { snapshot1, err in
             
@@ -124,17 +138,27 @@ class ListingViewModel: ObservableObject {
                     if error == nil && snapshot != nil {
                         for document1 in snapshot!.documents {
                             if document1.documentID == userID {
-                                self.recentListings = snapshot!.documents.map { doc in
-                                        return carListing(id: document.documentID, carDescription: document["carDescrpition"] as? String ?? "", carMake: document["carMake"] as? String ?? "", carModel: document["carModel"] as? String ?? "", carType: document["carType"] as? String ?? "", carYear: document["carYear"] as? String ?? "", userID: document["userID"] as? String ?? "", imageName: document["imageName"] as? String ?? "", listingType: document["listingType"] as? String ?? "", listingID: document["listingID"] as? String ?? "", dateCreated: document["dateCreated"] as? Date ?? Date(), timeAccessed: doc["timeAccessed"] as? Date ?? Date())
+                                //transforms firbase type "Timestamp" into type "Date"
+                                let dateNow = Date.now
+                                let modifiedDate = Calendar.current.date(byAdding: .day, value: -7, to: dateNow)!
+                                let listingDate: Timestamp = document1["timeAccessed"] as? Timestamp ?? Timestamp()
+                                let date = listingDate.dateValue()
+                                let createdDate: Timestamp = document["dateCreated"] as? Timestamp ?? Timestamp()
+                                let create = createdDate.dateValue()
+
+                                if modifiedDate <= date {
+                                    self.recentListings.append(carListing(id: document.documentID, carDescription: document["carDescrpition"] as? String ?? "", carMake: document["carMake"] as? String ?? "", carModel: document["carModel"] as? String ?? "", carType: document["carType"] as? String ?? "", carYear: document["carYear"] as? String ?? "", userID: document["userID"] as? String ?? "", imageName: document["imageName"] as? String ?? "", listingType: document["listingType"] as? String ?? "", listingID: document["listingID"] as? String ?? "", dateCreated: create, timeAccessed: date))
                                     
+                                    print("added")
                                 }
                             }
                         }
                     }
                 }
             }
-            
         }
+        
     }
-    
 }
+    
+

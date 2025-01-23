@@ -24,6 +24,9 @@ struct listingView: View {
     var body: some View {
         NavigationStack{
             VStack{
+                Text((listing?.listingType) ?? "No Data")
+                    .font(.custom("Jost-Regular", size:35))
+                    .foregroundColor(.foreground)
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
