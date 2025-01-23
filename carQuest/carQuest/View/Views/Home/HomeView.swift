@@ -19,58 +19,47 @@ struct HomeView: View {
 
     @State var isPresented = false
     var body: some View {
-        
-        NavigationView {
-            VStack {
-                Spacer()
-                    .navigationBarBackButtonHidden(true)
-                ScrollView(showsIndicators: false){
-                    VStack{
-                        HStack {
-                            if viewModel.displayName == "" {
-                                Text("Welcome, $displayname!")
-                                    .font(Font.custom("Jost", size:30))
-                                    .foregroundColor(Color("Foreground"))
-                            }else {
-                                Text("Welcome, \(viewModel.displayName)!")
-                                    .font(Font.custom("Jost", size:30))
-                                    .foregroundColor(Color("Foreground"))
-                            }
+        NavigationStack {
+            Spacer()
+                .navigationBarBackButtonHidden(true)
+            ScrollView(showsIndicators: false){
+                VStack{
+                    HStack {
+                        if viewModel.displayName == "" {
+                            Text("Welcome, $displayname!")
+                                .font(Font.custom("Jost", size:30))
+                                .foregroundColor(Color("Foreground"))
+                        }else {
+                            Text("Welcome, \(viewModel.displayName)!")
+                                .font(Font.custom("Jost", size:30))
+                                .foregroundColor(Color("Foreground"))
                         }
-                        Divider()
-                        HStack{
-                            VStack {
+                    }
+                    Divider()
+                        VStack{
+                            HStack{
                                 Text("Recently viewed")
                                     .font(Font.custom("Jost-Regular", size:20))
-                                ScrollView(.horizontal, showsIndicators: false){
-                                    HStack{
-                                        Spacer()
-                                        ForEach(viewModel2.recentListings) { listing in
-                                            
-                                            if (listing.timeAccessed!.addingTimeInterval(604800)) >= date {
-                                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                                    imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                                }
-                                            }
-                                            
+                                Spacer()
+                                Text("See all")
+                                    .font(Font.custom("Jost-Regular", size:15))
+                                    .underline()
+                            }
+                        ScrollView(.horizontal, showsIndicators: false){
+                            HStack{
+                                Spacer()
+                                ForEach(viewModel2.recentListings) { listing in
+                                    if (listing.timeAccessed!.addingTimeInterval(604800)) >= date {
+                                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                         }
                                     }
                                 }
                             }
-                            Spacer()
-                            Text("See all")
-                                .font(Font.custom("Jost-Regular", size:15))
-                                .underline()
-                        }.padding(.horizontal, 10.0)
-                        HStack{
-                           
                         }
-                        HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                        }
-                        Divider()
+                    Spacer()
+                    }
+                    VStack{
                         HStack{
                             Text("Liked vehicles")
                                 .font(Font.custom("Jost-Regular", size:20))
@@ -82,22 +71,35 @@ struct HomeView: View {
                                     .font(Font.custom("Jost-Regular", size:15))
                                     .underline()
                             })
-                           
-                        }.padding(.horizontal, 10.0)
-                        HStack{
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
-                            Spacer()
-                            carListingLink(showSignInView: $showSignInView, imageName: "carExample", text: "2019 Honda Civic Hatchback")
                         }
-                    }.padding()
-                }
+                    ScrollView(.horizontal, showsIndicators: false){
+                        HStack{
+                            Spacer()
+                            ForEach(viewModel2.likedVehicles) { listing in
+                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                        HStack{
+                                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100,    textSize: 10)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                }.padding()
             }
-        }.onAppear{
+        } .fullScreenCover(isPresented: $isPresented, content: {
+            LikedVehiclesView(showSignInView: .constant(false))
+        })
+            .onAppear{
             viewModel2.generateAllListings()
             viewModel2.generateUsersClicked()
+
             Task {
                 do {
                     user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                    try viewModel2.generateLikedListings()
+
                 }catch {
                     
                 }
@@ -106,7 +108,9 @@ struct HomeView: View {
             if FirebaseApp.app() == nil {
                 FirebaseApp.configure()
             }
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        
+        .navigationViewStyle(StackNavigationViewStyle())
             .task {
                 viewModel.getDisplayName()
             }
@@ -133,29 +137,38 @@ struct LikedVehiclesView: View {
     
     
     var body: some View {
-        VStack{
-            HStack{
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    backButton()
-                })
+        NavigationStack{
+            VStack{
+                HStack{
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        backButton()
+                    })
+                    Text("Liked Vehicles")
+                        .font(Font.custom("ZingRustDemo-Base", size: 30))
+                        .foregroundStyle(Color.foreground)
+                    Spacer()
+                }
                 
+                ScrollView(showsIndicators: false){
+                    ForEach(vm.likedVehicles) { listing in
+                        VStack{
+                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                            }
+                        }
+                    }
+                }.foregroundStyle(Color.foreground)
                 Spacer()
             }
-            ScrollView(showsIndicators: false){
-                ForEach(vm.likedVehicles) { listing in
-                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                        imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
-                        Divider()
-                    }
-                }
-            }
-            //            ForEach(vehiclesLikedArray, id: \.self) { listing in
-            //
-            //
-            //            }
-            Spacer()
+//            }.toolbar{
+//                ToolbarItem(placement: .principal){
+//                    Text("Liked Vehicles")
+//                        .font(Font.custom("ZingRustDemo-Base", size: 30))
+//                        .foregroundStyle(Color.foreground)
+//                }
+//            }
         }
         .padding()
         .onAppear(){
@@ -166,37 +179,7 @@ struct LikedVehiclesView: View {
                     
                 }
             }
-            //            Task{
-            //                do {
-            //                    await appendLikedVehicles()
-            //                }
-            //            }
         }
     }
 }
-//    func appendLikedVehicles() async{
-//        let db = Firestore.firestore()
-//        let docRef = db.collection("carListings")
-//
-//        do{
-//            let query = try await docRef.whereField("usersLiked", arrayContains: AuthenticationManager.shared.getAuthenticatedUser().uid).getDocuments()
-//            for document in query.documents {
-//                vehiclesLikedArray.append(document.documentID)
-//                print(vehiclesLikedArray)
-//            }
-//        } catch{
-//            
-//        }
-//    }
-//    func fetchLikedVehicles(){
-//        Firestore.firestore().collection("carListings").whereField("usersLiked", isEqualTo: AuthenticationManager.shared.getAuthenticatedUser().uid).getDocuments() {snapshot, error in
-//            if error == nil && snapshot != nil {
-//                likedVehicles = snapshot!.documents.map { doc in
-//                    
-//                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? String ?? "", listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", usersLiked: doc["usersLiked"] as? [String] ?? [""])
-//                    
-//                }
-//            }
-//        }
-//}
 

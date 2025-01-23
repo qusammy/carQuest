@@ -236,7 +236,9 @@ struct listingCreation: View {
                 "listingType" : "renting",
                 "imageName" : "4.png",
                 "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
-                "dateCreated" : date
+                "dateCreated" : date,
+                "usersLiked" : []
+
         ])
         
         if let photo1Data,

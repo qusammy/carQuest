@@ -120,7 +120,8 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
-                                
+                                try await appendLikedUser(usersLiked: user ?? "")
+
                             }catch {
                                 print("error getting listing")
                             }
