@@ -10,25 +10,31 @@ import SwiftUI
 struct AuctionView: View {
     @Binding var showSignInView: Bool
     @State var userPreferences = ""
+    @State private var creationIsPresented: Bool = false
+    
     var body: some View {
         NavigationStack{
             VStack{
                 HStack{
-                        Text("Auction services")
-                            .foregroundColor(Color.foreground)
-                            .font(.custom("ZingRustDemo-Base", size: 35))
-                        Spacer()
-                        NavigationLink(destination: listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription:"", showSignInView: $showSignInView).navigationBarBackButtonHidden(true)){
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .frame(width:135, height:35)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Auction a car")
-                                        .foregroundColor(.white)
-                                        .font(.custom("Jost-Regular", size: 20))
-                            }
+                    Text("Auction services")
+                        .foregroundColor(Color.foreground)
+                        .font(.custom("ZingRustDemo-Base", size: 35))
+                    Spacer()
+                    Button{
+                        creationIsPresented.toggle()
+                    }label: {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width:135, height:35)
+                                .foregroundColor(Color("appColor"))
+                            Text("Auction a car")
+                                .foregroundColor(.white)
+                                .font(.custom("Jost-Regular", size: 20))
                         }
+                    } .fullScreenCover(isPresented: $creationIsPresented) {
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 1)
                     }
+                }
                     HStack{
                         Image(systemName: "list.bullet.circle.fill")
                             .resizable()

@@ -114,12 +114,16 @@ struct listingView: View {
                     }
                 }
                 .onAppear{
-                    Task {
-                        do{
-                            user = try AuthenticationManager.shared.getAuthenticatedUser().uid
-                            try await userViewModel.getUserInfo(listing: listing!)
-                        }catch {
-                            print("error getting listing")
+                    if listing != nil {
+                        Task {
+                            do{
+                                try await userViewModel.getUserInfo(listing: listing!)
+                                user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                                try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
+                                
+                            }catch {
+                                print("error getting listing")
+                            }
                         }
                     }
                 }
