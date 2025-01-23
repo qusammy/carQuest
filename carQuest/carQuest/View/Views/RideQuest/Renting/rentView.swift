@@ -57,38 +57,17 @@ struct rentView: View {
                         .frame(width:200, height:30)
                         .font(.custom("Jost-Regular", size: 18))
                 }
-                ScrollView{
+                ScrollView(showsIndicators: false){
                     ForEach(viewModel.rentListings) { listing in
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                             imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250)
                         }
                     }
-//                List(viewModel.rentListings) { listing in
-//                    var listingIndex: Int = 0
-//                    var listingFromList: carListing = carListing()
-//                    HStack{
-//                        Spacer()
-//                        Button{
-//                            listingIsPresented.toggle()
-//                            listingIndex = viewModel.rentListings.firstIndex(of: listing)!
-//                            listingFromList = viewModel.rentListings[listingIndex]
-//                            print(listingFromList)
-//                        }label: {
-//                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear ?? "", carMake: listing.carMake ?? "", carModel: listing.carModel ?? "", carType: listing.carType ?? "", width: 275, height: 275)
-//                        }.fullScreenCover(isPresented: $listingIsPresented) {
-//                            listingView(showSignInView: $showSignInView, listing: listingFromList)
-//                        }
-//                        Spacer()
-//                    }
-                }.foregroundStyle(Color.foreground)
-//                    .background(Color.background)
-//                    .listStyle(.inset)
-//                    .scrollContentBackground(.hidden)
-//                    .scrollIndicators(.hidden)
-//                    .listRowBackground(Color(.background))
-                    .onAppear {
-                        viewModel.generateRentListings()
-                    }
+                }
+                .foregroundStyle(Color.foreground)
+                .onAppear {
+                    viewModel.generateRentListings()
+                }
             }.padding()
         }.foregroundStyle(Color.foreground)
             .background(Color.background)

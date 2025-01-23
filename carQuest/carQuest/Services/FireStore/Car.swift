@@ -19,6 +19,7 @@ struct carListing: Codable, Identifiable, Equatable {
     var listingType: String?
     var imageData: Data?
     var listingID: String?
+    var usersLiked: [String?]
     
 //    init(carDescription: String, carMake: String, carModel: String, carType: String, carYear: String, userID: String, imageName: String, listingType: String) {
 //        self.carDescription = carDescription

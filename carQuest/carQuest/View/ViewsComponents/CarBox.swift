@@ -96,7 +96,7 @@ struct carListingLink: View {
     var text: String
     var body: some View {
         VStack{
-            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: carListing())) {
+            NavigationLink(destination: listingView(showSignInView: $showSignInView)) {
             VStack{
                 imageBox(carYear: "", carMake: "", carModel: "", width: 100, height: 100)
                 Text("")
