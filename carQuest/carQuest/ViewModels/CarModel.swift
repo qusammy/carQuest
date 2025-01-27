@@ -161,9 +161,8 @@ class ListingViewModel: ObservableObject {
                                 let create = createdDate.dateValue()
 
                                 if modifiedDate <= date {
-                                    self.recentListings.append(carListing(id: document.documentID, carDescription: document["carDescrpition"] as? String ?? "", carMake: document["carMake"] as? String ?? "", carModel: document["carModel"] as? String ?? "", carType: document["carType"] as? String ?? "", carYear: document["carYear"] as? String ?? "", userID: document["userID"] as? String ?? "", imageName: document["imageName"] as? String ?? "", listingType: document["listingType"] as? String ?? "", listingID: document["listingID"] as? String ?? "", dateCreated: create, timeAccessed: date, usersLiked: doc["usersLiked"] as? [String] ?? [""]))
+                                    self.recentListings.append(carListing(id: document.documentID, carDescription: document["carDescrpition"] as? String ?? "", carMake: document["carMake"] as? String ?? "", carModel: document["carModel"] as? String ?? "", carType: document["carType"] as? String ?? "", carYear: document["carYear"] as? String ?? "", userID: document["userID"] as? String ?? "", imageName: document["imageName"] as? String ?? "", listingType: document["listingType"] as? String ?? "", listingID: document["listingID"] as? String ?? "", dateCreated: create, timeAccessed: date, usersLiked: document["usersLiked"] as? [String] ?? [""]))
                                     
-                                    print("added")
                                 }
                             }
                         }

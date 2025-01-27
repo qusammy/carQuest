@@ -15,10 +15,15 @@ struct rentView: View {
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
     @State private var shuffledList: [carListing] = [carListing]()
+    @State private var searchTerm = ""
+    var filteredList: [carListing] {
+        guard !searchTerm.isEmpty else {return shuffledList}
+        return shuffledList.filter {$0.carModel!.localizedCaseInsensitiveContains(searchTerm)}
+    }
     
     @State var shouldNavigateToListingView = false
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack{
                 HStack{
                     Text("Rental services")
@@ -41,42 +46,27 @@ struct rentView: View {
                         listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                     }
                 }
-                HStack{
-                    Image(systemName: "list.bullet.circle.fill")
-                        .resizable()
-                        .foregroundColor(Color.accentColor)
-                        .frame(width:30, height:30)
-                    Spacer()
-                    Button(action: {
-                    }, label: {
-                        Image(systemName: "magnifyingglass.circle.fill")
-                            .resizable()
-                            .foregroundColor(Color.accentColor)
-                            .frame(width:30, height:30)
-                    })
-                    TextField("Search for a dream car...", text: $userPreferences)
-                        .frame(width:200, height:30)
-                        .font(.custom("Jost-Regular", size: 18))
-                }
+                
                 ScrollView(showsIndicators: false){
-                    ForEach(shuffledList) { listing in
+                    ForEach(filteredList) { listing in
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                             imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
                         }
                     }
                 }.foregroundStyle(Color.foreground)
-                    .onAppear {
-                        viewModel.generateRentListings()
-                        shuffledList = viewModel.rentListings.shuffled()
+                    .task {
+                        DispatchQueue.main.async {
+                            viewModel.generateRentListings()
+                            shuffledList = viewModel.rentListings.shuffled()
+                        }
                     }
+                
             }.padding()
-        }.foregroundStyle(Color.foreground)
-            .background(Color.background)
-            .scrollContentBackground(.hidden)
-            .listRowBackground(Color(.background))
-            .onAppear {
-                viewModel.generateRentListings()
-            }
+                .task {
+                    viewModel.generateRentListings()
+                }
+        }
+        
     }
 }
 

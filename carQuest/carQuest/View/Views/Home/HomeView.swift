@@ -15,7 +15,7 @@ struct HomeView: View {
     @StateObject var viewModel2 = ListingViewModel()
     @State var date: Date = Date()
     @State var user = ""
-
+    
     @State var isPresented = false
     var body: some View {
         NavigationStack {
@@ -35,66 +35,65 @@ struct HomeView: View {
                         }
                     }
                     Divider()
-                        VStack{
-                            HStack{
-                                Text("Recently viewed")
-                                    .font(Font.custom("Jost-Regular", size:20))
-                                ScrollView(.horizontal, showsIndicators: false){
-                                    HStack{
-                                        Spacer()
-                                        ForEach(viewModel2.recentListings) { listing in
-                                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                            }
-                                            
+                    VStack{
+                        HStack{
+                            Text("Recently viewed")
+                                .font(Font.custom("Jost-Regular", size:20))
+                            ScrollView(.horizontal, showsIndicators: false){
+                                HStack{
+                                    Spacer()
+                                    ForEach(viewModel2.recentListings) { listing in
+                                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                         }
+                                        
                                     }
                                 }
                             }
                         }
-                    Spacer()
                     }
-                    VStack{
-                        HStack{
-                            Text("Liked vehicles")
-                                .font(Font.custom("Jost-Regular", size:20))
-                            Spacer()
-                            Button(action: {
-                                isPresented.toggle()
-                            }, label: {
-                                Text("See all")
-                                    .font(Font.custom("Jost-Regular", size:15))
-                                    .underline()
-                            })
-                        }
+                    Spacer()
+                }
+                VStack{
+                    HStack{
+                        Text("Liked vehicles")
+                            .font(Font.custom("Jost-Regular", size:20))
+                        Spacer()
+                        Button(action: {
+                            isPresented.toggle()
+                        }, label: {
+                            Text("See all")
+                                .font(Font.custom("Jost-Regular", size:15))
+                                .underline()
+                        })
+                    }
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
                             Spacer()
                             ForEach(viewModel2.likedVehicles) { listing in
-                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                        HStack{
-                                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100,    textSize: 10)
-                                        }
+                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                    HStack{
+                                        imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100,    textSize: 10)
                                     }
                                 }
                             }
                         }
-                        Spacer()
                     }
-                }.padding()
-            }
+                    Spacer()
+                }
+            }.padding()
         } .fullScreenCover(isPresented: $isPresented, content: {
             LikedVehiclesView(showSignInView: .constant(false))
         })
-            .onAppear{
+        .onAppear{
             viewModel2.generateAllListings()
             viewModel2.generateUsersClicked()
-
+            
             Task {
                 do {
                     user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                     try viewModel2.generateLikedListings()
-
+                    
                 }catch {
                     
                 }
@@ -105,12 +104,10 @@ struct HomeView: View {
         }
         
         .navigationViewStyle(StackNavigationViewStyle())
-            .task {
-                viewModel.getDisplayName()
-            }
+        .task {
+            viewModel.getDisplayName()
+        }
     }
-    
-    
 }
 #Preview {
     HomeView(showSignInView: .constant(false))

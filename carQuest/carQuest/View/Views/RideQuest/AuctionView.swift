@@ -11,6 +11,7 @@ struct AuctionView: View {
     @Binding var showSignInView: Bool
     @State var userPreferences = ""
     @State private var creationIsPresented: Bool = false
+    @StateObject private var vm = ListingViewModel()
     
     var body: some View {
         NavigationStack{
