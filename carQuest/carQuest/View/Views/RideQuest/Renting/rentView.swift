@@ -50,7 +50,7 @@ struct rentView: View {
                 ScrollView(showsIndicators: false){
                     ForEach(filteredList) { listing in
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
+                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
                         }
                     }
                 }.foregroundStyle(Color.foreground)
@@ -66,11 +66,9 @@ struct rentView: View {
                     viewModel.generateRentListings()
                 }
         }
-        
     }
+    
 }
-
-
 
 
 #Preview {

@@ -31,10 +31,11 @@ struct listingView: View {
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
-                            imageBox(imageName: URL(string: listing?.imageName ?? "4.png"), width: 300, height: 275)
-                            Image("carQuestLogo")
-                                .resizable()
-                                .frame(width:300, height:275)
+                            ForEach((listing?.imageName)!, id: \.self) { image in
+                                WebImage(url: URL(string: image))
+                                    .resizable()
+                                    .frame(width:300, height:300)
+                            }
                         }
                     }
                     VStack{
