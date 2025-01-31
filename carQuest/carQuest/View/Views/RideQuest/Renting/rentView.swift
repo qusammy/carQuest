@@ -15,10 +15,15 @@ struct rentView: View {
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
     @State private var shuffledList: [carListing] = [carListing]()
+    @State private var searchTerm = ""
+    var filteredList: [carListing] {
+        guard !searchTerm.isEmpty else {return shuffledList}
+        return shuffledList.filter {$0.carModel!.localizedCaseInsensitiveContains(searchTerm)}
+    }
     
     @State var shouldNavigateToListingView = false
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack{
                 HStack{
                     Text("Rental services")
@@ -62,26 +67,25 @@ struct rentView: View {
                     ForEach(shuffledList.filter({ searchText.isEmpty ? true : $0.listingTitle!.localizedCaseInsensitiveContains(searchText) })) { listing in
                        
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                            imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
+                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
                         }
                     }
                 }.foregroundStyle(Color.foreground)
-                    .onAppear {
-                        viewModel.generateRentListings()
-                        shuffledList = viewModel.rentListings.shuffled()
+                    .task {
+                        DispatchQueue.main.async {
+                            viewModel.generateRentListings()
+                            shuffledList = viewModel.rentListings.shuffled()
+                        }
                     }
+                
             }.padding()
-        }.foregroundStyle(Color.foreground)
-            .background(Color.background)
-            .scrollContentBackground(.hidden)
-            .listRowBackground(Color(.background))
-            .onAppear {
-                viewModel.generateRentListings()
-            }
+                .task {
+                    viewModel.generateRentListings()
+                }
+        }
     }
+    
 }
-
-
 
 
 #Preview {

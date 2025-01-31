@@ -34,7 +34,7 @@ struct AuthDataResultModel {
 final class AuthenticationManager {
 
     static let shared = AuthenticationManager()
-
+    var imageURLs = [String]()
     private init() {
 
     }
@@ -79,19 +79,21 @@ final class AuthenticationManager {
             }
     }
     
-    func updateImage(imageURL: URL, additionalListing: Int) {
+    func updateImage(imageURL: String, additionalListing: Int, listingLetter: String) {
+        
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
             return
         }
-        
-        let postingImageData = ["imageName": imageURL.absoluteString]
+        imageURLs.append(imageURL)
+        let listingImageData = ["imageName": imageURLs]
         FirebaseManager.shared.firestore.collection("carListings")
-            .document("R\(additionalListing)\(uid)").updateData(postingImageData){ err in
+            .document("\(listingLetter)\(additionalListing)\(uid)").setData(listingImageData, merge: true) { err in
                 if let err = err {
                     print(err)
                     return
                 }}
     }
+
     
     func resetPassword(email: String) async throws{
         try await Auth.auth().sendPasswordReset(withEmail: email)

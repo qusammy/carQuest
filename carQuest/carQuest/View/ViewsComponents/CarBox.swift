@@ -123,13 +123,13 @@ struct headline: View {
 }
 
 struct previewListing: View {
-    @Binding var carYear: String
-    @Binding var make: String
-    @Binding var model: String
-    @Binding var description: String
-    @Binding var typeOfCar: String
-    @Binding var date: Date
-    @Binding var listedPhoto1: UIImage?
+    var carYear: String
+    var make: String
+    var model: String
+    var description: String
+    var typeOfCar: String
+    var date: Date
+    var listedPhotos: [UIImage]?
     
     @ObservedObject var vm = UserProfileViewModel()
     var body: some View{
@@ -144,10 +144,12 @@ struct previewListing: View {
                 ScrollView(.horizontal, showsIndicators: false)
                 {
                     HStack{
-                        Image(uiImage: listedPhoto1!)
-                            .resizable()
-                            .clipped()
-                            .frame(width: 300, height: 300)
+                        ForEach(listedPhotos!, id: \.self) { image in
+                            Image(uiImage: image)
+                                .resizable()
+                                .clipped()
+                                .frame(width:300, height:300)
+                        }
                     }
                 }
                 
