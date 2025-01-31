@@ -76,6 +76,7 @@ struct listingCreation: View {
                     .font(Font.custom("Jost-Regular", size:20))
                     .frame(maxWidth: 275)
                     .foregroundStyle(Color.blue)
+                    .multilineTextAlignment(.center)
                 RoundedRectangle(cornerRadius: 70)
                     .frame(width:345, height:1)
 
@@ -199,11 +200,11 @@ struct listingCreation: View {
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
-        if listingType == "renting" {
+        if listingType == "Rental" {
             listingLetter = "R"
-        }else if listingType == "auction" {
+        }else if listingType == "Auction" {
             listingLetter = "A"
-        }else if listingType == "buying" {
+        }else if listingType == "For Sale" {
             listingLetter = "B"
         }
         let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
@@ -237,7 +238,9 @@ struct listingCreation: View {
                 "imageName" : "4.png",
                 "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
                 "dateCreated" : date,
-                "usersLiked" : []
+                "usersLiked" : [],
+                "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)"
+                
 
         ])
         

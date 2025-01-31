@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 struct rentView: View {
     @StateObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
-    @State var userPreferences = ""
+    @State var searchText: String
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
     @State private var shuffledList: [carListing] = [carListing]()
@@ -47,19 +47,20 @@ struct rentView: View {
                         .foregroundColor(Color.accentColor)
                         .frame(width:30, height:30)
                     Spacer()
-                    Button(action: {
-                    }, label: {
+                    HStack{
                         Image(systemName: "magnifyingglass.circle.fill")
                             .resizable()
-                            .foregroundColor(Color.accentColor)
                             .frame(width:30, height:30)
-                    })
-                    TextField("Search for a dream car...", text: $userPreferences)
-                        .frame(width:200, height:30)
-                        .font(.custom("Jost-Regular", size: 18))
+                            .foregroundColor(Color.accentColor)
+                        TextField("Search for a dream car...", text: $searchText)
+                            .frame(width:200, height:30)
+                            .font(.custom("Jost-Regular", size: 18))
+                           
+                    }
                 }
                 ScrollView(showsIndicators: false){
-                    ForEach(shuffledList) { listing in
+                    ForEach(shuffledList.filter({ searchText.isEmpty ? true : $0.listingTitle!.localizedCaseInsensitiveContains(searchText) })) { listing in
+                       
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                             imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
                         }
@@ -84,5 +85,5 @@ struct rentView: View {
 
 
 #Preview {
-    rentView(showSignInView: .constant(false))
+    rentView(showSignInView: .constant(false), searchText: "")
 }

@@ -25,9 +25,6 @@ struct listingView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                Text((listing?.listingType) ?? "No Data")
-                    .font(.custom("Jost-Regular", size:35))
-                    .foregroundColor(.foreground)
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
@@ -65,10 +62,6 @@ struct listingView: View {
                                 }
                             })
                             Spacer()
-//                            if listing?.usersLiked != nil && listing?.usersLiked.contains(AuthenticationManager.shared.getAuthenticatedUser())
-                      //      if listing?.usersLiked.contains("2") {
-                                
-                            //}
                             Button(action: {
                                 isLiked.toggle()
                                 Task{
@@ -104,7 +97,12 @@ struct listingView: View {
                                 .foregroundColor(.foreground)
                             Spacer()
                         }
-                        Text("\(listing?.carDescription ?? "No Data")")
+                        Text((listing?.listingType) ?? "No Data")
+                            .font(.custom("Jost-Regular", size:17))
+                            .foregroundColor(.foreground)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: 375, alignment: .leading)
+                        Text("\(listing?.carDescription ?? "Description")")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.foreground)
                             .frame(maxWidth: 375, alignment: .leading)

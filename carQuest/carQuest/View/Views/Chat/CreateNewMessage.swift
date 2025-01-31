@@ -49,9 +49,10 @@ struct CreateNewMessage: View{
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
-                        Text("Back")
+                        Text("Cancel")
                             .foregroundColor(Color.accentColor)
-                            .font(Font.custom("Jost-Regular", size:20))
+                            .font(Font.custom("Jost-Regular", size:17))
+                            .underline()
                     })
                 } 
                 ToolbarItem(placement: .navigationBarLeading){
