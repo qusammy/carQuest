@@ -20,7 +20,8 @@ struct listingView: View {
     @State var listingName: String?
     @State var listing: carListing?
     @State var user: String?
-    
+    @State private var reviewIsShown: Bool = false
+    @State private var rating: Double = 0.0
 
     var body: some View {
         NavigationStack{
@@ -114,10 +115,22 @@ struct listingView: View {
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.gray)
                             .frame(maxWidth: 375, alignment: .leading)
+                        RatingView(rating: $viewModel.rating)
+                        Button {
+                            reviewIsShown.toggle()
+                        }label: {
+                            Text("Leave a Review")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                            ReviewView(listing: listing, review: Review())
+                        }
                         
                     }
                 }
                 .onAppear{
+                    viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
                         Task {
                             do{
@@ -142,11 +155,22 @@ struct listingView: View {
         let usersLikedData = [
             "usersLiked": [usersLiked]
         ]
+        
         try await FirebaseManager.shared.firestore.collection("carListings")
             .document((listing?.listingID)!).setData(usersLikedData, merge: true)
         
         
     }
+//    func averageRating(ratingList: [Int]) {
+//        print(ratingList)
+//        var ratingTotal = 0
+//        var unroundedRating = 0.0
+//        for rating in ratingList {
+//            ratingTotal += rating
+//        }
+//        unroundedRating = Double(ratingTotal / ratingList.count)
+//        rating = round(unroundedRating * 10) / 10.0
+//    }
 }
 #Preview {
     listingView(showSignInView: .constant(false))

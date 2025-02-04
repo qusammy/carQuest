@@ -43,7 +43,7 @@ struct rentView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, listingType: "renting", selection: 2)
                     }
                 }
                 

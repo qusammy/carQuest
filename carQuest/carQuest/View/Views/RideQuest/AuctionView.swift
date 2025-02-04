@@ -33,7 +33,7 @@ struct AuctionView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 1)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView,listingType: "auction", selection: 1)
                     }
                 }
                     HStack{

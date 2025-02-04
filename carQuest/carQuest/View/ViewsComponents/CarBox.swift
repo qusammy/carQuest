@@ -196,6 +196,7 @@ struct listingTextField: View {
 }
 
 struct backButton: View {
+
     var body: some View {
         HStack{
             Image(systemName: "chevron.backward")
@@ -208,6 +209,213 @@ struct backButton: View {
         }
     }
 }
+
+struct StarsView: View {
+    @Binding var rating: Int
+    let highestRating = 5
+    let unselected = Image(systemName: "star")
+    let selected = Image(systemName: "star.fill")
+    let font: Font = .largeTitle
+    let fillColor: Color = .yellow
+    let unfillColor: Color = .foreground
+    var body: some View {
+        HStack {
+            ForEach(1...highestRating, id: \.self) { number in
+                showStar(for: number)
+                    .foregroundStyle(number <= rating ? fillColor : unfillColor)
+                    .onTapGesture {
+                        rating = number
+//                        print(number)
+//                        print(rating)
+                    }
+                
+            }
+        }
+    }
+    
+    func showStar(for number: Int) -> Image {
+        if number > rating {
+            return unselected
+        }else {
+            return selected
+        }
+    }
+}
+
+struct RatingView: View {
+    @Binding var rating: Double
+    var body: some View {
+        let stars = HStack(spacing: 0) {
+            ForEach(0..<5, id: \.self) { _ in
+                Image(systemName: "star.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+            }
+        }
+
+        stars.overlay(
+            GeometryReader { g in
+                let width = rating / CGFloat(5) * g.size.width
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .frame(width: width)
+                        .foregroundColor(.yellow)
+                }
+            }
+            .mask(stars)
+        )
+        .foregroundColor(.gray)
+//        if rating > 1 && rating < 2{
+//            HStack {
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                GeometryReader { geometry in
+//                    ZStack(alignment: .leading) {
+//                        Rectangle()
+//                            .fill(Color.foreground)
+//                        Rectangle()
+//                            .fill(Color.yellow)
+//                            .frame(width: geometry.size.width * rating - 1)
+//                    }
+//                }
+//                .mask(
+//                    Image(systemName: "star.fill")
+//                        .resizable()
+//                )
+//                .frame(width: 50, height: 50)
+//            }
+//        } else if rating > 2 && rating < 3{
+//            HStack {
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                GeometryReader { geometry in
+//                    ZStack(alignment: .leading) {
+//                        Rectangle()
+//                            .fill(Color.foreground)
+//                        Rectangle()
+//                            .fill(Color.yellow)
+//                            .frame(width: geometry.size.width * rating - 2)
+//                    }
+//                }
+//                .mask(
+//                    Image(systemName: "star.fill")
+//                        .resizable()
+//                )
+//                .frame(width: 50, height: 50)
+//            }
+//        } else if rating > 3 && rating < 4{
+//            HStack {
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                GeometryReader { geometry in
+//                    ZStack(alignment: .leading) {
+//                        Rectangle()
+//                            .fill(Color.foreground)
+//                        Rectangle()
+//                            .fill(Color.yellow)
+//                            .frame(width: geometry.size.width * rating - 3)
+//                    }
+//                }
+//                .mask(
+//                    Image(systemName: "star.fill")
+//                        .resizable()
+//                )
+//                .frame(width: 50, height: 50)
+//            }
+//        } else if rating > 4 && rating < 5{
+//            HStack {
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                GeometryReader { geometry in
+//                    ZStack(alignment: .leading) {
+//                        Rectangle()
+//                            .fill(Color.foreground)
+//                        Rectangle()
+//                            .fill(Color.yellow)
+//                            .frame(width: geometry.size.width * rating - 3)
+//                    }
+//                }
+//                .mask(
+//                    Image(systemName: "star.fill")
+//                        .resizable()
+//                )
+//                .frame(width: 50, height: 50)
+//            }
+//        }else if rating == 5{
+//            HStack {
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//                    .foregroundStyle(Color.yellow)
+//            }
+//        }else {
+//            GeometryReader { geometry in
+//                ZStack(alignment: .leading) {
+//                    Rectangle()
+//                        .fill(Color.foreground)
+//                    Rectangle()
+//                        .fill(Color.yellow)
+//                        .frame(width: geometry.size.width * rating)
+//                }
+//            }
+//            .mask(
+//                Image(systemName: "star.fill")
+//                    .resizable()
+//            )
+//            .frame(width: 50, height: 50)
+//        }
+
+    }
+}
+
 //struct recentMessageTextBox: View{
 //    @State var carUser: CarQuestUser?
 //    @ObservedObject var vm = CreateNewMessageViewModel()

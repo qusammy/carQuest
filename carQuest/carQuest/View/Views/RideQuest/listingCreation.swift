@@ -60,7 +60,7 @@ struct listingCreation: View {
                     }
                 }.navigationBarTitleDisplayMode(.inline)
                 HStack{
-                    Text("List a Rental")
+                    Text("List a Car")
                         .font(Font.custom("Jost-Regular", size:40))
                         .frame(maxWidth: 275, alignment: .leading)
                     
@@ -259,7 +259,7 @@ struct listingCreation: View {
             "carType": carType,
             "carYear": carYear,
             "userID": userID,
-            "listingType" : "renting",
+            "listingType" : listingType ?? "",
             "imageName" : "4.png",
             "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
             "dateCreated" : date,
