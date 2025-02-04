@@ -26,9 +26,6 @@ struct listingView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                Text((listing?.listingType) ?? "No Data")
-                    .font(.custom("Jost-Regular", size:35))
-                    .foregroundColor(.foreground)
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
@@ -41,38 +38,14 @@ struct listingView: View {
                     }
                     VStack{
                         HStack{
-                            Button(action: {
-                                //brings up booking view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 80, height: 35)
-                                        .foregroundColor(.foreground)
-                                    Text("Book")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
+                            Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
+                                .font(.custom("Jost-Regular", size: 25))
+                                .frame(maxWidth: 375, alignment: .leading)
+                                .foregroundColor(Color.foreground)
                             Spacer()
-                            Button(action: {
-                                //brings up message view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 160, height: 35)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Send a Message")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
-                            Spacer()
-//                            if listing?.usersLiked != nil && listing?.usersLiked.contains(AuthenticationManager.shared.getAuthenticatedUser())
-                      //      if listing?.usersLiked.contains("2") {
-                                
-                            //}
                             Button(action: {
                                 isLiked.toggle()
+                                
                                 Task{
                                     do{
                                         try await appendLikedUser(usersLiked: user ?? "")
@@ -89,12 +62,7 @@ struct listingView: View {
                                 }
                             })
                         }
-                        HStack {
-                            Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
-                                .font(.custom("Jost-Regular", size: 25))
-                                .frame(maxWidth: 375, alignment: .leading)
-                                .foregroundColor(Color.foreground)
-                        }
+                        Divider()
                         HStack{
                             WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
@@ -127,6 +95,15 @@ struct listingView: View {
                             ReviewView(listing: listing, review: Review())
                         }
                         
+                        }label: {
+                            Text("Leave a Review")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                            ReviewView(listing: listing, review: Review())
+                        }
+                        
                     }
                 }
                 .onAppear{
@@ -137,7 +114,6 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
-                                try await appendLikedUser(usersLiked: user ?? "")
 
                             }catch {
                                 print("error getting listing")

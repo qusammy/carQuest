@@ -13,24 +13,6 @@ struct AuctionListingView: View {
     @State var isLiked: Bool = false
     var body: some View {
         VStack{
-            ZStack{
-                NavigationLink(destination: AuctionView(showSignInView: $showSignInView).navigationBarBackButtonHidden(true)) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .frame(width: 90, height: 35)
-                            .foregroundColor(Color("appColor"))
-                        HStack {
-                            Image(systemName: "arrow.left")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                            Text("Back")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-            }.offset(x:-140)
             ScrollView{
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{

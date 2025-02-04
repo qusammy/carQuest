@@ -32,6 +32,7 @@ struct imageBox: View {
                     .foregroundColor(Color.foreground)
                     .lineLimit(1)
                     .multilineTextAlignment(.leading)
+                    
             }
         }
     }
@@ -116,9 +117,11 @@ struct carListingLink: View {
 struct headline: View {
     var headerText: String
     var body: some View {
-        Text(headerText)
-            .font(Font.custom("ZingRustDemo-Base", size:30))
-            .frame(maxWidth: 375, alignment: .leading)
+        HStack{
+            Text(headerText)
+                .font(Font.custom("ZingRustDemo-Base", size:30))
+            Spacer()
+        }
     }
 }
 
@@ -126,10 +129,12 @@ struct previewListing: View {
     var carYear: String
     var make: String
     var model: String
-    var description: String
+    var carDescription: String
     var typeOfCar: String
     var date: Date
+    var listingPrice: String
     var listedPhotos: [UIImage]?
+    @State var isLiked: Bool
     
     @ObservedObject var vm = UserProfileViewModel()
     var body: some View{
@@ -152,32 +157,78 @@ struct previewListing: View {
                         }
                     }
                 }
-                
-                Text("\(carYear) \(make) \(model) \(typeOfCar)")
-                    .font(.custom("Jost-Regular", size: 25))
-                    .foregroundColor(.black)
-                HStack{
-                    WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon.png"))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:55, height:55)
-                        .clipShape(Circle())
-                    Text(vm.carUser?.display_name ?? "$username")
+                VStack{
+                    HStack{
+                        Text("\(carYear) \(make) \(model) \(typeOfCar)")
+                            .font(.custom("Jost-Regular", size: 25))
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .foregroundColor(Color.foreground)
+                        Spacer()
+                        Button(action: {
+                            isLiked.toggle()
+                        }, label: {
+                            ZStack{
+                                Image(systemName: isLiked ? "heart.fill" : "heart")
+                                    .resizable()
+                                    .foregroundColor(.foreground)
+                                    .frame(width:40, height:35)
+                            }
+                        })
+                    }
+                    Divider()
+                    HStack{
+                        WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon.png"))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:55, height:55)
+                            .clipShape(Circle())
+                        Text(vm.carUser?.display_name ?? "$username")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.black)
+                        Spacer()
+                        Button(action: {
+                            //brings up message view
+                        }, label: {
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 15)
+                                    .frame(width: 160, height: 35)
+                                    .foregroundColor(Color("appColor"))
+                                Text("Send a Message")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.white)
+                            }
+                        })
+                    }
+                    Text("\(carDescription)")
                         .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(3)
+                    Divider()
+                    HStack{
+                        Text("Price per day: $\(listingPrice)")
+                            .font(.custom("Jost-Regular", size: 22))
+                            .foregroundColor(.black)
+                        Button(action: {
+                            //brings up booking view
+                        }, label: {
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 15)
+                                    .frame(width: 80, height: 35)
+                                    .foregroundColor(.accentColor)
+                                Text("Book")
+                                    .font(.custom("Jost-Regular", size:20))
+                                    .foregroundColor(.white)
+                            }
+                        })
+                    }
+                    Text("Listed \(date)")
+                        .font(.custom("Jost-Regular", size: 20))
+                        .foregroundColor(.gray)
                         .frame(maxWidth: 375, alignment: .leading)
                 }
-                Text("\(description)")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: 375, alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                Text("Listed \(date)")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: 375, alignment: .leading)
             }
-        }
+        }.padding()
     }
 }
 
@@ -192,6 +243,7 @@ struct listingTextField: View {
             .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
             .cornerRadius(10)
             .multilineTextAlignment(.leading)
+        
     }
 }
 

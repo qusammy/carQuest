@@ -20,7 +20,7 @@ struct ContentView: View {
                             Label("", systemImage:("dollarsign.circle.fill"))
                         }.tag(1)
                     
-                    rentView(showSignInView: $showSignInView)
+                    rentView(showSignInView: $showSignInView, searchText: "")
                         .tabItem{
                             Image(systemName: "key.horizontal.fill")
                         }.tag(2)

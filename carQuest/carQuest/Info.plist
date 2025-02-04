@@ -22,5 +22,14 @@
 		<string>ZingRustDemo-Base.otf</string>
 		<string>Jost-Regular.ttf</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>appColor</string>
+		<key>UIImageName</key>
+		<string>launchScreen</string>
+		<key>UILaunchScreen</key>
+		<dict/>
+	</dict>
 </dict>
 </plist>
