@@ -10,7 +10,6 @@ import FirebaseCore
 struct carListing: Codable, Identifiable, Equatable {
     var id: String?
     
-    var carDescription: String?
     var carMake: String?
     var carModel: String?
     var carType: String?
@@ -18,6 +17,8 @@ struct carListing: Codable, Identifiable, Equatable {
     var userID: String?
     var imageName: [String]?
     var listingType: String?
+    var listingPrice: String?
+    var carDescription: String?
     var imageData: Data?
     var listingID: String?
     var dateCreated: Date?

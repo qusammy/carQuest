@@ -33,7 +33,7 @@ struct AuctionView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 1)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 1)
                     }
                 }
                     HStack{
@@ -58,7 +58,7 @@ struct AuctionView: View {
                     Divider()
                     HStack{
                         //carBox elements will go here. links to auction view in separate HStack lines! still being built
-                        NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: "").navigationBarBackButtonHidden(true)){
+                        NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: "")){
                             VStack{
                                 Image("carQuestLogo")
                                     .resizable()

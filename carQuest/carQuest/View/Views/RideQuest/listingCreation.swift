@@ -25,9 +25,10 @@ struct listingCreation: View {
     @State var location: String
     @State var carModel: String
     @State var carMake: String
-    @State var carDescription: String
     @State var carYear = "2024"
     let years = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+    @State var listingPrice: String
+    @State var carDescription: String
     @State var date = Date()
     @State private var photoItem1 = [PhotosPickerItem]()
     @State private var listedPhotos: UIImage?
@@ -53,40 +54,39 @@ struct listingCreation: View {
     var body: some View {
         NavigationView{
             VStack{
-                NavigationLink(destination: ContentView(showSignInView: $showSignInView, selection: selection ?? 3).navigationBarBackButtonHidden(true)) {
+                Button(action: {
+                    dismiss()
+                }, label: {
                     HStack{
                         backButton()
                         Spacer()
                     }
-                }.navigationBarTitleDisplayMode(.inline)
+                })
+                .navigationBarTitleDisplayMode(.inline)
                 HStack{
-                    Text("List a Rental")
-                        .font(Font.custom("Jost-Regular", size:40))
+                    Text("List a Vehicle")
+                        .font(Font.custom("Jost-Regular", size:30))
                         .frame(maxWidth: 275, alignment: .leading)
                     
                     ZStack{
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(maxWidth:100, maxHeight:50)
+                        RoundedRectangle(cornerRadius: 15)
+                            .frame(maxWidth:80, maxHeight:40)
                             .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
                         Text("Preview")
-                            .font(.custom("Jost-Regular", size: 25))
+                            .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.white)
                     }.onTapGesture {
                         previewListing = true}
                     .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: carYear, make: carMake, model: carModel, description: carDescription, typeOfCar: carType, date: date, listedPhotos: previewImages)
+                        carQuest.previewListing(carYear: carYear, make: carMake, model: carModel, carDescription: carDescription, typeOfCar: carType, date: date, listingPrice: listingPrice, listedPhotos: previewImages, isLiked: false)
                     }
                 }
-                Text("Users are only allowed to create three listings of each type!")
-                    .font(Font.custom("Jost-Regular", size:20))
-                    .frame(maxWidth: 275)
-                    .foregroundStyle(Color.blue)
-                    .multilineTextAlignment(.center)
-                RoundedRectangle(cornerRadius: 70)
-                    .frame(width:345, height:1)
-                
+                Divider()
                 ScrollView(showsIndicators:false){
-                    headline(headerText: "Year")
+                    HStack{
+                        headline(headerText: "Year")
+                        Spacer()
+                    }
                     Picker("Select year of vehicle", selection: $carYear){
                         ForEach(years, id: \.self) {
                             Text($0)
@@ -94,19 +94,36 @@ struct listingCreation: View {
                     }
                     .frame(width:375, height:100)
                     .pickerStyle(.inline)
+                    
                     headline(headerText: "Make")
                     listingTextField(carFactor: $carMake, textFieldText: "BMW, Honda, etc.")
                     
                     headline(headerText: "Model")
                     listingTextField(carFactor: $carModel, textFieldText: "Civic, 4Runner, etc.")
-                    
+                        
                     headline(headerText: "Type")
                     listingTextField(carFactor: $carType, textFieldText: "Sedan, hatchback, etc.")
                     
                     headline(headerText: "Description")
                     listingTextField(carFactor: $carDescription, textFieldText: "Description of vehicle")
                     
-                    headline(headerText: "Location")
+                    HStack{
+                        Text("Price")
+                            .font(Font.custom("ZingRustDemo-Base", size:30))
+                            .foregroundColor(.foreground)
+                        Text("per day")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        Spacer()
+                    }
+                    listingTextField(carFactor: $listingPrice, textFieldText: "000.00")
+                        .underline()
+                        .keyboardType(.numberPad)
+                    
+                    HStack{
+                        headline(headerText: "Location")
+                        Spacer()
+                    }
                     Group{
                         if locationManager.userLocation == nil {
                             ZStack{
@@ -128,10 +145,13 @@ struct listingCreation: View {
                                 .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
                         }
                     }
-                    headline(headerText: "Photos")
+                    HStack{
+                        headline(headerText: "Photos")
+                        Spacer()
+                    }
                     Text("CarQuest recommends you upload photos with a 1:1 ratio.")
                         .font(.custom("Jost-Regular", size: 15))
-                        .foregroundColor(/*@START_MENU_TOKEN@*/Color(red: 0.723, green: 0.717, blue: 0.726)/*@END_MENU_TOKEN@*/)
+                        .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
                         .frame(maxWidth: 375, alignment: .leading)
                         .multilineTextAlignment(.leading)
                     ScrollView(.horizontal, showsIndicators: false){
@@ -211,10 +231,13 @@ struct listingCreation: View {
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.white)
                         }
-                    }.frame(maxWidth: 375, alignment: .center)
+                    }
+                    Text("Users are only allowed to create three listings of each type!")
+                        .font(.custom("Jost-Regular", size: 15))
+                        .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        .multilineTextAlignment(.leading)
                     Text(successText)
                         .font(Font.custom("Jost-Regular", size:20))
-                        .frame(maxWidth: 275)
                         .foregroundStyle(Color.accentColor)
                 }
             }.padding()
@@ -255,13 +278,14 @@ struct listingCreation: View {
         
         try await db.collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").setData([
                 "carMake": carMake,
-                "carDescription": carDescription,
                 "carModel": carModel,
                 "carType": carType,
                 "carYear": carYear,
                 "userID": userID,
                 "listingType" : "renting",
                 "imageName" : "4.png",
+                "listingPrice": listingPrice,
+                "carDescription": carDescription,
                 "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
                 "dateCreated" : date,
                 "usersLiked" : [],
@@ -320,5 +344,5 @@ extension Image {
     }
 }
 #Preview {
-    listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", showSignInView: .constant(false))
+    listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", showSignInView: .constant(false))
 }

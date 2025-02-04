@@ -59,7 +59,7 @@ struct HomeView: View {
                                 Spacer()
                                 ForEach(viewModel2.recentListings) { listing in
                                     NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100)
+                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                     }
                                 }
                             }
@@ -83,12 +83,9 @@ struct HomeView: View {
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
                             Spacer()
-                            
                             ForEach(viewModel2.likedVehicles) { listing in
                                 NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    HStack{
-                                        imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100,    textSize: 10)
-                                    }
+                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                 }
                             }
                         }
@@ -112,8 +109,8 @@ struct HomeView: View {
                         HStack{
                             ForEach(shuffledList0.prefix(5)) { listing in
                                 NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }
+                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                }.frame(width:115)
                             }
                         }
                     }
@@ -121,8 +118,8 @@ struct HomeView: View {
                         HStack{
                             ForEach(shuffledList1.prefix(5)) { listing in
                                 NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100)
-                                }
+                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                }.frame(width:115)
                             }
                         }
                     }
@@ -130,8 +127,8 @@ struct HomeView: View {
                         HStack{
                             ForEach(shuffledList2.prefix(5)) { listing in
                                 NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }
+                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                }.frame(width:115)
                             }
                         }
                     }

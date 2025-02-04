@@ -39,7 +39,7 @@ struct LikedVehiclesView: View {
                     ForEach(vm.likedVehicles) { listing in
                         VStack{
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200, textSize: 20)
                             }
                         }
                     }
@@ -94,7 +94,7 @@ struct RecentlyViewedView: View {
                     ForEach(vm.recentListings) { listing in
                         VStack{
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName!), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                             }
                         }
                     }

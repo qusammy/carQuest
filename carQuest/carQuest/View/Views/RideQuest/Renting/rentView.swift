@@ -43,7 +43,7 @@ struct rentView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -65,9 +65,10 @@ struct rentView: View {
                 }
                 ScrollView(showsIndicators: false){
                     ForEach(shuffledList.filter({ searchText.isEmpty ? true : $0.listingTitle!.localizedCaseInsensitiveContains(searchText) })) { listing in
-                       
+                        
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20)
+                            
+                            imageBox(imageName:URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
                         }
                     }
                 }.foregroundStyle(Color.foreground)
