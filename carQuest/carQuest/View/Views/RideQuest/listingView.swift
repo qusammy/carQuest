@@ -19,7 +19,8 @@ struct listingView: View {
     @State var listingName: String?
     @State var listing: carListing?
     @State var user: String?
-    
+    @State private var reviewIsShown: Bool = false
+    @State private var rating: Double = 0.0
 
     var body: some View {
         NavigationStack{
@@ -71,53 +72,41 @@ struct listingView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
                             Spacer()
-                            Button(action: {
-                                //brings up message view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 160, height: 35)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Send a Message")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
                         }
-                        HStack{
-                            Text(listing?.carDescription ?? "")
-                                .font(.custom("Jost-Regular", size: 17))
-                                .foregroundColor(Color(hue: 1.0, saturation: 0.0, brightness: 0.579))
-                                .multilineTextAlignment(.leading)
-                            Spacer()
+                        Text("\(listing?.carDescription ?? "No Data")")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.foreground)
+                            .frame(maxWidth: 375, alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                        Text("Listed date")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: 375, alignment: .leading)
+                        RatingView(rating: $viewModel.rating)
+                        Button {
+                            reviewIsShown.toggle()
+                        }label: {
+                            Text("Leave a Review")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                            ReviewView(listing: listing, review: Review())
                         }
-                        Divider()
-                        HStack{
-                            Text("Price per day: $")
-                                .font(.custom("Jost-Regular", size: 22))
-                                .foregroundColor(.black)
-                            Text(listing?.listingPrice ?? "Error")
-                                .font(.custom("Jost-Regular", size: 22))
-                                .underline()
-                                .foregroundColor(.black)
-                            Spacer()
-                            Button(action: {
-                                //brings up booking view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 80, height: 35)
-                                        .foregroundColor(.accentColor)
-                                    Text("Book")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
+                        
+                        }label: {
+                            Text("Leave a Review")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                            ReviewView(listing: listing, review: Review())
                         }
-                      
+                        
                     }
                 }
                 .onAppear{
+                    viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
                         Task {
                             do{
@@ -177,6 +166,16 @@ struct listingView: View {
             print("Error getting documents: \(error)")
         }
     }
+//    func averageRating(ratingList: [Int]) {
+//        print(ratingList)
+//        var ratingTotal = 0
+//        var unroundedRating = 0.0
+//        for rating in ratingList {
+//            ratingTotal += rating
+//        }
+//        unroundedRating = Double(ratingTotal / ratingList.count)
+//        rating = round(unroundedRating * 10) / 10.0
+//    }
 }
 #Preview {
     listingView(showSignInView: .constant(false))
