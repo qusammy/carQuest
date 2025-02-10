@@ -13,7 +13,6 @@ import SDWebImageSwiftUI
 struct listingView: View {
     
     @State private var isLiked: Bool = false
-    @State private var likeTapped: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
@@ -47,7 +46,7 @@ struct listingView: View {
                                 
                                 Task{
                                     do{
-                                        try await appendLikedUser(usersLiked: user ?? "")
+                                        try await appendLikedUser(usersLiked: user ?? "", isLiked: isLiked, listingID: listing?.listingID ?? "")
                                     }catch {
                                         
                                     }
@@ -120,7 +119,9 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
+                                try await checkForLike()
                                 
+
                             }catch {
                                 print("error getting listing")
                             }
@@ -131,17 +132,45 @@ struct listingView: View {
             
         }
     }
-    func appendLikedUser(usersLiked: String) async throws {
+    
+    func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+
+        if isLiked == true {
+            
+            let usersLikedData = [
+                "usersLiked": [usersLiked]
+            ]
+            
+            try await FirebaseManager.shared.firestore.collection("carListings")
+                .document((listing?.listingID)!).setData(usersLikedData, merge: true)
+        }
+        else {
+            try await db.collection("carListings").document(listingID).updateData([
+                    "usersLiked": FieldValue.arrayRemove([user])
+                ])
+        }
+    }
+    
+    func checkForLike() async throws {
+        @State var likedVehicles: [String] = []
+        
+        let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
         
-        let usersLikedData = [
-            "usersLiked": [usersLiked]
-        ]
-        
-        try await FirebaseManager.shared.firestore.collection("carListings")
-            .document((listing?.listingID)!).setData(usersLikedData, merge: true)
-        
-        
+        do {
+            let querySnapshot = try await db.collection("carListings").whereField("usersLiked", arrayContains: user)
+                .getDocuments()
+            for document in querySnapshot.documents {
+                
+                if listing?.listingID == document.documentID {
+                    isLiked = true
+                }
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
     }
     //    func averageRating(ratingList: [Int]) {
     //        print(ratingList)
