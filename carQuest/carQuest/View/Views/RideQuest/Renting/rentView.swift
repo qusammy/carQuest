@@ -68,7 +68,7 @@ struct rentView: View {
                         
                         NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                             
-                            imageBox(imageName:URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
+                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
                         }
                     }
                 }.foregroundStyle(Color.foreground)

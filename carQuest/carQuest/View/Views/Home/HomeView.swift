@@ -54,7 +54,7 @@ struct HomeView: View {
                                     .underline()
                             })
                         }
-                        ScrollView(.horizontal, showsIndicators: false){
+                        ScrollView(.horizontal, showsIndicators: false) {
                             HStack{
                                 Spacer()
                                 ForEach(viewModel2.recentListings) { listing in

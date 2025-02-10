@@ -17,12 +17,11 @@ struct listingView: View {
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
-    @State var listingName: String?
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
     @State private var rating: Double = 0.0
-
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -62,6 +61,7 @@ struct listingView: View {
                                 }
                             })
                         }
+                        RatingView(rating: $viewModel.rating, width: 30, height: 30)
                         Divider()
                         HStack{
                             WebImage(url: URL(string: userViewModel.photoURL))
@@ -79,11 +79,11 @@ struct listingView: View {
                             .foregroundColor(.foreground)
                             .frame(maxWidth: 375, alignment: .leading)
                             .multilineTextAlignment(.leading)
-                        Text("Listed date")
+                        Text(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.gray)
                             .frame(maxWidth: 375, alignment: .leading)
-                        RatingView(rating: $viewModel.rating)
+
                         Button {
                             reviewIsShown.toggle()
                         }label: {
@@ -94,16 +94,22 @@ struct listingView: View {
                         } .fullScreenCover(isPresented: $reviewIsShown) {
                             ReviewView(listing: listing, review: Review())
                         }
-                        
-                        }label: {
-                            Text("Leave a Review")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: 375, alignment: .leading)
-                        } .fullScreenCover(isPresented: $reviewIsShown) {
-                            ReviewView(listing: listing, review: Review())
+                        VStack{
+                            Spacer()
+                            if viewModel.reviews.isEmpty {
+                                Text("There are no reviews for this listing yet.")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.foreground)
+                                    .frame(maxWidth: 375, alignment: .leading)
+                            } else {
+                                ForEach(viewModel.reviews) { review in
+                                    HStack {
+                                        ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
+                                        Spacer()
+                                    }
+                                }
+                            }
                         }
-                        
                     }
                 }
                 .onAppear{
@@ -114,7 +120,7 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
-
+                                
                             }catch {
                                 print("error getting listing")
                             }
@@ -122,7 +128,7 @@ struct listingView: View {
                     }
                 }
             }.padding()
-
+            
         }
     }
     func appendLikedUser(usersLiked: String) async throws {
@@ -137,16 +143,16 @@ struct listingView: View {
         
         
     }
-//    func averageRating(ratingList: [Int]) {
-//        print(ratingList)
-//        var ratingTotal = 0
-//        var unroundedRating = 0.0
-//        for rating in ratingList {
-//            ratingTotal += rating
-//        }
-//        unroundedRating = Double(ratingTotal / ratingList.count)
-//        rating = round(unroundedRating * 10) / 10.0
-//    }
+    //    func averageRating(ratingList: [Int]) {
+    //        print(ratingList)
+    //        var ratingTotal = 0
+    //        var unroundedRating = 0.0
+    //        for rating in ratingList {
+    //            ratingTotal += rating
+    //        }
+    //        unroundedRating = Double(ratingTotal / ratingList.count)
+    //        rating = round(unroundedRating * 10) / 10.0
+    //    }
 }
 #Preview {
     listingView(showSignInView: .constant(false))

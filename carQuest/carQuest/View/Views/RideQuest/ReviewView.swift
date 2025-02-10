@@ -11,7 +11,7 @@ struct ReviewView: View {
     @Environment(\.dismiss) var dismiss
     @State var listing: carListing?
     @State var review: Review
-    
+    @State var userVM = UserProfileViewModel()
 
     var body: some View {
         NavigationStack {
@@ -49,6 +49,16 @@ struct ReviewView: View {
                 .padding(.horizontal)
                 .font(.title2)
                 Spacer()
+            }.onAppear {
+                Task {
+                    do {
+                        review.userID = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                        review.userImage = userVM.carUser?.profileImageURL ?? ""
+                        review.userName = userVM.carUser?.display_name ?? ""
+                    }catch {
+                        
+                    }
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -61,6 +71,7 @@ struct ReviewView: View {
                         Task{
                             do{
                                 let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                                
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("reviews").document(user).setData(review.dictionary)
                             }catch {
                                 
