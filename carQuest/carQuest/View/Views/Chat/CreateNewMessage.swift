@@ -16,15 +16,18 @@ struct CreateNewMessage: View{
     
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = CreateNewMessageViewModel()
-    
+    @State private var userSearch = ""
+
     var body: some View{
         
         NavigationView{
             VStack{
-                Text(vm.errorMessage)
-                    .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                TextField("username", text: $userSearch)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width:350, height:35)
+                    .font(.custom("Jost-Regular", size: 20))
                 ScrollView{
-                    ForEach(vm.users) { user in
+                    ForEach(vm.users.filter({ userSearch.isEmpty ? true : $0.display_name.localizedCaseInsensitiveContains(userSearch)})) { user in
                         Button{
                             presentationMode.wrappedValue.dismiss()
                             didSelectNewUser(user)
@@ -43,7 +46,9 @@ struct CreateNewMessage: View{
                         }
                         Divider()
                     }
-                }.frame(maxWidth:375)
+                    Text(vm.errorMessage)
+                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                }.padding()
             }.toolbar{
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button(action: {

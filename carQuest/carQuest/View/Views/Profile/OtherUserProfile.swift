@@ -22,30 +22,34 @@ struct OtherUserProfile: View {
                 })
                 Spacer()
             }
-            HStack{
-                WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width:65, height:65)
-                    .clipShape(Circle())
-                Text(vm.carUser?.display_name ?? "$username")
-                    .foregroundStyle(Color.foreground)
-                    .font(Font.custom("ZingRustDemo-Base", size: 30))
-                Spacer()
+            ScrollView(showsIndicators: false){
+                HStack{
+                    WebImage(url: URL(string: vm.carUser?.profileImageURL ?? "profileIcon"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width:65, height:65)
+                        .clipShape(Circle())
+                    Text(vm.carUser?.display_name ?? "$username")
+                        .foregroundStyle(Color.foreground)
+                        .font(Font.custom("ZingRustDemo-Base", size: 35))
+                    Spacer()
                 }
-            HStack{
-                Text(vm.carUser?.description ?? "Hi, I'm new to Car Quest.")
-                    .foregroundStyle(Color.foreground)
-                    .font(Font.custom("Jost-Regular", size: 20))
-                    .multilineTextAlignment(.leading)
-            }
-            HStack{
-                Text(vm.carUser?.display_name ?? "$username" + "'s listings")
-                    .foregroundStyle(Color.foreground)
-                    .font(Font.custom("Jost-Regular", size: 20))
+                HStack{
+                    Text(vm.carUser?.description ?? "Hi, I'm new to Car Quest.")
+                        .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        .font(Font.custom("Jost-Regular", size: 20))
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                Divider()
+                HStack{
+                    Text("\(vm.carUser?.display_name ?? "")'s listings")
+                        .foregroundStyle(Color.foreground)
+                        .font(Font.custom("Jost-Regular", size: 25))
+                    Spacer()
+                }
                 Spacer()
             }
-            Spacer()
         }.padding()
     }
 }

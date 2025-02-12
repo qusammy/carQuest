@@ -15,7 +15,7 @@ struct ContentView: View {
                 topNavigationBar(showSignInView: $showSignInView)
                 TabView(selection: $selection){
                     
-                    AuctionView(showSignInView: $showSignInView)
+                    AuctionView(showSignInView: $showSignInView, searchText: "")
                         .tabItem{
                             Label("", systemImage:("dollarsign.circle.fill"))
                         }.tag(1)

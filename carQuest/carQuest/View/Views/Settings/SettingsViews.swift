@@ -65,16 +65,19 @@ struct MyListingsView: View {
                         .foregroundColor(Color.foreground)
                     Spacer()
                 }
+                HStack{
                     Text("Auction")
                         .font(Font.custom("Jost", size: 30))
-                        .foregroundStyle(Color.accentColor)
-                Text("No Listings")
-                    .font(Font.custom("Jost", size: 15))
-                    .foregroundStyle(Color.foreground)
+                        .foregroundStyle(Color.foreground)
+                    Spacer()
+                }
                 if viewModel.myauctionListings.isEmpty {
-                    Rectangle()
-                        .frame(width: 200, height: 200)
-                        .foregroundStyle(Color.background)
+                    HStack{
+                        Text("No auction listings.")
+                            .font(Font.custom("Jost", size: 15))
+                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        Spacer()
+                    }
                 }
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack{
@@ -94,16 +97,20 @@ struct MyListingsView: View {
                         
                     }
                 }
+                Divider()
+                HStack{
                     Text("Renting")
                         .font(Font.custom("Jost", size: 30))
-                        .foregroundStyle(Color.accentColor)
-                if viewModel.myrentListings.isEmpty {
-                    Rectangle()
-                        .frame(width: 200, height: 200)
-                        .foregroundStyle(Color.background)
-                    Text("No Listings")
-                        .font(Font.custom("Jost", size: 15))
                         .foregroundStyle(Color.foreground)
+                    Spacer()
+                }
+                if viewModel.myrentListings.isEmpty {
+                    HStack{
+                        Text("No rental listings.")
+                            .font(Font.custom("Jost", size: 15))
+                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        Spacer()
+                    }
                 }
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack{
@@ -121,17 +128,19 @@ struct MyListingsView: View {
                         
                     }
                 }
+                Divider()
+                HStack{
                     Text("Buying")
                         .font(Font.custom("Jost", size: 30))
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(Color.foreground)
+                    Spacer()
+                }
                 if viewModel.mybuyListings.isEmpty {
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 200, height: 200)
-                            .foregroundStyle(Color.background)
-                        Text("No Listings")
+                    HStack{
+                        Text("No vehicles for sale.")
                             .font(Font.custom("Jost", size: 15))
-                            .foregroundStyle(Color.foreground)
+                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        Spacer()
                     }
                 }
                 ScrollView(.horizontal, showsIndicators: false) {
