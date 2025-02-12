@@ -21,6 +21,7 @@ struct ProfileView: View {
     // Variables to navigate to a different setting
     @State var showNewMessageScreen = false
     @State var shouldNavigateToSettingView = false
+    @State private var errorText = ""
     var body: some View {
         NavigationView{
             VStack {
@@ -104,7 +105,7 @@ struct ProfileView: View {
                                                 try await viewModel.deleteAccount()
                                                 showSignInView = true
                                             }catch {
-                                                print(error)
+                                                errorText = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
                                             }
                                         }
                                     }label: {
@@ -115,6 +116,9 @@ struct ProfileView: View {
                                     Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                                 }
                             }
+                        Text(errorText)
+                            .font(Font.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.blue)
                     }.padding()
 
                     }.task {

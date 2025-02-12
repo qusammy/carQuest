@@ -11,7 +11,6 @@ struct ReviewView: View {
     @Environment(\.dismiss) var dismiss
     @State var listing: carListing?
     @State var review: Review
-    @State var userVM = UserProfileViewModel()
 
     var body: some View {
         NavigationStack {
@@ -53,8 +52,9 @@ struct ReviewView: View {
                 Task {
                     do {
                         review.userID = try AuthenticationManager.shared.getAuthenticatedUser().uid
-                        review.userImage = userVM.carUser?.profileImageURL ?? ""
-                        review.userName = userVM.carUser?.display_name ?? ""
+                        let user = try await UserManager.shared.getUser(userId: review.userID)
+                        review.userImage = user.profileImageURL ?? ""
+                        review.userName = user.display_name ?? "No username"
                     }catch {
                         
                     }
