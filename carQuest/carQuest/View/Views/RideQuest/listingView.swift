@@ -117,17 +117,54 @@ struct listingView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
                             Spacer()
+                            Button(action: {
+                                //brings up message view
+                            }, label: {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .frame(width: 160, height: 35)
+                                        .foregroundColor(Color("appColor"))
+                                    Text("Send a Message")
+                                        .font(.custom("Jost-Regular", size:20))
+                                        .foregroundColor(.white)
+                                }
+                            })
                         }
-                        Text("\(listing?.carDescription ?? "No Data")")
-                            .font(.custom("Jost-Regular", size: 20))
-                            .foregroundColor(.foreground)
-                            .frame(maxWidth: 375, alignment: .leading)
-                            .multilineTextAlignment(.leading)
-                        Text(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())
-                            .font(.custom("Jost-Regular", size: 20))
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: 375, alignment: .leading)
-
+                        HStack{
+                            Text("\(listing?.carDescription ?? "No Data")")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(4)
+                            Spacer()
+                        }
+                        HStack{
+                            Text(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: 375, alignment: .leading)
+                            Spacer()
+                        }
+                        Divider()
+                        HStack{
+                            Text("$\(listing?.listingPrice ?? "000.00") per day")
+                                .font(.custom("Jost-Regular", size: 22))
+                                .foregroundColor(.foreground)
+                            Spacer()
+                            Button(action: {
+                                //brings up message view
+                            }, label: {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .frame(width: 65, height: 35)
+                                        .foregroundColor(Color("appColor"))
+                                    Text("Book")
+                                        .font(.custom("Jost-Regular", size:20))
+                                        .foregroundColor(.white)
+                                }
+                            })
+                        }
+                        RatingView(rating: $viewModel.rating)
                         Button {
                             reviewIsShown.toggle()
                         }label: {
@@ -176,7 +213,6 @@ struct listingView: View {
             }.padding()
             
         }
-    }
     
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
         let db = Firestore.firestore()
