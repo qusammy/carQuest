@@ -94,7 +94,7 @@ struct RecentlyViewedView: View {
                     ForEach(vm.recentListings) { listing in
                         VStack{
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200, textSize: 20)
                             }
                         }
                     }
@@ -108,13 +108,59 @@ struct RecentlyViewedView: View {
             }
         }
         .padding()
-        //        .onAppear(){
-        //            Task{
-        //                do{
-        //                  //  try vm.generateUsersClicked() }
-        //                catch { }
-        //            }
-        //        }
-        //    }
+        .onAppear {
+            vm.generateUsersClicked()
+        }
+    }
+}
+
+struct NewListingsView: View {
+    @Binding var showSignInView: Bool
+    
+    @Environment(\.dismiss) var dismiss
+    @State private var vehiclesLikedArray: [String] = []
+    @StateObject var viewModel = ProfileViewModel()
+    @StateObject var vm = ListingViewModel()
+    
+    var body: some View {
+        NavigationStack{
+            VStack{
+                HStack{
+                    Text("New Listings")
+                        .font(Font.custom("ZingRustDemo-Base", size: 35))
+                        .foregroundStyle(Color.foreground)
+                    Spacer()
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Text("Cancel")
+                            .font(.custom("Jost-Regular", size: 17))
+                            .foregroundStyle(Color.accentColor)
+                            .underline()
+                    })
+                }
+                ScrollView(showsIndicators: false){
+                    ForEach(vm.allListings.shuffled()) { listing in
+                        VStack{
+                            if listing.dateCreated! >= Calendar.current.date(byAdding: .month, value: -1, to: Date.now)! {
+                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200, textSize: 20)
+                                }
+                            }
+                        }
+                    }
+                    Spacer()
+                    Text("Newly posted listings will appear here.")
+                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                        .multilineTextAlignment(.center)
+                        .font(.custom("Jost-Regular", size: 17))
+                }.foregroundStyle(Color.foreground)
+                Spacer()
+            }
+        }
+        .padding()
+        .onAppear {
+            vm.generateAllListings()
+        }
     }
 }

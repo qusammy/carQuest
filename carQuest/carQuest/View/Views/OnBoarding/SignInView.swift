@@ -6,43 +6,19 @@
 //  Additions by James Hollander
 
 import SwiftUI
+import FirebaseAuth
 
 struct SignInView: View {
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
 
     @Binding var showSignInView: Bool
+    @State private var resetPWisPresented: Bool = false
+    @State private var signUpIsPresented: Bool = false
     
-    
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         VStack{
-//            Spacer()
-//                .navigationBarBackButtonHidden(true)
-//                .toolbar(content: {
-//                    ToolbarItem(placement: .navigationBarLeading) {
-//                        Button(action: {
-//                            presentationMode.wrappedValue.dismiss()
-//                        }, label: {
-//                            ZStack {
-//                                RoundedRectangle(cornerRadius: 15)
-//                                    .frame(width: 90, height: 35)
-//                                    .foregroundColor(Color("appColor"))
-//                                HStack {
-//                                    Image(systemName: "arrow.left")
-//                                        .resizable()
-//                                        .frame(width: 20, height: 20)
-//                                        .foregroundColor(.white)
-//                                    Text("Back")
-//                                        .font(.system(size: 20))
-//                                        .foregroundColor(.white)
-//                                }
-//                            }
-//                        }
-//                        )
-//                    }
-//                })
             Image("carQuestLogo")
                 .resizable()
                 .renderingMode(.original)
@@ -78,7 +54,10 @@ struct SignInView: View {
                     Task {
                         do {
                             try await viewModel.signIn()
-                            showSignInView = false
+                            let user = Auth.auth().currentUser
+                            if user != nil {
+                                showSignInView = false
+                            }
                         }catch {
                             if viewModel.email.isEmpty {
                                 viewModel.errorText = "Please provide a valid email."
@@ -103,21 +82,30 @@ struct SignInView: View {
                     Text("Forgot Password?")
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundColor(Color("Foreground"))
-                    NavigationLink(destination: ResetPassword()) {
+                    Button {
+                        resetPWisPresented.toggle()
+                    }label: {
                         Text("Click Here!")
                             .font(Font.custom("Jost-Regular", size:20))
                             .foregroundColor(Color("appColor"))
-                    }
+                    }.fullScreenCover(isPresented: $resetPWisPresented, content: {
+                        ResetPassword()
+                    })
                 }
                 HStack {
                     Text("Don't have an account?")
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundColor(Color("Foreground"))
-                    NavigationLink(destination: SignUpView(showSignInView: $showSignInView)) {
+                    Button {
+                        signUpIsPresented.toggle()
+                    }label: {
                         Text("Sign Up!")
                             .font(Font.custom("Jost-Regular", size:20))
                             .foregroundColor(Color("appColor"))
                     }
+                    .fullScreenCover(isPresented: $signUpIsPresented, content: {
+                        SignUpView(showSignInView: $showSignInView)
+                    })
                 }
                 
                 Button(action: {

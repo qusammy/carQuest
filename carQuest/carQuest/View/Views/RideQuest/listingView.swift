@@ -11,20 +11,64 @@ import FirebaseAuth
 import SDWebImageSwiftUI
 
 struct listingView: View {
-    
+    @Environment(\.dismiss) var dismiss
+
     @State private var isLiked: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
     @StateObject var userViewModel = UserInfoViewModel()
-    @State var listingName: String?
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
     @State private var rating: Double = 0.0
-
+    @State private var editIsPresented: Bool = false
+    @State private var showingDeleteAlert: Bool = false
+    
     var body: some View {
         NavigationStack{
             VStack{
+                if listing?.userID == user {
+                    Button{
+                        editIsPresented.toggle()
+                    }label: {
+                        ZStack{
+                            
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width:125, height:35)
+                                .foregroundColor(Color("appColor"))
+                            Text("Edit")
+                                .foregroundColor(.white)
+                                .font(.custom("Jost-Regular", size: 20))
+                        }
+                    } .fullScreenCover(isPresented: $editIsPresented) {
+                        listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                    }
+                    
+                    Button {
+                        showingDeleteAlert = true
+                        }label: {
+                        Text("Delete")
+                            .font(Font.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.accentColor)
+                            }.alert("Are you sure you want to delete this listing?", isPresented: $showingDeleteAlert) {
+                                Button(role: .destructive) {
+                                    Task {
+                                        do{
+                                            try await Firestore.firestore().collection("carListings").document((listing?.listingID)!).delete()
+                                            dismiss()
+                                        }catch {
+                                            
+                                        }
+                                    }
+
+                                }label: {
+                                    Text("Delete Listing")
+                                        .font(Font.custom("Jost-Regular", size: 20))
+                                }
+                            }message: {
+                                Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
+                            }
+                }
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
@@ -61,6 +105,7 @@ struct listingView: View {
                                 }
                             })
                         }
+                        RatingView(rating: $viewModel.rating, width: 30, height: 30)
                         Divider()
                         HStack{
                             WebImage(url: URL(string: userViewModel.photoURL))
@@ -94,7 +139,7 @@ struct listingView: View {
                             Spacer()
                         }
                         HStack{
-                            Text("Listed 1/1/2025")
+                            Text(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: 375, alignment: .leading)
@@ -130,8 +175,22 @@ struct listingView: View {
                         } .fullScreenCover(isPresented: $reviewIsShown) {
                             ReviewView(listing: listing, review: Review())
                         }
-                    }
-                        
+                        VStack{
+                            Spacer()
+                            if viewModel.reviews.isEmpty {
+                                Text("There are no reviews for this listing yet.")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.foreground)
+                                    .frame(maxWidth: 375, alignment: .leading)
+                            } else {
+                                ForEach(viewModel.reviews) { review in
+                                    HStack {
+                                        ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 .onAppear{
@@ -152,6 +211,7 @@ struct listingView: View {
                     }
                 }
             }.padding()
+            
         }
     
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
@@ -193,16 +253,16 @@ struct listingView: View {
             print("Error getting documents: \(error)")
         }
     }
-//    func averageRating(ratingList: [Int]) {
-//        print(ratingList)
-//        var ratingTotal = 0
-//        var unroundedRating = 0.0
-//        for rating in ratingList {
-//            ratingTotal += rating
-//        }
-//        unroundedRating = Double(ratingTotal / ratingList.count)
-//        rating = round(unroundedRating * 10) / 10.0
-//    }
+    //    func averageRating(ratingList: [Int]) {
+    //        print(ratingList)
+    //        var ratingTotal = 0
+    //        var unroundedRating = 0.0
+    //        for rating in ratingList {
+    //            ratingTotal += rating
+    //        }
+    //        unroundedRating = Double(ratingTotal / ratingList.count)
+    //        rating = round(unroundedRating * 10) / 10.0
+    //    }
 }
 #Preview {
     listingView(showSignInView: .constant(false))

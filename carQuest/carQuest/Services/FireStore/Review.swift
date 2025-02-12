@@ -11,14 +11,17 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct Review: Identifiable, Codable {
+    
     @DocumentID var id: String?
+    var userID = ""
+    var userImage = ""
+    var userName = ""
     var title = ""
     var body = ""
     var rating = 0
-    var reviewer = ""
     var postedOn = Date()
     
     var dictionary: [String: Any] {
-        return ["title": title, "body": body, "rating": rating, "reviewer": Auth.auth().currentUser?.email ?? "", "postedOn": Timestamp(date: Date())]
+        return ["userID": userID, "userImage": userImage, "userName": userName, "title": title, "body": body, "rating": rating, "postedOn": Timestamp(date: Date())]
     }
 }

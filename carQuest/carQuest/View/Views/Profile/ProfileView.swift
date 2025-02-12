@@ -21,29 +21,10 @@ struct ProfileView: View {
     // Variables to navigate to a different setting
     @State var showNewMessageScreen = false
     @State var shouldNavigateToSettingView = false
-    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationView{
             VStack {
                 VStack {
-                    
-                    if showSignInView == true {
-                        VStack{
-                            Spacer()
-                            NavigationLink(destination: SignInView(showSignInView: $showSignInView).navigationBarBackButtonHidden(false)){
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .frame(width:250, height:50)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Sign In")
-                                        .font(.custom("Jost-Regular", size: 25))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            Spacer()
-                        }
-                    }
-                    
                     List {
                         if showSignInView == false {
                             if let user = viewModel.user {
