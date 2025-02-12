@@ -80,9 +80,6 @@ struct rentView: View {
                     }
                 
             }.padding()
-                .task {
-                    viewModel.generateRentListings()
-                }
         }
     }
     

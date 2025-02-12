@@ -53,8 +53,10 @@ struct PushNotificationView: View {
 }
 
 struct MyListingsView: View {
+    
     @Binding var showSignInView: Bool
     @StateObject private var viewModel = ListingViewModel()
+    
 
     var body: some View {
         ScrollView{

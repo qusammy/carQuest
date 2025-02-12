@@ -104,7 +104,7 @@ class UserInfoViewModel: ObservableObject {
             let document = try await db.collection("users").document(listing.userID!).getDocument()
             if document.exists {
                 self.displayName = document.get("display_name") as! String
-                self.photoURL = document.get("profileImageURL") as! String
+//                self.photoURL = document.get("profileImageURL") as! String
             }
         }
     }

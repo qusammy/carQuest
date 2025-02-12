@@ -11,7 +11,8 @@ import FirebaseAuth
 import SDWebImageSwiftUI
 
 struct listingView: View {
-    
+    @Environment(\.dismiss) var dismiss
+
     @State private var isLiked: Bool = false
     @Binding var showSignInView: Bool
     @StateObject var viewModel = ListingViewModel()
@@ -20,10 +21,54 @@ struct listingView: View {
     @State var user: String?
     @State private var reviewIsShown: Bool = false
     @State private var rating: Double = 0.0
+    @State private var editIsPresented: Bool = false
+    @State private var showingDeleteAlert: Bool = false
     
     var body: some View {
         NavigationStack{
             VStack{
+                if listing?.userID == user {
+                    Button{
+                        editIsPresented.toggle()
+                    }label: {
+                        ZStack{
+                            
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(width:125, height:35)
+                                .foregroundColor(Color("appColor"))
+                            Text("Edit")
+                                .foregroundColor(.white)
+                                .font(.custom("Jost-Regular", size: 20))
+                        }
+                    } .fullScreenCover(isPresented: $editIsPresented) {
+                        listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                    }
+                    
+                    Button {
+                        showingDeleteAlert = true
+                        }label: {
+                        Text("Delete")
+                            .font(Font.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.accentColor)
+                            }.alert("Are you sure you want to delete this listing?", isPresented: $showingDeleteAlert) {
+                                Button(role: .destructive) {
+                                    Task {
+                                        do{
+                                            try await Firestore.firestore().collection("carListings").document((listing?.listingID)!).delete()
+                                            dismiss()
+                                        }catch {
+                                            
+                                        }
+                                    }
+
+                                }label: {
+                                    Text("Delete Listing")
+                                        .font(Font.custom("Jost-Regular", size: 20))
+                                }
+                            }message: {
+                                Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
+                            }
+                }
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{

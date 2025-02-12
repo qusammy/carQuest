@@ -8,40 +8,24 @@
 import SwiftUI
 import FirebaseAuth
 struct SignUpView: View {
+    @Environment(\.dismiss) var dismiss
     @StateObject private var viewModelGoogle = AuthenticationViewModel()
     @StateObject private var viewModel = SignInEmailViewModel()
     @StateObject private var viewModelProfile = ProfileViewModel()
 
     @Binding var showSignInView: Bool
     
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-    
     var body: some View {
+        HStack {
+            Button {
+                dismiss()
+            }label: {
+                backButton()
+            }
+            .padding()
+            Spacer()
+        }
         VStack{
-//                .navigationBarBackButtonHidden(true)
-//                .toolbar(content: {
-//                    ToolbarItem(placement: .navigationBarLeading) {
-//                        Button(action: {
-//                            presentationMode.wrappedValue.dismiss()
-//                        }, label: {
-//                            ZStack {
-//                                RoundedRectangle(cornerRadius: 15)
-//                                    .frame(width: 90, height: 35)
-//                                    .foregroundColor(Color("appColor"))
-//                                HStack {
-//                                    Image(systemName: "arrow.left")
-//                                        .resizable()
-//                                        .frame(width: 20, height: 20)
-//                                        .foregroundColor(.white)
-//                                    Text("Back")
-//                                        .font(.system(size: 20))
-//                                        .foregroundColor(.white)
-//                                }
-//                            }
-//                        }
-//                        )
-//                    }
-//                })
             Image("carQuestLogo")
                 .resizable()
                 .renderingMode(.original)
@@ -89,13 +73,16 @@ struct SignUpView: View {
                         do {
                             try await viewModel.signUp()
                             viewModel.errorText = ""
-                            showSignInView = false
+                            let user = Auth.auth().currentUser
+                            if user != nil {
+                                showSignInView = false
+                                dismiss()
+
+                            }
                         }catch {
                             let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,64}"
                             if viewModel.email.contains(emailRegEx) == false {
                                 viewModel.errorText = "Please provide a valid email."
-                            }else if viewModel.password.isEmpty {
-                                viewModel.errorText = "Password must have at least 6 characters."
                             }else if viewModel.password.count < 6 {
                                 viewModel.errorText = "Password must have at least 6 characters."
                             }else {
@@ -139,6 +126,7 @@ struct SignUpView: View {
                     }
                 })
             }
+        Spacer()
         }
     }
     func image (_ image: Image, show: Bool) -> some View {

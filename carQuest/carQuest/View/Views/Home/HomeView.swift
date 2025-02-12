@@ -18,9 +18,10 @@ struct HomeView: View {
     
     @State var isPresented = false
     @State var isPresented2 = false
-    @State private var shuffledList0: [carListing] = [carListing]()
-    @State private var shuffledList1: [carListing] = [carListing]()
-    @State private var shuffledList2: [carListing] = [carListing]()
+    @State var isPresented3 = false
+    @State private var shuffledList: [carListing] = [carListing]()
+
+    
 
 
     var body: some View {
@@ -31,7 +32,7 @@ struct HomeView: View {
                 VStack{
                     HStack {
                         if viewModel.displayName == "" {
-                            Text("Welcome, $displayname!")
+                            Text("Welcome, user!")
                                 .font(Font.custom("Jost", size:30))
                                 .foregroundColor(Color("Foreground"))
                         }else {
@@ -93,11 +94,11 @@ struct HomeView: View {
                 Divider()
                 VStack{
                     HStack{
-                        Text("Recently Viewed")
+                        Text("New")
                             .font(Font.custom("Jost-Regular", size:20))
                         Spacer()
                         Button(action: {
-                            isPresented2.toggle()
+                            isPresented3.toggle()
                         }, label: {
                             Text("See all")
                                 .font(Font.custom("Jost-Regular", size:15))
@@ -106,53 +107,12 @@ struct HomeView: View {
                     }
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
-                            Spacer()
-                            ForEach(viewModel2.recentListings) { listing in
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                            ForEach(shuffledList.prefix(5)) { listing in
+                                if listing.dateCreated! >= Calendar.current.date(byAdding: .month, value: -1, to: Date.now)! {
+                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                    }.frame(width:115)
                                 }
-                            }
-                        }
-                    }
-                }
-                Divider()
-                VStack{
-                    HStack{
-                        Text("For You")
-                            .font(Font.custom("Jost-Regular", size:20))
-                        Spacer()
-                        Button(action: {
-                            // view of all shuffled lists
-                        }, label: {
-                            Text("See all")
-                                .font(Font.custom("Jost-Regular", size:15))
-                                .underline()
-                        })
-                    }
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
-                            ForEach(shuffledList0.prefix(5)) { listing in
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }.frame(width:115)
-                            }
-                        }
-                    }
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
-                            ForEach(shuffledList1.prefix(5)) { listing in
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }.frame(width:115)
-                            }
-                        }
-                    }
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
-                            ForEach(shuffledList2.prefix(5)) { listing in
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }.frame(width:115)
                             }
                         }
                     }
@@ -165,12 +125,15 @@ struct HomeView: View {
     .fullScreenCover(isPresented: $isPresented2, content: {
         RecentlyViewedView(showSignInView: .constant(false))
     })
+    .fullScreenCover(isPresented: $isPresented3, content: {
+        NewListingsView(showSignInView: .constant(false))
+    })
+        
     .onAppear{
+        
         viewModel2.generateAllListings()
-        //viewModel2.generateUsersClicked()
-        shuffledList0 = viewModel2.allListings.shuffled()
-        shuffledList1 = viewModel2.allListings.shuffled()
-        shuffledList2 = viewModel2.allListings.shuffled()
+        viewModel2.generateUsersClicked()
+        shuffledList = viewModel2.allListings.shuffled()
 
             
         Task {
@@ -192,5 +155,7 @@ struct HomeView: View {
         viewModel.getDisplayName()
         }
     }
+    
+
 }
 

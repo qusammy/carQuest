@@ -292,7 +292,7 @@ struct listingCreation: View {
                 "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)"
                 
 
-        ])
+        ], merge: true)
         for image in selectedImages {
             let uiImage = UIImage(data: image)
             listedPhotos = uiImage

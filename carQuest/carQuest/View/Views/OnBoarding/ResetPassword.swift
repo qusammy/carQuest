@@ -8,40 +8,25 @@
 import SwiftUI
 
 struct ResetPassword: View {
-    
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
+
     @StateObject var viewModel = SignInEmailViewModel()
     @State private var email: String = ""
     
     @State private var showingAlert = false
     
     var body: some View {
+        HStack {
+            Button {
+                dismiss()
+            }label: {
+                backButton()
+            }
+            .padding()
+            Spacer()
+        }
         VStack{
             Spacer()
-                .navigationBarBackButtonHidden(true)
-                .toolbar(content: {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .frame(width: 90, height: 35)
-                                    .foregroundColor(Color("appColor"))
-                                HStack {
-                                    Image(systemName: "arrow.left")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(.white)
-                                    Text("Back")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                        }
-                        )
-                    }
-                })
             Image("carQuestLogo")
                 .resizable()
                 .renderingMode(.original)
@@ -67,6 +52,7 @@ struct ResetPassword: View {
                         try await viewModel.resetPassword(email: email)
                         showingAlert.toggle()
                         viewModel.errorText = ""
+                        dismiss()
                     }catch {
                         viewModel.errorText = "There is no account using this email."
                     }
