@@ -20,9 +20,8 @@ struct HomeView: View {
     @State var isPresented2 = false
     @State var isPresented3 = false
     @State private var shuffledList: [carListing] = [carListing]()
-
-    
-
+    @State private var shuffledList1: [carListing] = [carListing]()
+    @State private var shuffledList2: [carListing] = [carListing]()
 
     var body: some View {
         NavigationStack {
@@ -58,7 +57,7 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack{
                                 Spacer()
-                                ForEach(viewModel2.recentListings) { listing in
+                                ForEach(shuffledList1) { listing in
                                     NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                                         imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                     }
@@ -83,7 +82,7 @@ struct HomeView: View {
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
                             Spacer()
-                            ForEach(viewModel2.likedVehicles) { listing in
+                            ForEach(shuffledList2) { listing in
                                 NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                                     imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                                 }.frame(width:115)
@@ -128,12 +127,11 @@ struct HomeView: View {
     .fullScreenCover(isPresented: $isPresented3, content: {
         NewListingsView(showSignInView: .constant(false))
     })
-        
+
     .onAppear{
         
         viewModel2.generateAllListings()
         viewModel2.generateUsersClicked()
-        shuffledList = viewModel2.allListings.shuffled()
 
             
         Task {
@@ -148,6 +146,17 @@ struct HomeView: View {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
+    }
+
+    .onChange(of: viewModel2.allListings) {
+        shuffledList = viewModel2.allListings.shuffled()
+    }
+    .onChange(of: viewModel2.recentListings) {
+        shuffledList1 = viewModel2.allListings.shuffled()
+    }
+    .onChange(of: viewModel2.likedVehicles) {
+        shuffledList2 = viewModel2.allListings.shuffled()
+
     }
     
     .navigationViewStyle(StackNavigationViewStyle())

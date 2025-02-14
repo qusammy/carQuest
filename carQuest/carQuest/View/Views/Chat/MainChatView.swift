@@ -1,10 +1,3 @@
-//
-//  MainChatView.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 11/6/24.
-//
-
 import SwiftUI
 import SDWebImageSwiftUI
 import Firebase

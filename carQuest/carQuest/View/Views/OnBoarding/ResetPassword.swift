@@ -1,10 +1,3 @@
-//
-//  ResetPassword.swift
-//  carQuest
-//
-//  Created by hollande_894789 on 10/2/24.
-//
-
 import SwiftUI
 
 struct ResetPassword: View {

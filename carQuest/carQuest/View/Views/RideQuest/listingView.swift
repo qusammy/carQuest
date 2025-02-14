@@ -1,9 +1,3 @@
-//
-//  listingView.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 9/24/24.
-//
 import SwiftUI
 import Firebase
 import FirebaseFirestore
@@ -12,11 +6,11 @@ import SDWebImageSwiftUI
 
 struct listingView: View {
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var isLiked: Bool = false
     @Binding var showSignInView: Bool
-    @StateObject var viewModel = ListingViewModel()
-    @StateObject var userViewModel = UserInfoViewModel()
+    @ObservedObject var viewModel = ListingViewModel()
+    @ObservedObject var userViewModel = UserInfoViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
@@ -46,28 +40,28 @@ struct listingView: View {
                     
                     Button {
                         showingDeleteAlert = true
-                        }label: {
+                    }label: {
                         Text("Delete")
                             .font(Font.custom("Jost-Regular", size: 20))
                             .foregroundColor(.accentColor)
-                            }.alert("Are you sure you want to delete this listing?", isPresented: $showingDeleteAlert) {
-                                Button(role: .destructive) {
-                                    Task {
-                                        do{
-                                            try await Firestore.firestore().collection("carListings").document((listing?.listingID)!).delete()
-                                            dismiss()
-                                        }catch {
-                                            
-                                        }
-                                    }
-
-                                }label: {
-                                    Text("Delete Listing")
-                                        .font(Font.custom("Jost-Regular", size: 20))
+                    }.alert("Are you sure you want to delete this listing?", isPresented: $showingDeleteAlert) {
+                        Button(role: .destructive) {
+                            Task {
+                                do{
+                                    try await Firestore.firestore().collection("carListings").document((listing?.listingID)!).delete()
+                                    dismiss()
+                                }catch {
+                                    
                                 }
-                            }message: {
-                                Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
                             }
+                            
+                        }label: {
+                            Text("Delete Listing")
+                                .font(Font.custom("Jost-Regular", size: 20))
+                        }
+                    }message: {
+                        Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
+                    }
                 }
                 ScrollView{
                     ScrollView(.horizontal, showsIndicators: false){
@@ -203,7 +197,7 @@ struct listingView: View {
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
                                 try await checkForLike()
                                 
-
+                                
                             }catch {
                                 print("error getting listing")
                             }
@@ -213,11 +207,11 @@ struct listingView: View {
             }.padding()
             
         }
-    
+    }
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
         let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
-
+        
         if isLiked == true {
             
             let usersLikedData = [
@@ -229,8 +223,8 @@ struct listingView: View {
         }
         else {
             try await db.collection("carListings").document(listingID).updateData([
-                    "usersLiked": FieldValue.arrayRemove([user])
-                ])
+                "usersLiked": FieldValue.arrayRemove([user])
+            ])
         }
     }
     
@@ -253,17 +247,8 @@ struct listingView: View {
             print("Error getting documents: \(error)")
         }
     }
-    //    func averageRating(ratingList: [Int]) {
-    //        print(ratingList)
-    //        var ratingTotal = 0
-    //        var unroundedRating = 0.0
-    //        for rating in ratingList {
-    //            ratingTotal += rating
-    //        }
-    //        unroundedRating = Double(ratingTotal / ratingList.count)
-    //        rating = round(unroundedRating * 10) / 10.0
-    //    }
 }
+
 #Preview {
     listingView(showSignInView: .constant(false))
 }

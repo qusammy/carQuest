@@ -1,9 +1,3 @@
-//
-//  RootView.swift
-//  carQuest
-//
-//  Created by hollande_894789 on 9/11/24.
-//
 import SwiftUI
 
 struct RootView: View {

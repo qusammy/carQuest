@@ -1,10 +1,3 @@
-//
-//  ProfileView.swift
-//  carQuest
-//
-//  Created by beraoud_981215 on 9/13/24.
-//
-
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
@@ -134,6 +127,15 @@ struct ProfileView: View {
                         .scrollContentBackground(.hidden)
                         .listRowBackground(Color(.background))
                 }
+            .onChange(of: showSignInView) {
+                Task {
+                    do {
+                        try await viewModel.loadCurrentUser()
+                    }catch {
+                        
+                    }
+                }
+            }
             }.navigationBarTitleDisplayMode(.inline)
         }
     }

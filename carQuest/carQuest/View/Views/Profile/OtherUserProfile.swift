@@ -1,10 +1,3 @@
-//
-//  OtherUserProfile.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 1/10/25.
-//
-
 import SwiftUI
 import SDWebImageSwiftUI
 

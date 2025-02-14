@@ -1,10 +1,3 @@
-//
-//  Review.swift
-//  carQuest
-//
-//  Created by hollande_894789 on 1/31/25.
-//
-
 import Foundation
 import Firebase
 import FirebaseFirestore

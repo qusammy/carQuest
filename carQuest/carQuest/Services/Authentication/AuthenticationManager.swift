@@ -1,10 +1,3 @@
-//
-//  AuthenticationManager.swift
-//  carQuest
-//
-//  Created by hollande_894789 on 9/13/24.
-//
-
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore

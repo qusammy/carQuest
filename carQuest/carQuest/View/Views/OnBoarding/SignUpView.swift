@@ -1,10 +1,3 @@
-//
-//  SignUpView.swift
-//  carQuest
-//
-//  Created by hollande_894789 on 9/26/24.
-//
-
 import SwiftUI
 import FirebaseAuth
 struct SignUpView: View {

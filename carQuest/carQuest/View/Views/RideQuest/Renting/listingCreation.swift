@@ -1,9 +1,3 @@
-//
-//  listingCreation.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 8/29/24.
-//  Additions by James Hollander
 import SwiftUI
 import CoreLocation
 import PhotosUI
@@ -256,6 +250,7 @@ struct listingCreation: View {
         }else if listingType == "For Sale" {
             listingLetter = "B"
         }
+        
         let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
         
         if document.exists {
