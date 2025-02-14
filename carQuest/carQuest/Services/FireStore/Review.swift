@@ -3,7 +3,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseAuth
 
-struct Review: Identifiable, Codable {
+struct Review: Identifiable, Codable, Equatable {
     
     @DocumentID var id: String?
     var userID = ""

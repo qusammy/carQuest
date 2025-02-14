@@ -17,6 +17,7 @@ struct listingView: View {
     @State private var rating: Double = 0.0
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
+    @State private var reviews = [Review]()
     
     var body: some View {
         NavigationStack{
@@ -99,7 +100,7 @@ struct listingView: View {
                                 }
                             })
                         }
-                       
+                        
                         Divider()
                         HStack{
                             WebImage(url: URL(string: userViewModel.photoURL))
@@ -223,10 +224,14 @@ struct listingView: View {
                         }
                     }
                 }
+
             }.padding()
-        }
+            .onChange(of: viewModel.reviews) {
+                reviews = viewModel.reviews.shuffled()
+            }
         }
     }
+    
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
         let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
@@ -267,6 +272,7 @@ struct listingView: View {
         }
     }
 }
+
 
 #Preview {
     listingView(showSignInView: .constant(false))

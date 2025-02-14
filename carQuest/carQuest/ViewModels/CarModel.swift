@@ -177,7 +177,7 @@ class ListingViewModel: ObservableObject {
             let userID = user!.uid
             let ref = Firestore.firestore().collection("carListings")
             self.recentListings = [carListing]()
-            
+
             ref.getDocuments { snapshot1, err in
                 
                 for document in snapshot1!.documents {

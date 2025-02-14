@@ -57,12 +57,10 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false){
                             HStack{
                                 Spacer()
-                                ForEach(shuffledList1) { listing in
-                                    ForEach(viewModel2.likedVehicles) { listing in
-                                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                        }.frame(width:115)
-                                    }
+                                ForEach(shuffledList2) { listing in
+                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                    }.frame(width:115)
                                 }
                             }
                         }
@@ -72,26 +70,21 @@ struct HomeView: View {
                                 Text("Recently Viewed")
                                     .font(Font.custom("Jost-Regular", size:20))
                                 Spacer()
-                                ForEach(shuffledList2) { listing in
-                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                    }.frame(width:115)
-                                    Button(action: {
-                                        isPresented2.toggle()
-                                    }, label: {
-                                        Text("See all")
-                                            .font(Font.custom("Jost-Regular", size:15))
-                                            .underline()
-                                    })
-                                }
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack{
-                                        Spacer()
-                                        ForEach(viewModel2.recentListings) { listing in
-                                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                            }.frame(width:115)
-                                        }
+                                Button(action: {
+                                    isPresented2.toggle()
+                                }, label: {
+                                    Text("See all")
+                                        .font(Font.custom("Jost-Regular", size:15))
+                                        .underline()
+                                })
+                            }
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack{
+                                    Spacer()
+                                    ForEach(shuffledList1) { listing in
+                                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                        }.frame(width:115)
                                     }
                                 }
                             }
@@ -136,11 +129,8 @@ struct HomeView: View {
                 })
                 
                 .onAppear{
-                    
                     viewModel2.generateAllListings()
                     viewModel2.generateUsersClicked()
-                    
-                    
                     Task {
                         do {
                             user = try AuthenticationManager.shared.getAuthenticatedUser().uid
@@ -159,10 +149,10 @@ struct HomeView: View {
                     shuffledList = viewModel2.allListings.shuffled()
                 }
                 .onChange(of: viewModel2.recentListings) {
-                    shuffledList1 = viewModel2.allListings.shuffled()
+                    shuffledList1 = viewModel2.recentListings.shuffled()
                 }
                 .onChange(of: viewModel2.likedVehicles) {
-                    shuffledList2 = viewModel2.allListings.shuffled()
+                    shuffledList2 = viewModel2.likedVehicles.shuffled()
                     
                 }
                 
