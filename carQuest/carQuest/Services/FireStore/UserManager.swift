@@ -34,9 +34,9 @@ struct CarQuestUser: Identifiable{
 struct DBUser {
     let userId: String
     let email: String?
-    let photoURL: String?
+    let profileImageURL: String?
     let dateCreated: Date?
-    let displayName: String?
+    let display_name: String?
     let description: String?
 
 }
@@ -56,7 +56,7 @@ final class UserManager {
             userData["email"] = auth.email
         }
         if auth.photoURL != nil {
-            userData["photoURL"] = auth.photoURL
+            userData["profileImageURL"] = auth.photoURL
         }
         if let displayName = auth.displayName {
             userData["display_name"] = displayName
@@ -78,11 +78,11 @@ final class UserManager {
         }
         
         let email = data["email"] as? String
-        let photoURL = data["photoURL"] as? String
+        let profileImageURL = data["profileImageURL"] as? String
         let dateCreated = data["date_created"] as? Date
         let displayName = data["display_name"] as? String
         let description = data["description"] as? String
 
-        return DBUser(userId: userId, email: email, photoURL: photoURL, dateCreated: dateCreated, displayName: displayName, description: description)
+        return DBUser(userId: userId, email: email, profileImageURL: profileImageURL, dateCreated: dateCreated, display_name: displayName, description: description)
     }
 }

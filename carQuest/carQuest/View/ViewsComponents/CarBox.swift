@@ -314,19 +314,26 @@ struct ReviewPod: View {
                     .lineLimit(1)
                     .multilineTextAlignment(.leading)
                 RatingView(rating: $rating, width: 15, height: 15)
+                Spacer()
             }
-            Text(title ?? "")
-                .frame(alignment: .leading)
-                .font(.custom("Jost-Regular", size: textSize ?? 20).bold())
-                .foregroundColor(Color.foreground)
-                .multilineTextAlignment(.leading)
-                .lineLimit(1)
-            Text(textBody ?? "")
-                .frame(alignment: .leading)
-                .font(.custom("Jost-Regular", size: textSize ?? 20))
-                .foregroundColor(Color.foreground)
-                .multilineTextAlignment(.leading)
-                .lineLimit(3)
+            HStack {
+                Text(title ?? "")
+                    .frame(alignment: .leading)
+                    .font(.custom("Jost-Regular", size: textSize ?? 20))
+                    .foregroundColor(Color.foreground)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(1)
+                Spacer()
+            }
+            HStack {
+                Text(textBody ?? "")
+                    .frame(alignment: .leading)
+                    .font(.custom("Jost-Regular", size: textSize ?? 20))
+                    .foregroundColor(Color.foreground)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(3)
+                Spacer()
+            }
         }
     }
 }
