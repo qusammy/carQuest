@@ -63,7 +63,7 @@ struct listingView: View {
                         Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
                     }
                 }
-                ScrollView{
+                ScrollView(showsIndicators: false){
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
                             ForEach((listing?.imageName)!, id: \.self) { image in
@@ -99,7 +99,7 @@ struct listingView: View {
                                 }
                             })
                         }
-                        RatingView(rating: $viewModel.rating, width: 30, height: 30)
+                       
                         Divider()
                         HStack{
                             WebImage(url: URL(string: userViewModel.photoURL))
@@ -127,16 +127,16 @@ struct listingView: View {
                         HStack{
                             Text("\(listing?.carDescription ?? "No Data")")
                                 .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                .foregroundColor(.gray)
                                 .multilineTextAlignment(.leading)
                                 .lineLimit(4)
                             Spacer()
                         }
                         HStack{
-                            Text(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())
+                            Text("Listed on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
                                 .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: 375, alignment: .leading)
+                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                .frame(alignment: .leading)
                             Spacer()
                         }
                         Divider()
@@ -158,7 +158,23 @@ struct listingView: View {
                                 }
                             })
                         }
-                        RatingView(rating: $viewModel.rating)
+                        Divider()
+                        HStack{
+                            Text("Reviews")
+                                .font(.custom("Jost", size: 20))
+                                .foregroundStyle(Color.foreground)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
+                        }
+                        HStack{
+                            RatingView(rating: $viewModel.rating, width: 30, height:30)
+                            Spacer()
+                            Text("\(viewModel.rating) stars")
+                                .font(.custom("Jost", size: 15))
+                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                .multilineTextAlignment(.trailing)
+                            
+                        }
                         Button {
                             reviewIsShown.toggle()
                         }label: {
@@ -172,15 +188,18 @@ struct listingView: View {
                         VStack{
                             Spacer()
                             if viewModel.reviews.isEmpty {
-                                Text("There are no reviews for this listing yet.")
+                                Text("There are no reviews for this vehicle yet.")
                                     .font(.custom("Jost-Regular", size: 20))
                                     .foregroundColor(.foreground)
                                     .frame(maxWidth: 375, alignment: .leading)
                             } else {
                                 ForEach(viewModel.reviews) { review in
-                                    HStack {
-                                        ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
-                                        Spacer()
+                                    VStack{
+                                        HStack {
+                                            ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
+                                            Spacer()
+                                        }
+                                        Divider()
                                     }
                                 }
                             }
@@ -205,7 +224,7 @@ struct listingView: View {
                     }
                 }
             }.padding()
-            
+        }
         }
     }
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {

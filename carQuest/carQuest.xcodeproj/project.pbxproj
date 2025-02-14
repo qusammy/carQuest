@@ -204,6 +204,7 @@
 			children = (
 				00F5C0C02CAB07B900856E1E /* rentView.swift */,
 				00BF079B2C80D21E000404AA /* listingCreation.swift */,
+				00CF05342CA3144000E53D2F /* listingView.swift */,
 			);
 			path = Renting;
 			sourceTree = "<group>";
@@ -248,6 +249,15 @@
 				002ABF712C73A3A300FFCC86 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0030CD0F2D5D108C0098B71C /* Auction */ = {
+			isa = PBXGroup;
+			children = (
+				005577842CDE7CC300E9A69A /* AuctionListingView.swift */,
+				005577822CDE777C00E9A69A /* AuctionView.swift */,
+			);
+			path = Auction;
 			sourceTree = "<group>";
 		};
 		00A7236C2D0A012800AF6CEC /* Buying */ = {
@@ -380,11 +390,9 @@
 		6F2EBC912C94923A00EF07FC /* RideQuest */ = {
 			isa = PBXGroup;
 			children = (
+				0030CD0F2D5D108C0098B71C /* Auction */,
 				0016A1112D2EC84900474CBD /* Renting */,
 				00A7236C2D0A012800AF6CEC /* Buying */,
-				005577822CDE777C00E9A69A /* AuctionView.swift */,
-				00CF05342CA3144000E53D2F /* listingView.swift */,
-				005577842CDE7CC300E9A69A /* AuctionListingView.swift */,
 				22D59B642D4D154A00E8961A /* ReviewView.swift */,
 			);
 			path = RideQuest;
