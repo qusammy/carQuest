@@ -352,12 +352,12 @@ struct RatingView: View {
                     ZStack(alignment: .leading) {
                         Rectangle()
                             .frame(width: width)
-                            .foregroundColor(.yellow)
+                            .foregroundColor(.accentColor)
                     }
                 }
                     .mask(stars)
             )
-            .foregroundColor(.gray)
+            .foregroundColor(.background)
             .onDisappear {
                 rating = 0.0
             }

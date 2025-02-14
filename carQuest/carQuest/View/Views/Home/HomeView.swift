@@ -44,6 +44,31 @@ struct HomeView: View {
                     Divider()
                     VStack{
                         HStack{
+                            Text("Liked Vehicles")
+                                .font(Font.custom("Jost-Regular", size:20))
+                            Spacer()
+                            Button(action: {
+                                isPresented.toggle()
+                            }, label: {
+                                Text("See all")
+                                    .font(Font.custom("Jost-Regular", size:15))
+                                    .underline()
+                            })
+                        }
+                        ScrollView(.horizontal, showsIndicators: false){
+                            HStack{
+                                Spacer()
+                                ForEach(viewModel2.likedVehicles) { listing in
+                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                    }.frame(width:115)
+                                }
+                            }
+                        }
+                    }
+                    Divider()
+                    VStack{
+                        HStack{
                             Text("Recently Viewed")
                                 .font(Font.custom("Jost-Regular", size:20))
                             Spacer()
@@ -61,36 +86,13 @@ struct HomeView: View {
                                 ForEach(viewModel2.recentListings) { listing in
                                     NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                                         imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                    }
+                                    }.frame(width:115)
                                 }
                             }
                         }
                     }
                 }
-                VStack{
-                    HStack{
-                        Text("Liked Vehicles")
-                            .font(Font.custom("Jost-Regular", size:20))
-                        Spacer()
-                        Button(action: {
-                            isPresented.toggle()
-                        }, label: {
-                            Text("See all")
-                                .font(Font.custom("Jost-Regular", size:15))
-                                .underline()
-                        })
-                    }
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
-                            Spacer()
-                            ForEach(viewModel2.likedVehicles) { listing in
-                                NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                    imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                }.frame(width:115)
-                            }
-                        }
-                    }
-                }
+                
                 Divider()
                 VStack{
                     HStack{
