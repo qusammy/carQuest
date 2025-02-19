@@ -1,11 +1,3 @@
-//
-//  UserProfileView.swift
-//  carQuest
-//
-//  Created by beraoud_981215 on 9/13/24.
-//new packages:
-// https://github.com/SDWebImage/SDWebImageSwiftUI.git
-
 import SwiftUI
 import Firebase
 import FirebaseAuth

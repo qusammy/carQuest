@@ -1,10 +1,3 @@
-//
-//  CarModel.swift
-//  carQuest
-//
-//  Created by beraoud_981215 on 9/13/24.
-//
-
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
@@ -50,7 +43,7 @@ class ListingViewModel: ObservableObject {
                     
                     return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "")
                     
-//                    return carListing(id: doc.documentID, carDescription: doc["carDescrpition"] as? String ?? "", carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""])
+                    
                 }
             }
         }
@@ -198,7 +191,7 @@ class ListingViewModel: ObservableObject {
             let userID = user!.uid
             let ref = Firestore.firestore().collection("carListings")
             self.recentListings = [carListing]()
-            
+
             ref.getDocuments { snapshot1, err in
                 
                 for document in snapshot1!.documents {

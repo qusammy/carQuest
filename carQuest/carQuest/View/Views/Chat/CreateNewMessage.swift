@@ -1,10 +1,3 @@
-//
-//  CreateNewMessage.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 11/14/24.
-//
-
 import SwiftUI
 import Firebase
 import SDWebImageSwiftUI

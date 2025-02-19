@@ -1,10 +1,3 @@
-//
-//  AuctionView.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 11/8/24.
-//
-
 import SwiftUI
 
 struct AuctionView: View {

@@ -1,10 +1,3 @@
-//
-//  SettingsViews.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 12/11/24.
-//
-
 import Foundation
 import SwiftUI
 

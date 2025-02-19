@@ -1,26 +1,6 @@
-//
-//  UserManager.swift
-//  carQuest
-//
-//  Created by beraoud_981215 on 9/13/24.
-//
-
 import Foundation
 import FirebaseFirestore
 
-//struct CarQuestUser: Identifiable{
-//    var id: String { uid }
-//    
-//    let uid, email, profileImageURL, display_name: String
-//    
-//    init(data: [String: Any]) {
-//        self.uid = data["uid"] as? String ?? ""
-//        self.email = data["email"] as? String ?? ""
-//        self.display_name = data["display_name"] as? String ?? ""
-//        self.profileImageURL = data["profileImageURL"] as? String ?? ""
-//        
-//    }
-//}
 
 struct CarQuestUser: Identifiable{
     var id: String

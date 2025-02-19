@@ -1,9 +1,3 @@
-//
-//  listingView.swift
-//  carQuest
-//
-//  Created by Maddy Quinn on 9/24/24.
-//
 import SwiftUI
 import Firebase
 import FirebaseFirestore
@@ -12,18 +6,18 @@ import SDWebImageSwiftUI
 
 struct listingView: View {
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var isLiked: Bool = false
     @Binding var showSignInView: Bool
-    @StateObject var viewModel = ListingViewModel()
-    @StateObject var userViewModel = UserInfoViewModel()
+    @ObservedObject var viewModel = ListingViewModel()
+    @ObservedObject var userViewModel = UserInfoViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
     @State private var rating: Double = 0.0
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
-    @State private var profileViewIsPresented: Bool = false
+    @State private var reviews = [Review]()
     
     var body: some View {
         NavigationStack{
@@ -106,12 +100,9 @@ struct listingView: View {
                                 }
                             })
                         }
-                       
+                        
                         Divider()
                         HStack{
-                        Button {
-                            profileViewIsPresented.toggle()
-                        } label: {
                             WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
                                 .scaledToFill()
@@ -120,9 +111,8 @@ struct listingView: View {
                             Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
-                        }
-                        Spacer()
-                        Button(action: {
+                            Spacer()
+                            Button(action: {
                                 //brings up message view
                             }, label: {
                                 ZStack{
@@ -145,11 +135,12 @@ struct listingView: View {
                         }
                         HStack{
                             Text("Listed on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
-                                .font(.custom("Jost-Regular", size: 18))
+                                .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
                                 .frame(alignment: .leading)
                             Spacer()
                         }
+                        Divider()
                         HStack{
                             Text("$\(listing?.listingPrice ?? "000.00") per day")
                                 .font(.custom("Jost-Regular", size: 22))
@@ -169,52 +160,47 @@ struct listingView: View {
                             })
                         }
                         Divider()
-                        .fullScreenCover(isPresented: $reviewIsShown) {
+                        HStack{
+                            Text("Reviews")
+                                .font(.custom("Jost", size: 20))
+                                .foregroundStyle(Color.foreground)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
+                        }
+                        HStack{
+                            RatingView(rating: $viewModel.rating, width: 30, height:30)
+                            Spacer()
+                            Text("\(viewModel.rating) stars")
+                                .font(.custom("Jost", size: 15))
+                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                .multilineTextAlignment(.trailing)
+                            
+                        }
+                        Button {
+                            reviewIsShown.toggle()
+                        }label: {
+                            Text("Leave a Review")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: 375, alignment: .leading)
+                        } .fullScreenCover(isPresented: $reviewIsShown) {
                             ReviewView(listing: listing, review: Review())
                         }
                         VStack{
                             Spacer()
                             if viewModel.reviews.isEmpty {
-                                VStack{
-                                    Text("There are no reviews for this vehicle yet.")
-                                        .font(.custom("Jost-Regular", size: 20))
-                                        .foregroundColor(.foreground)
-                                    Button {
-                                        reviewIsShown.toggle()
-                                    }label: {
-                                        Text("Write a Review")
-                                            .font(.custom("Jost-Regular", size: 20))
-                                            .foregroundColor(.accentColor)
-                                    }
-                                }
+                                Text("There are no reviews for this vehicle yet.")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.foreground)
+                                    .frame(maxWidth: 375, alignment: .leading)
                             } else {
-                                VStack{
-                                    HStack{
-                                        RatingView(rating: $viewModel.rating, width: 30, height:30)
-                                        Spacer()
-                                        Text("\(viewModel.rating) stars")
-                                            .font(.custom("Jost", size: 15))
-                                            .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                            .multilineTextAlignment(.trailing)
-                                    }
-                                    Button {
-                                        reviewIsShown.toggle()
-                                    }label: {
-                                        HStack{
-                                            Text("Write a Review")
-                                                .font(.custom("Jost-Regular", size: 20))
-                                                .foregroundColor(.accentColor)
+                                ForEach(viewModel.reviews) { review in
+                                    VStack{
+                                        HStack {
+                                            ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
                                             Spacer()
                                         }
-                                    }
-                                    ForEach(viewModel.reviews) { review in
-                                        VStack{
-                                            HStack {
-                                                ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
-                                                Spacer()
-                                            }
-                                            Divider()
-                                        }
+                                        Divider()
                                     }
                                 }
                             }
@@ -238,18 +224,18 @@ struct listingView: View {
                         }
                     }
                 }
+
+            }.padding()
+            .onChange(of: viewModel.reviews) {
+                reviews = viewModel.reviews.shuffled()
             }
-            .padding()
-            .fullScreenCover(isPresented: $profileViewIsPresented, content: {
-                OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView)
-            })
         }
     }
     
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
         let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
-
+        
         if isLiked == true {
             
             let usersLikedData = [
@@ -261,12 +247,14 @@ struct listingView: View {
         }
         else {
             try await db.collection("carListings").document(listingID).updateData([
-                    "usersLiked": FieldValue.arrayRemove([user])
-                ])
+                "usersLiked": FieldValue.arrayRemove([user])
+            ])
         }
     }
     
-    func checkForLike() async throws {        
+    func checkForLike() async throws {
+        @State var likedVehicles: [String] = []
+        
         let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
         
@@ -283,17 +271,9 @@ struct listingView: View {
             print("Error getting documents: \(error)")
         }
     }
-    //    func averageRating(ratingList: [Int]) {
-    //        print(ratingList)
-    //        var ratingTotal = 0
-    //        var unroundedRating = 0.0
-    //        for rating in ratingList {
-    //            ratingTotal += rating
-    //        }
-    //        unroundedRating = Double(ratingTotal / ratingList.count)
-    //        rating = round(unroundedRating * 10) / 10.0
-    //    }
 }
+
+
 #Preview {
     listingView(showSignInView: .constant(false))
 }

@@ -1,5 +1,3 @@
-//  Created by Maddy Quinn on 9/30/24.
-//
 import SwiftUI
 import Combine
 import Firebase
@@ -9,7 +7,7 @@ import SDWebImage
 import SDWebImageSwiftUI
 
 struct rentView: View {
-    @StateObject var viewModel = ListingViewModel()
+    @ObservedObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
     @State private var creationIsPresented: Bool = false
     @State private var listingIsPresented: Bool = false
@@ -127,18 +125,20 @@ struct rentView: View {
                         ForEach(filteredList){
                             listing in
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName:URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
                             }
                         }
+                        
                     }
                 }
+                
                 .foregroundStyle(Color.foreground)
-                .task {
-                    DispatchQueue.main.async {
-                        viewModel.generateRentListings()
-                        shuffledList = viewModel.rentListings.shuffled()
-                    }
-                }
+            }
+            .onAppear {
+                viewModel.generateRentListings()
+            }
+            .onChange(of: viewModel.rentListings) {
+                shuffledList = viewModel.rentListings.shuffled()
             }
             // filters for the rentView listings
             .fullScreenCover(isPresented: $isPresented, content: {
@@ -170,6 +170,7 @@ struct rentView: View {
                                 .frame(width:25, height:25)
                         })
                     }
+                    
                     List{
                         Section {
                             Picker("Year", selection: $selectedYear) {
@@ -209,9 +210,6 @@ struct rentView: View {
                 }.padding()
             })
             .padding()
-            .task {
-                viewModel.generateRentListings()
-            }
         }
     }
 }
