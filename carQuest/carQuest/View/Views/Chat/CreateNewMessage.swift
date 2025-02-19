@@ -9,7 +9,7 @@ import SwiftUI
 import Firebase
 import SDWebImageSwiftUI
 
-
+// list of users to create message
 struct CreateNewMessage: View{
     
     let didSelectNewUser: (CarQuestUser?) -> ()
@@ -22,11 +22,43 @@ struct CreateNewMessage: View{
         
         NavigationView{
             VStack{
-                TextField("username", text: $userSearch)
+                HStack{
+                    Text("Saved messages")
+                        .font(Font.custom("ZingRustDemo-Base", size: 30))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+                if vm.savedUsers.isEmpty {
+                    HStack{
+                        Text("No saved users.")
+                            .font(.custom("Jost", size: 18))
+                            .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                        Spacer()
+                    }
+                } else {
+                    ScrollView(showsIndicators: false){
+                        ForEach(vm.savedUsers){ user in
+                            Button{
+                                presentationMode.wrappedValue.dismiss()
+                                didSelectNewUser(user)
+                            } label: {
+                                recentMessageTextBox(carUser: user, pfp: user.profileImageURL, displayName: user.display_name, recentMessage: "Hello")
+                            }
+                        }
+                    }.frame(height: 125)
+                    Divider()
+                }
+                HStack{
+                    Text("Create new message")
+                        .font(Font.custom("ZingRustDemo-Base", size: 30))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                }
+                TextField("Search for a user...", text: $userSearch)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(width:350, height:35)
                     .font(.custom("Jost-Regular", size: 20))
-                ScrollView{
+                ScrollView(showsIndicators: false){
                     ForEach(vm.users.filter({ userSearch.isEmpty ? true : $0.display_name.localizedCaseInsensitiveContains(userSearch)})) { user in
                         Button{
                             presentationMode.wrappedValue.dismiss()
@@ -46,10 +78,10 @@ struct CreateNewMessage: View{
                         }
                         Divider()
                     }
-                    Text(vm.errorMessage)
-                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                }.padding()
-            }.toolbar{
+                }
+            }
+            .padding()
+            .toolbar{
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -68,10 +100,19 @@ struct CreateNewMessage: View{
             }
             .onAppear{
                 vm.fetchUsers()
+                Task {
+                    do {
+                        try vm.fetchSavedUsers()
+                    } catch {
+                        
+                    }
+                }
             }
         }.background(Color.background)
     }
-}
+    
+   
+    }
 
 #Preview {
     //MainChatView(showSignInView: .constant(false))

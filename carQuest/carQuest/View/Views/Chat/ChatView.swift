@@ -3,7 +3,7 @@ import Firebase
 import FirebaseAuth
 import SDWebImageSwiftUI
 
-
+// this is the actual chat log view
 struct ChatView: View {
     
     let carUser: CarQuestUser?
@@ -15,7 +15,8 @@ struct ChatView: View {
     
     @ObservedObject var vm: chatViewModel
     @ObservedObject var userVM = UserProfileViewModel()
-    
+    @State private var isSaved: Bool = false
+    @State var user: String?
     @State private var isPresented = false
 
     var body: some View {
@@ -77,18 +78,75 @@ struct ChatView: View {
         
         .toolbar{
             ToolbarItem(placement: .principal){
-                Button(action: {
-                    isPresented.toggle()
-
-                }, label: {
                     Text(carUser?.display_name ?? "$username")
                         .foregroundStyle(Color.foreground)
                         .font(Font.custom("Jost-Regular", size: 25))
-                })
+                }
+            ToolbarItem(placement: .topBarTrailing){
+                Button {
+                    isSaved.toggle()
+                    Task{
+                        do{
+                            try await appendSavedChat(usersSaved: user ?? "", isSaved: isSaved, userID: carUser?.user_id ?? "")
+                        }catch {
+                            
+                        }
+                    }
+                } label: {
+                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                        .resizable()
+                        .foregroundColor(.foreground)
+                        .frame(width:20, height:25)
+                }
             }
-        }.fullScreenCover(isPresented: $isPresented, content: {
-            OtherUserProfile(vm: chatViewModel(carUser: self.carUser), carUser: self.carUser)
-        })
+
+        }
+        .onAppear{
+            Task {
+                do{
+                    try await checkForSave()
+                    user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+                } catch {
+                    
+                }
+            }
+        }
+    }
+    func appendSavedChat(usersSaved: String, isSaved: Bool, userID: String) async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+
+        if isSaved == true {
+            
+            let usersSavedData = [
+                "usersSaved": [usersSaved]
+            ]
+            
+            try await FirebaseManager.shared.firestore.collection("users")
+                .document(carUser?.user_id ?? "NO data").setData(usersSavedData, merge: true)
+        }
+        else {
+            try await db.collection("users").document(carUser?.user_id ?? "").updateData([
+                    "usersSaved": FieldValue.arrayRemove([user])
+                ])
+        }
+    }
+    func checkForSave() async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        do {
+            let querySnapshot = try await db.collection("users").whereField("usersSaved", arrayContains: user)
+                .getDocuments()
+            for document in querySnapshot.documents {
+                
+                if carUser?.user_id == document.documentID {
+                    isSaved = true
+                }
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+        }
     }
 }
 struct ChatView_Previews: PreviewProvider {

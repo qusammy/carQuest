@@ -23,6 +23,7 @@ struct listingView: View {
     @State private var rating: Double = 0.0
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
+    @State private var profileViewIsPresented: Bool = false
     
     var body: some View {
         NavigationStack{
@@ -108,6 +109,9 @@ struct listingView: View {
                        
                         Divider()
                         HStack{
+                        Button {
+                            profileViewIsPresented.toggle()
+                        } label: {
                             WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
                                 .scaledToFill()
@@ -116,8 +120,9 @@ struct listingView: View {
                             Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
-                            Spacer()
-                            Button(action: {
+                        }
+                        Spacer()
+                        Button(action: {
                                 //brings up message view
                             }, label: {
                                 ZStack{
@@ -140,12 +145,11 @@ struct listingView: View {
                         }
                         HStack{
                             Text("Listed on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
-                                .font(.custom("Jost-Regular", size: 20))
+                                .font(.custom("Jost-Regular", size: 18))
                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
                                 .frame(alignment: .leading)
                             Spacer()
                         }
-                        Divider()
                         HStack{
                             Text("$\(listing?.listingPrice ?? "000.00") per day")
                                 .font(.custom("Jost-Regular", size: 22))
@@ -165,47 +169,52 @@ struct listingView: View {
                             })
                         }
                         Divider()
-                        HStack{
-                            Text("Reviews")
-                                .font(.custom("Jost", size: 20))
-                                .foregroundStyle(Color.foreground)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                        }
-                        HStack{
-                            RatingView(rating: $viewModel.rating, width: 30, height:30)
-                            Spacer()
-                            Text("\(viewModel.rating) stars")
-                                .font(.custom("Jost", size: 15))
-                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                .multilineTextAlignment(.trailing)
-                            
-                        }
-                        Button {
-                            reviewIsShown.toggle()
-                        }label: {
-                            Text("Leave a Review")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: 375, alignment: .leading)
-                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                        .fullScreenCover(isPresented: $reviewIsShown) {
                             ReviewView(listing: listing, review: Review())
                         }
                         VStack{
                             Spacer()
                             if viewModel.reviews.isEmpty {
-                                Text("There are no reviews for this vehicle yet.")
-                                    .font(.custom("Jost-Regular", size: 20))
-                                    .foregroundColor(.foreground)
-                                    .frame(maxWidth: 375, alignment: .leading)
+                                VStack{
+                                    Text("There are no reviews for this vehicle yet.")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(.foreground)
+                                    Button {
+                                        reviewIsShown.toggle()
+                                    }label: {
+                                        Text("Write a Review")
+                                            .font(.custom("Jost-Regular", size: 20))
+                                            .foregroundColor(.accentColor)
+                                    }
+                                }
                             } else {
-                                ForEach(viewModel.reviews) { review in
-                                    VStack{
-                                        HStack {
-                                            ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
+                                VStack{
+                                    HStack{
+                                        RatingView(rating: $viewModel.rating, width: 30, height:30)
+                                        Spacer()
+                                        Text("\(viewModel.rating) stars")
+                                            .font(.custom("Jost", size: 15))
+                                            .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                            .multilineTextAlignment(.trailing)
+                                    }
+                                    Button {
+                                        reviewIsShown.toggle()
+                                    }label: {
+                                        HStack{
+                                            Text("Write a Review")
+                                                .font(.custom("Jost-Regular", size: 20))
+                                                .foregroundColor(.accentColor)
                                             Spacer()
                                         }
-                                        Divider()
+                                    }
+                                    ForEach(viewModel.reviews) { review in
+                                        VStack{
+                                            HStack {
+                                                ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
+                                                Spacer()
+                                            }
+                                            Divider()
+                                        }
                                     }
                                 }
                             }
@@ -229,9 +238,13 @@ struct listingView: View {
                         }
                     }
                 }
-            }.padding()
+            }
+            .padding()
+            .fullScreenCover(isPresented: $profileViewIsPresented, content: {
+                OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView)
+            })
         }
-        }
+    }
     
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
         let db = Firestore.firestore()
@@ -253,9 +266,7 @@ struct listingView: View {
         }
     }
     
-    func checkForLike() async throws {
-        @State var likedVehicles: [String] = []
-        
+    func checkForLike() async throws {        
         let db = Firestore.firestore()
         let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
         

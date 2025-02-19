@@ -328,8 +328,8 @@ struct ReviewPod: View {
             HStack {
                 Text(textBody ?? "")
                     .frame(alignment: .leading)
-                    .font(.custom("Jost-Regular", size: textSize ?? 20))
-                    .foregroundColor(Color.foreground)
+                    .font(.custom("Jost-Regular", size: textSize ?? 18))
+                    .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
                 Spacer()
