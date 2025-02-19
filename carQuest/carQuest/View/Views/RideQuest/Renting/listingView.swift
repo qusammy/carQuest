@@ -18,6 +18,7 @@ struct listingView: View {
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
+    @State private var isPresentingOtherProfileView: Bool = false
     
     var body: some View {
         NavigationStack{
@@ -111,6 +112,9 @@ struct listingView: View {
                         }
                         Divider()
                         HStack{
+                        Button {
+                            isPresentingOtherProfileView.toggle()
+                        } label: {
                             WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
                                 .scaledToFill()
@@ -119,7 +123,12 @@ struct listingView: View {
                             Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
-                            Spacer()
+                        }
+                        .fullScreenCover(isPresented: $isPresentingOtherProfileView, content: {
+                            OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView)
+                        })
+
+                        Spacer()
                             if listing?.userID != user {
                                 Button(action: {
                                     //brings up message view

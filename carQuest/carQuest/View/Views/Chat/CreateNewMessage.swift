@@ -10,9 +10,10 @@ struct CreateNewMessage: View{
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = CreateNewMessageViewModel()
     @State private var userSearch = ""
+    @State var createNewMessageIsPresented: Bool = false
+    @Environment(\.dismiss) var dismiss
 
     var body: some View{
-        
         NavigationView{
             VStack{
                 HStack{
@@ -22,11 +23,13 @@ struct CreateNewMessage: View{
                     Spacer()
                 }
                 if vm.savedUsers.isEmpty {
-                    HStack{
-                        Text("No saved users.")
-                            .font(.custom("Jost", size: 18))
-                            .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                        Spacer()
+                    ScrollView(showsIndicators: false){
+                        HStack{
+                            Text("No saved users.")
+                                .font(.custom("Jost", size: 18))
+                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                            Spacer()
+                        }
                     }
                 } else {
                     ScrollView(showsIndicators: false){
@@ -38,57 +41,71 @@ struct CreateNewMessage: View{
                                 recentMessageTextBox(carUser: user, pfp: user.profileImageURL, displayName: user.display_name, recentMessage: "Hello")
                             }
                         }
-                    }.frame(height: 125)
+                    }
                     Divider()
                 }
-                HStack{
-                    Text("Create new message")
-                        .font(Font.custom("ZingRustDemo-Base", size: 30))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
-                TextField("Search for a user...", text: $userSearch)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width:350, height:35)
-                    .font(.custom("Jost-Regular", size: 20))
-                ScrollView(showsIndicators: false){
-                    ForEach(vm.users.filter({ userSearch.isEmpty ? true : $0.display_name.localizedCaseInsensitiveContains(userSearch)})) { user in
-                        Button{
-                            presentationMode.wrappedValue.dismiss()
-                            didSelectNewUser(user)
-                        } label: {
-                            HStack{
-                                WebImage(url: URL(string: user.profileImageURL))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width:45, height:45)
-                                    .clipShape(Circle())
-                                Text(user.display_name)
-                                    .font(Font.custom("Jost-Regular", size: 23))
-                                    .foregroundColor(Color.foreground)
-                                Spacer()
+                
+            }
+            .fullScreenCover(isPresented: $createNewMessageIsPresented) {
+                VStack{
+                    HStack{
+                        Text("Create new message")
+                            .font(Font.custom("ZingRustDemo-Base", size: 30))
+                            .foregroundColor(Color.foreground)
+                        Spacer()
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            Text("Cancel")
+                                .underline()
+                                .font(.custom("Jost-Regular", size: 17))
+                        })
+                    }
+                    TextField("Search for a user...", text: $userSearch)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width:350, height:35)
+                        .font(.custom("Jost-Regular", size: 20))
+                    ScrollView(showsIndicators: false){
+                        ForEach(vm.users.filter({ userSearch.isEmpty ? true : $0.display_name.localizedCaseInsensitiveContains(userSearch)})) { user in
+                            Button{
+                                presentationMode.wrappedValue.dismiss()
+                                didSelectNewUser(user)
+                            } label: {
+                                HStack{
+                                    WebImage(url: URL(string: user.profileImageURL))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:45, height:45)
+                                        .clipShape(Circle())
+                                    Text(user.display_name)
+                                        .font(Font.custom("Jost-Regular", size: 23))
+                                        .foregroundColor(Color.foreground)
+                                    Spacer()
+                                }
                             }
+                            Divider()
                         }
-                        Divider()
                     }
                 }
+                .padding()
             }
             .padding()
             .toolbar{
-                ToolbarItem(placement: .navigationBarTrailing){
+                ToolbarItem(placement: .navigationBarLeading){
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
-                        Text("Cancel")
-                            .foregroundColor(Color.accentColor)
-                            .font(Font.custom("Jost-Regular", size:17))
-                            .underline()
+                        backButton()
                     })
-                } 
-                ToolbarItem(placement: .navigationBarLeading){
-                    Text("Messages")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
+                }
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                        createNewMessageIsPresented.toggle()
+                    }, label: {
+                        Image(systemName: "person.crop.circle.fill.badge.plus")
+                            .resizable()
+                            .frame(width:45, height:40)
+                    })
                 }
             }
             .onAppear{
