@@ -34,6 +34,7 @@ struct LikedVehiclesView: View {
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
                                 imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 200, height: 200, textSize: 20)
                             }
+                            Divider()
                         }
                     }
                     Spacer()
@@ -44,8 +45,8 @@ struct LikedVehiclesView: View {
                 }.foregroundStyle(Color.foreground)
                 Spacer()
             }
+            .padding()
         }
-        .padding()
         .onAppear(){
             Task{
                 do{
@@ -99,8 +100,8 @@ struct RecentlyViewedView: View {
                 }.foregroundStyle(Color.foreground)
                 Spacer()
             }
+            .padding()
         }
-        .padding()
         .onAppear {
             vm.generateUsersClicked()
         }

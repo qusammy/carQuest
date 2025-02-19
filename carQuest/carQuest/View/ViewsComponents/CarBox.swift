@@ -241,8 +241,8 @@ struct listingTextField: View {
     }
 }
 
-struct backButton: View {
 
+struct backButton: View {
     var body: some View {
         HStack{
             Image(systemName: "chevron.backward")
