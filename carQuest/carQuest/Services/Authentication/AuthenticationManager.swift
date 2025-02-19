@@ -72,13 +72,13 @@ final class AuthenticationManager {
             }
     }
     
-    func updateImage(imageURL: String, additionalListing: Int, listingLetter: String) {
+    func updateImage(imageURLs: URL, additionalListing: Int, listingLetter: String) {
         
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
             return
         }
-        imageURLs.append(imageURL)
-        let listingImageData = ["imageName": imageURLs]
+        let imageURLs = [imageURLs.absoluteString]
+        let listingImageData = ["imageName": FieldValue.arrayUnion(imageURLs)]
         FirebaseManager.shared.firestore.collection("carListings")
             .document("\(listingLetter)\(additionalListing)\(uid)").setData(listingImageData, merge: true) { err in
                 if let err = err {

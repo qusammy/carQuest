@@ -6,6 +6,8 @@ import Combine
 import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseStorage
+import SDWebImage
+import SDWebImageSwiftUI
 struct listingCreation: View {
     @Environment(\.dismiss) var dismiss
     
@@ -14,12 +16,13 @@ struct listingCreation: View {
     @StateObject var carViewModel = ListingViewModel()
     
     let db = Firestore.firestore()
-    
+    @State var listingName: String?
+    @State var editListing: Bool
     @State var carType: String
     @State var location: String
     @State var carModel: String
     @State var carMake: String
-    @State var carYear = "2024"
+    @State var carYear: String
     let years = ["1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
     @State var listingPrice: String
     @State var carDescription: String
@@ -41,7 +44,7 @@ struct listingCreation: View {
     @State var selection: Int?
     @State private var selectedImages = [Data]()
     @State private var previewImages = [UIImage]()
-    @State private var imageURLs: [URL] = [URL]()
+    @State var imageURLs: [String] = [""]
     
     
     
@@ -82,7 +85,7 @@ struct listingCreation: View {
                         Spacer()
                     }
                     Picker("Select year of vehicle", selection: $carYear){
-                        ForEach(years, id: \.self) {
+                        ForEach(years.reversed(), id: \.self) {
                             Text($0)
                         }
                     }
@@ -154,8 +157,25 @@ struct listingCreation: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .frame(width:200, height:200)
                                     .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                                
-                                if  previewImages.isEmpty != true {
+                                if imageURLs.isEmpty == false {
+                                    WebImage(url: URL(string: imageURLs[0]))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 200, height: 200)
+                                        .clipped()
+                                        .opacity(0.5)
+                                    if imageURLs.count > 1 {
+                                        Text("+\(imageURLs.count - 1)")
+                                            .frame(width: 30, height: 30)
+                                            .font(.custom("Jost-Regular", size: 15))
+                                            .foregroundStyle(Color.white)
+                                            .background(Color.blue)
+                                            .clipShape(Circle())
+                                            .offset(x: 75, y: 75)
+                                    }
+                                }
+                                else if previewImages.isEmpty != true {
                                     Image(uiImage: previewImages[0])
                                         .resizable()
                                         .scaledToFill()
@@ -176,11 +196,21 @@ struct listingCreation: View {
                                 PhotosPicker("Select image", selection: $photoItem1, matching: .images)
                                     .font(.custom("Jost-Regular", size:20))
                                     .foregroundColor(Color.foreground)
+                                    .onAppear {
+                                        for item in imageURLs {
+                                            let url = URL(string: item)
+                                            if url != nil {
+                                                guard let imageData = try? Data(contentsOf: url!) else { return }
+                                                selectedImages.append(imageData)
+                                            }
+                                        }
+                                    }
                             }
                             .onChange(of: photoItem1) {
                                 Task {
                                     selectedImages.removeAll()
                                     previewImages.removeAll()
+                                    imageURLs.removeAll()
                                     for item in photoItem1 {
                                         if let loaded = try? await item.loadTransferable(type: Data.self) {
                                             selectedImages.append(loaded)
@@ -192,36 +222,46 @@ struct listingCreation: View {
                                         if let loaded = try? await item.loadTransferable(type: Image.self) {
                                             let size = CGSize(width: 300, height: 300)
                                             let uiImage = loaded.getUIImage(newSize: size)
-                                            previewImages.append(uiImage!)
+                                            if previewImages.contains(uiImage!) == false {
+                                                previewImages.append(uiImage!)
+                                            }
                                         } else {
                                             print("Failed")
                                         }
                                     }
+                                    
                                 }
                             }
                         }
                     }
+                    
                     Text(errorText)
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
                         .foregroundStyle(Color.blue)
                     Button {
-                        Task{
-                            do{
-                                try await createListingRenting()
-                                photo1Data = Data()
-                                showError = false
-                                dismiss()
-                            }catch {
-                                showError.toggle()
+                        if carMake != "" || carModel != "" || carType != "" || listingPrice != "" {
+                            Task{
+                                do{
+                                    try await createListingRenting(listingExists: editListing, listingName: listingName ?? "")
+                                    photo1Data = Data()
+                                    showError = false
+                                    dismiss()
+                                    carViewModel.generateRentListings()
+                                    errorText = ""
+                                }catch {
+                                    showError.toggle()
+                                }
                             }
+                        }else {
+                            errorText = "Car make, model, type, and listing price are required fields!"
                         }
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(maxWidth:150, maxHeight:100)
                                 .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                            Text("Post Listing")
+                            Text("Save")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.white)
                         }
@@ -237,94 +277,107 @@ struct listingCreation: View {
             }.padding()
         }
     }
-    func createListingRenting() async throws {
+    func createListingRenting(listingExists: Bool, listingName: String) async throws {
         var additionalListing: Int = 0
         var additionalPhoto: Int = 0
+        var listingID = ""
         guard let userID = Auth.auth().currentUser?.uid else {
             return
         }
-        if listingType == "Rental" {
-            listingLetter = "R"
-        }else if listingType == "Auction" {
-            listingLetter = "A"
-        }else if listingType == "For Sale" {
-            listingLetter = "B"
-        }
-        
-        let document = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
-        
-        if document.exists {
-            additionalListing += 1
-        }
-        
-        let document1 = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
-        
-        if document1.exists {
-            additionalListing += 1
-        }
-        
-        let document2 = try await Firestore.firestore().collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").getDocument()
-        
-        if document2.exists {
-            errorText = "Users are only allowed to create three listings of each type"
+        if listingExists == true {
+            listingID = listingName
+        }else {
+            listingID = "\(listingLetter!)\(additionalListing)\(userID)"
+            
+            
+            if listingType == "Rental" {
+                listingLetter = "R"
+            }else if listingType == "Auction" {
+                listingLetter = "A"
+            }else if listingType == "For Sale" {
+                listingLetter = "B"
+            }
+            
+            let document = try await Firestore.firestore().collection("carListings").document(listingID).getDocument()
+            
+            if document.exists {
+                additionalListing += 1
+            }
+            
+            let document1 = try await Firestore.firestore().collection("carListings").document(listingID).getDocument()
+            
+            if document1.exists {
+                additionalListing += 1
+            }
+            
+            let document2 = try await Firestore.firestore().collection("carListings").document(listingID).getDocument()
+            
+            if document2.exists {
+                errorText = "Users are only allowed to create three listings of each type"
+            }
         }
         
         date = Date.now
         
-        try await db.collection("carListings").document("\(listingLetter!)\(additionalListing)\(userID)").setData([
-                "carMake": carMake,
-                "carModel": carModel,
-                "carType": carType,
-                "carYear": carYear,
-                "userID": userID,
-                "listingType" : "renting",
-                "imageName" : "4.png",
-                "listingPrice": listingPrice,
-                "carDescription": carDescription,
-                "listingID" : "\(listingLetter!)\(additionalListing)\(userID)",
-                "dateCreated" : date,
-                "usersLiked" : [],
-                "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)"
-                
-
+        try await db.collection("carListings").document(listingID).setData([
+            "carMake": carMake,
+            "carModel": carModel,
+            "carType": carType,
+            "carYear": carYear,
+            "userID": userID,
+            "listingType" : "renting",
+            "imageName" : "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5",
+            "listingPrice": listingPrice,
+            "carDescription": carDescription,
+            "listingID" : listingID,
+            "dateCreated" : date,
+            "usersLiked" : [],
+            "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)"
+            
+            
         ], merge: true)
-        for image in selectedImages {
-            let uiImage = UIImage(data: image)
-            listedPhotos = uiImage
-            
-            guard listedPhotos != nil else{
-                print("No image")
-                return
-            }
-            
-            let storageRef = Storage.storage().reference()
-            let imageData = listedPhotos!.jpegData(compressionQuality: 0.8)
-            
-            guard imageData != nil else {
-                print("Problem turning photo into data")
-                return
-            }
-            
-            let path = "listingImages/\(additionalPhoto)\(listingLetter!)\(additionalListing)\(userID).jpeg"
-            let fileRef = storageRef.child(path)
-            
-            
-            fileRef.putData(imageData!, metadata: nil) { (metadata, error) in
-                if error == nil && metadata != nil {
-                    let ref = Storage.storage().reference(withPath: path)
-                    ref.downloadURL { url, err in
-                        if err == nil{
-                            
-                        }
-                        guard let url = url else { return }
-                        AuthenticationManager.shared.updateImage(imageURL: url.absoluteString,additionalListing: additionalListing, listingLetter: listingLetter!)
-                    }
+        if selectedImages.isEmpty == false {
+            try await db.collection("carListings").document(listingID).setData([
+                "imageName" : "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5"
+            ], merge: true)
+            for image in selectedImages {
+                let uiImage = UIImage(data: image)
+                listedPhotos = uiImage
+                
+                guard listedPhotos != nil else{
+                    print("No image")
+                    return
                 }
                 
+                let storageRef = Storage.storage().reference()
+                let imageData = listedPhotos!.jpegData(compressionQuality: 0.8)
+                
+                guard imageData != nil else {
+                    print("Problem turning photo into data")
+                    return
+                }
+                
+                let path = "listingImages/\(additionalPhoto)\(listingID).jpeg"
+                let fileRef = storageRef.child(path)
+                
+                fileRef.putData(imageData!, metadata: nil) { (metadata, error) in
+                    if error == nil && metadata != nil {
+                        let ref = Storage.storage().reference(withPath: path)
+                        ref.downloadURL { url, err in
+                            if err == nil{
+                                
+                            }
+                            guard let url = url else { return }
+                            AuthenticationManager.shared.updateImage(imageURLs: url,additionalListing: additionalListing, listingLetter: listingLetter!)
+                        }
+                    }
+                    
+                }
+                additionalPhoto += 1
             }
-            additionalPhoto += 1
-        }
 
+            selectedImages.removeAll()
+        }
     }
     
 }
@@ -339,5 +392,5 @@ extension Image {
     }
 }
 #Preview {
-    listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", showSignInView: .constant(false))
+    listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", showSignInView: .constant(false))
 }

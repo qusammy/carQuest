@@ -78,7 +78,7 @@ struct rentView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                        listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{

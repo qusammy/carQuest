@@ -18,6 +18,7 @@ struct listingView: View {
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
+    @State private var reload = true
     
     var body: some View {
         NavigationStack{
@@ -27,7 +28,6 @@ struct listingView: View {
                         editIsPresented.toggle()
                     }label: {
                         ZStack{
-                            
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width:125, height:35)
                                 .foregroundColor(Color("appColor"))
@@ -36,7 +36,7 @@ struct listingView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $editIsPresented) {
-                        listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                        listingCreation(listingName: listing?.listingID ?? "", editListing: true, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: listing?.listingPrice ?? "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2, imageURLs: listing?.imageName ?? [""])
                     }
                     
                     Button {
@@ -134,7 +134,7 @@ struct listingView: View {
                             Spacer()
                         }
                         HStack{
-                            Text("Listed on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
+                            Text("Last edited on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
                                 .frame(alignment: .leading)
@@ -208,6 +208,7 @@ struct listingView: View {
                     }
                 }
                 .onAppear{
+                    
                     viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
                         Task {
@@ -227,8 +228,16 @@ struct listingView: View {
 
             }.padding()
             .onChange(of: viewModel.reviews) {
-                reviews = viewModel.reviews.shuffled()
+                viewModel.getRatings(listingID: (listing?.listingID)!)
+                reviews = viewModel.reviews
             }
+            .onChange(of: listing?.listingTitle) {
+                reload.toggle()
+            }
+            .onChange(of: listing?.imageName) {
+                reload.toggle()
+            }
+            
         }
     }
     
