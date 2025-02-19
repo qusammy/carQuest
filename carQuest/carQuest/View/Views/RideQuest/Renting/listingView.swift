@@ -18,7 +18,7 @@ struct listingView: View {
     @State private var editIsPresented: Bool = false
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
-    @State private var reload = true
+    @State private var isPresentingOtherProfileView: Bool = false
     
     var body: some View {
         NavigationStack{
@@ -100,9 +100,62 @@ struct listingView: View {
                                 }
                             })
                         }
-                        
+                        if listing?.userID == user {
+                            HStack{
+                                Button{
+                                    editIsPresented.toggle()
+                                }label: {
+                                    Text("Edit")
+                                        .foregroundColor(.accentColor)
+                                        .font(.custom("Jost-Regular", size: 20))
+                                    
+                                } .fullScreenCover(isPresented: $editIsPresented) {
+                                    listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                }
+                                Spacer()
+                                Button {
+                                    showingDeleteAlert = true
+                                }label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .frame(width:110, height:35)
+                                            .foregroundColor(Color("appColor"))
+                                        HStack{
+                                            Text("Delete")
+                                                .font(Font.custom("Jost-Regular", size: 20))
+                                                .foregroundColor(.white)
+                                            Image(systemName: "trash.fill")
+                                                .resizable()
+                                                .frame(width:20, height:25)
+                                                .foregroundStyle(.white)
+                                        }
+                                    }
+                                }.alert("Are you sure you want to delete this listing?", isPresented: $showingDeleteAlert) {
+                                    Button(role: .destructive) {
+                                        Task {
+                                            do{
+                                                try await Firestore.firestore().collection("carListings").document((listing?.listingID)!).delete()
+                                                dismiss()
+                                            }catch {
+                                                
+                                            }
+                                        }
+                                        
+                                    }label: {
+                                        Text("Delete Listing")
+                                            .font(Font.custom("Jost-Regular", size: 20))
+                                        
+                                    }
+                                }message: {
+                                    Text("This action cannot be undone. \n The info on this listing will be unrecoverable.")
+                                }
+                            }
+                        }
                         Divider()
                         HStack{
+                        Button {
+                            isPresentingOtherProfileView.toggle()
+                        } label: {
                             WebImage(url: URL(string: userViewModel.photoURL))
                                 .resizable()
                                 .scaledToFill()
@@ -111,19 +164,26 @@ struct listingView: View {
                             Text("\(userViewModel.displayName)")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(.foreground)
-                            Spacer()
-                            Button(action: {
-                                //brings up message view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 160, height: 35)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Send a Message")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
+                        }
+                        .fullScreenCover(isPresented: $isPresentingOtherProfileView, content: {
+                            OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView)
+                        })
+
+                        Spacer()
+                            if listing?.userID != user {
+                                Button(action: {
+                                    //brings up message view
+                                }, label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .frame(width: 160, height: 35)
+                                            .foregroundColor(Color("appColor"))
+                                        Text("Send a Message")
+                                            .font(.custom("Jost-Regular", size:20))
+                                            .foregroundColor(.white)
+                                    }
+                                })
+                            }
                         }
                         HStack{
                             Text("\(listing?.carDescription ?? "No Data")")
@@ -146,56 +206,57 @@ struct listingView: View {
                                 .font(.custom("Jost-Regular", size: 22))
                                 .foregroundColor(.foreground)
                             Spacer()
-                            Button(action: {
-                                //brings up message view
-                            }, label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 65, height: 35)
-                                        .foregroundColor(Color("appColor"))
-                                    Text("Book")
-                                        .font(.custom("Jost-Regular", size:20))
-                                        .foregroundColor(.white)
-                                }
-                            })
+                            if listing?.userID != user {
+                                Button(action: {
+                                    //brings up message view
+                                }, label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .frame(width: 65, height: 35)
+                                            .foregroundColor(Color("appColor"))
+                                        Text("Book")
+                                            .font(.custom("Jost-Regular", size:20))
+                                            .foregroundColor(.white)
+                                    }
+                                })
+                            }
                         }
                         Divider()
-                        HStack{
-                            Text("Reviews")
-                                .font(.custom("Jost", size: 20))
-                                .foregroundStyle(Color.foreground)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                        }
-                        HStack{
-                            RatingView(rating: $viewModel.rating, width: 30, height:30)
-                            Spacer()
-                            Text("\(viewModel.rating) stars")
-                                .font(.custom("Jost", size: 15))
-                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                .multilineTextAlignment(.trailing)
-                            
-                        }
-                        Button {
-                            reviewIsShown.toggle()
-                        }label: {
-                            Text("Leave a Review")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: 375, alignment: .leading)
-                        } .fullScreenCover(isPresented: $reviewIsShown) {
-                            ReviewView(listing: listing, review: Review())
-                        }
                         VStack{
                             Spacer()
                             if viewModel.reviews.isEmpty {
                                 Text("There are no reviews for this vehicle yet.")
                                     .font(.custom("Jost-Regular", size: 20))
                                     .foregroundColor(.foreground)
-                                    .frame(maxWidth: 375, alignment: .leading)
+                                Button {
+                                    reviewIsShown.toggle()
+                                }label: {
+                                    Text("Leave a Review")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(.accentColor)
+                                } .fullScreenCover(isPresented: $reviewIsShown) {
+                                    ReviewView(listing: listing, review: Review())
+                                }
                             } else {
                                 ForEach(viewModel.reviews) { review in
                                     VStack{
+                                         HStack{
+                                             RatingView(rating: $viewModel.rating, width: 30, height:30)
+                                             Spacer()
+                                             Text("\(viewModel.rating) stars")
+                                                 .font(.custom("Jost", size: 15))
+                                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                                 .multilineTextAlignment(.trailing)
+                                         }
+                                        Button {
+                                            reviewIsShown.toggle()
+                                        }label: {
+                                            Text("Leave a Review")
+                                                .font(.custom("Jost-Regular", size: 20))
+                                                .foregroundColor(.accentColor)
+                                        } .fullScreenCover(isPresented: $reviewIsShown) {
+                                            ReviewView(listing: listing, review: Review())
+                                        }
                                         HStack {
                                             ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
                                             Spacer()

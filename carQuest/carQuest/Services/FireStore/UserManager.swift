@@ -42,7 +42,7 @@ final class UserManager {
             userData["display_name"] = displayName
         }
         if let description = auth.description {
-            userData["description"] = description
+            userData["description"] = "Hi, I'm new to Car Quest."
             
         }
        

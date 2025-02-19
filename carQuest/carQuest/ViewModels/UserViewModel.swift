@@ -77,6 +77,7 @@ class UserProfileViewModel: ObservableObject{
 class UserInfoViewModel: ObservableObject {
     @Published var displayName: String = ""
     @Published var photoURL: String = ""
+    @Published var description: String = ""
     
     func UserListingInfo() async throws{
         let user = try AuthenticationManager.shared.getAuthenticatedUser()
@@ -87,6 +88,8 @@ class UserInfoViewModel: ObservableObject {
               self.displayName = data ?? ""
               let data2 = document.get("profileImageURL") as? String
               self.photoURL = data2 ?? ""
+              let data3 = document.get("description") as? String
+              self.description = data3 ?? ""
           }
 
     }
@@ -97,7 +100,8 @@ class UserInfoViewModel: ObservableObject {
             let document = try await db.collection("users").document(listing.userID!).getDocument()
             if document.exists {
                 self.displayName = document.get("display_name") as! String
-//                self.photoURL = document.get("profileImageURL") as! String
+                self.photoURL = document.get("profileImageURL") as! String
+                self.description = document.get("description") as! String
             }
         }
     }

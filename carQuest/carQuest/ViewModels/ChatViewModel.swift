@@ -179,12 +179,17 @@ class chatViewModel: ObservableObject {
         }
     }
     
+    func fetchRecentMessage() {
+        
+    }
+    
     @Published var count = 0
 }
 
 class CreateNewMessageViewModel: ObservableObject {
     
     @Published var users = [CarQuestUser]()
+    @Published var savedUsers = [CarQuestUser]()
     @Published var errorMessage = ""
     func fetchUsers() {
         let db = Firestore.firestore()
@@ -210,6 +215,29 @@ class CreateNewMessageViewModel: ObservableObject {
             }
         }
     }
+    func fetchSavedUsers() throws{
+        let user = try AuthenticationManager.shared.getAuthenticatedUser()
+        let db = Firestore.firestore()
+            
+        db.collection("users").whereField("usersSaved", arrayContains: user.uid).getDocuments { snapshot, error in
+                if error == nil {
+                    if let snapshot = snapshot{
+                        DispatchQueue.main.async {
+                            self.savedUsers = snapshot.documents.map { d in
+                                
+                                return CarQuestUser(id: d.documentID,
+                                    display_name: d["display_name"] as? String ?? "",
+                                    email: d["email"] as? String ?? "",
+                                    user_id: d["user_id"] as? String ?? "",
+                                    profileImageURL: d["profileImageURL"] as? String ?? "")
+                            }
+                        }
+                    }
+                } else {
+                    self.errorMessage = "Failed to fetch users."
+                }
+            }
+        }
 }
 
 struct ChatLogs: View {
@@ -267,33 +295,39 @@ struct ChatLogs: View {
                     .padding(.horizontal)
                 }
             }
-            .fullScreenCover(isPresented: $isPresented, content: {
-                OtherUserProfile(vm: chatViewModel(carUser: self.carUser), carUser: self.carUser)
-            })
-
     }
 }
 
 struct recentMessageTextBox: View{
     @State var carUser: CarQuestUser?
     @ObservedObject var vm = CreateNewMessageViewModel()
+    @State var pfp: String
+    @State var displayName: String
+    @State var recentMessage: String
     var body: some View {
         NavigationLink(destination: ChatView(carUser: carUser)){
             VStack(alignment: .leading){
-                HStack{
-                    Image("profileIcon")
-                        .resizable()
-                        .frame(width:60, height:60)
-                    VStack{
-                        Text("recentMessage.display_name")
-                            .font(Font.custom("Jost-Regular", size:25))
+                VStack{
+                    HStack{
+                        WebImage(url: URL(string: pfp))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:45, height:45)
+                            .clipShape(Circle())
+                        Text(displayName)
+                            .font(Font.custom("Jost-Regular", size:23))
                             .foregroundColor(Color.foreground)
-                        Text("recent message")
+                        Spacer()
+                    }
+                    HStack{
+                        Text(recentMessage)
                             .font(Font.custom("Jost-Regular", size:17))
                             .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        Spacer()
+                        
                     }
+                    Spacer()
                 }
-                Divider()
             }
         }
     }

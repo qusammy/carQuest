@@ -11,6 +11,7 @@ class ListingViewModel: ObservableObject {
     @Published var myrentListings: [carListing] = [carListing]()
     @Published var myauctionListings: [carListing] = [carListing]()
     @Published var mybuyListings: [carListing] = [carListing]()
+    @Published var userRentListings: [carListing] = [carListing]()
     @Published var allListings: [carListing] = [carListing]()
     @Published var recentListings: [carListing] = [carListing]()
     @Published var userID: String = ""
@@ -95,6 +96,19 @@ class ListingViewModel: ObservableObject {
             if error == nil && snapshot != nil {
                 self.myrentListings = snapshot!.documents.map { doc in
                     //transforms firbase type "Timestamp" into type "Date"
+                    let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
+                    let create = createdDate.dateValue()
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "")
+                }
+            }
+        }
+    }
+    
+    func generateUserRentListings(userID: String) throws {
+        let user = try AuthenticationManager.shared.getAuthenticatedUser()
+        Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").whereField("userID", isEqualTo: userID).getDocuments() {snapshot, error in
+            if error == nil && snapshot != nil {
+                self.userRentListings = snapshot!.documents.map { doc in
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
                     return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "")
