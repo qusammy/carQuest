@@ -110,7 +110,7 @@ struct listingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    listingCreation(editListing: true, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                                 }
                                 Spacer()
                                 Button {
@@ -288,17 +288,6 @@ struct listingView: View {
                 }
 
             }.padding()
-            .onChange(of: viewModel.reviews) {
-                viewModel.getRatings(listingID: (listing?.listingID)!)
-                reviews = viewModel.reviews
-            }
-            .onChange(of: listing?.listingTitle) {
-                reload.toggle()
-            }
-            .onChange(of: listing?.imageName) {
-                reload.toggle()
-            }
-            
         }
     }
     
