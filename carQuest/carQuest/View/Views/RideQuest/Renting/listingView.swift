@@ -11,6 +11,7 @@ struct listingView: View {
     @Binding var showSignInView: Bool
     @ObservedObject var viewModel = ListingViewModel()
     @ObservedObject var userViewModel = UserInfoViewModel()
+    @StateObject var profileViewModel = UserProfileViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
@@ -19,6 +20,9 @@ struct listingView: View {
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
+    @State private var isPresentingChat: Bool = false
+ 
+
     
     var body: some View {
         NavigationStack{
@@ -171,9 +175,9 @@ struct listingView: View {
 
                         Spacer()
                             if listing?.userID != user {
-                                Button(action: {
-                                    //brings up message view
-                                }, label: {
+                                Button {
+                                    isPresentingChat.toggle()
+                                } label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 15)
                                             .frame(width: 160, height: 35)
@@ -182,7 +186,9 @@ struct listingView: View {
                                             .font(.custom("Jost-Regular", size:20))
                                             .foregroundColor(.white)
                                     }
-                                })
+                                }.fullScreenCover(isPresented: $isPresentingChat) {
+                                    ChatView(carUser: profileViewModel.carUser)
+                                }
                             }
                         }
                         HStack{
@@ -269,9 +275,9 @@ struct listingView: View {
                     }
                 }
                 .onAppear{
-                    
-                    viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
+                    viewModel.getRatings(listingID: (listing?.listingID)!)
+                    profileViewModel.getUser(uid: (listing?.userID)!)
                         Task {
                             do{
                                 try await userViewModel.getUserInfo(listing: listing!)

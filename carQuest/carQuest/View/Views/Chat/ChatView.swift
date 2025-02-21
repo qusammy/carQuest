@@ -12,7 +12,7 @@ struct ChatView: View {
         self.carUser = carUser
         self.vm = .init(carUser: carUser)
     }
-    
+    @Environment(\.dismiss) var dismiss
     @ObservedObject var vm: chatViewModel
     @ObservedObject var userVM = UserProfileViewModel()
     @State private var isSaved: Bool = false
@@ -21,6 +21,26 @@ struct ChatView: View {
 
     var body: some View {
         VStack{
+            Button(action: {
+                dismiss()
+            }, label: {
+                HStack{
+                    backButton()
+                    Spacer()
+                }
+            })
+            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            HStack {
+                WebImage(url: URL(string: carUser?.profileImageURL ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width:55, height:55)
+                    .clipShape(Circle())
+                Text(carUser?.display_name ?? "")
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundColor(.foreground)
+            }
             ScrollView{
                 ScrollViewReader { ScrollViewProxy in
                     Text("Keep your messages appropriate. You can always report another user by going to their profile and clicking 'Report'")

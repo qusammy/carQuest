@@ -61,7 +61,7 @@ class UserProfileViewModel: ObservableObject{
             guard let data = snapshot?.data() else {
                 self.errorMessage = "No data found"
                 return }
-            let uid = data["uid"] as? String ?? ""
+            let uid = data["user_id"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let display_name = data["display_name"] as? String ?? ""
             let description = data["description"] as? String ?? ""
@@ -71,6 +71,26 @@ class UserProfileViewModel: ObservableObject{
         }
     }
     
+    func getUser(uid: String){
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print("Failed to fetch current user", error)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return }
+            let uid = data["user_id"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let display_name = data["display_name"] as? String ?? ""
+            let description = data["description"] as? String ?? ""
+            let profileImageURL = data["profileImageURL"] as? String ?? "profileIcon"
+
+            self.carUser = CarQuestUser(id: "", display_name: display_name, email: email, user_id: uid, profileImageURL: profileImageURL, description: description)
+        }
+    }
 
 }
 
