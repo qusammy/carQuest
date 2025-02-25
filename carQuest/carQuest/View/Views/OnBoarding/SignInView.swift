@@ -8,6 +8,7 @@ struct SignInView: View {
     @Binding var showSignInView: Bool
     @State private var resetPWisPresented: Bool = false
     @State private var signUpIsPresented: Bool = false
+    @State private var phoneCheckIsPresented: Bool = false
     
     
     var body: some View {
@@ -43,25 +44,15 @@ struct SignInView: View {
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
             VStack{
-                Button(action: {
+                Button{
                     Task {
-                        do {
-                            try await viewModel.signIn()
+                        signInUser(email: viewModel.email, password: viewModel.password)
                             let user = Auth.auth().currentUser
                             if user != nil {
                                 showSignInView = false
                             }
-                        }catch {
-                            if viewModel.email.isEmpty {
-                                viewModel.errorText = "Please provide a valid email."
-                            }else if viewModel.password.isEmpty {
-                                viewModel.errorText = "Password must have at least 6 characters."
-                            }else {
-                                viewModel.errorText = "Your email or password is incorrect."
-                            }
-                        }
                     }
-                }, label: {
+                } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width:250, height:50)
@@ -70,7 +61,9 @@ struct SignInView: View {
                             .font(.custom("Jost-Regular", size: 25))
                             .foregroundColor(.white)
                     }
-                })
+                }.fullScreenCover(isPresented: $phoneCheckIsPresented) {
+                    PhoneSignIn(email: viewModel.email, password: viewModel.password)
+                }
                 HStack {
                     Text("Forgot Password?")
                         .font(Font.custom("Jost-Regular", size:20))
@@ -134,6 +127,21 @@ struct SignInView: View {
             .font(.system(size: 30))
             .scaleEffect(show ? 1 : 0)
             .frame(width:20, height: 20)
+    }
+    
+    func signInUser(email: String, password: String){
+       Auth.auth().signIn(
+            withEmail: email,
+            password: password
+       ) { (result, error) in
+           let authError = error! as NSError
+           if authError.code == AuthErrorCode.secondFactorRequired.rawValue {
+               self.phoneCheckIsPresented.toggle()
+           }
+           else {
+               
+           }
+       }
     }
     
 

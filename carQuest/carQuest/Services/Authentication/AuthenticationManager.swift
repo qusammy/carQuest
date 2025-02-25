@@ -51,10 +51,27 @@ final class AuthenticationManager {
         try Auth.auth().signOut()
     }
     
-    @discardableResult
-    func signInUser(email: String, password: String) async throws -> AuthDataResultModel {
-        let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
-        return AuthDataResultModel(user: authDataResult.user)
+    func signInUser(email: String, password: String){
+       Auth.auth().signIn(
+            withEmail: email,
+            password: password
+       ) { (result, error) in
+           let authError = error! as NSError
+           if authError.code == AuthErrorCode.secondFactorRequired.rawValue {
+               // The user is a multi-factor user. Second factor challenge is required.
+               let resolver =
+               authError.userInfo[AuthErrorUserInfoMultiFactorResolverKey] as! MultiFactorResolver
+               let hint = resolver.hints[0] as! PhoneMultiFactorInfo
+               PhoneAuthProvider.provider().verifyPhoneNumber(
+                with: hint,
+                uiDelegate: nil,
+                multiFactorSession: resolver.session
+               ) { (verificationId, error) in
+                   // verificationId will be needed for sign-in completion.
+               }
+           }
+           
+       }
     }
     
     func updateProfilePicture(photoURL: URL){
@@ -113,6 +130,7 @@ final class AuthenticationManager {
         let authDataResult = try await Auth.auth().signIn(with: credential)
         return AuthDataResultModel(user: authDataResult.user)
     }
+
 }
 
 

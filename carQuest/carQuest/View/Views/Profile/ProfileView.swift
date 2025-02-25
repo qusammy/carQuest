@@ -15,6 +15,7 @@ struct ProfileView: View {
     @State var showNewMessageScreen = false
     @State var shouldNavigateToSettingView = false
     @State private var errorText = ""
+    @State private var presenting2FA: Bool = false
     var body: some View {
         NavigationView{
             VStack {
@@ -28,14 +29,14 @@ struct ProfileView: View {
                                 Text("Profile")
                                     .font(.custom("Jost-Regular", size:20))
                                 .foregroundColor(Color.foreground) }
-
-                        
-                        NavigateToSetting(destination: AnyView.init(MyListingsView( showSignInView: $showSignInView)), title: "Listings")
-                        NavigateToSetting(destination: AnyView.init(PurchasesView(showSignInView: $showSignInView)), title: "Purchases & Payment")
-                        NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Push Notifications")
-                        NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Connections")
-                        NavigateToSetting(destination: AnyView.init(PrivacyView(showSignInView: $showSignInView)), title: "Privacy")
-                        NavigateToSetting(destination: AnyView.init(AboutCarQuest(showSignInView: $showSignInView)), title: "About Car Quest")
+                            
+                            
+                            NavigateToSetting(destination: AnyView.init(MyListingsView( showSignInView: $showSignInView)), title: "Listings")
+                            NavigateToSetting(destination: AnyView.init(PurchasesView(showSignInView: $showSignInView)), title: "Purchases & Payment")
+                            NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Push Notifications")
+                            NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Connections")
+                            NavigateToSetting(destination: AnyView.init(PrivacyView(showSignInView: $showSignInView)), title: "Privacy")
+                            NavigateToSetting(destination: AnyView.init(AboutCarQuest(showSignInView: $showSignInView)), title: "About Car Quest")
                             if Auth.auth().currentUser?.isEmailVerified == false {
                                 Button {
                                     Task {
@@ -66,67 +67,80 @@ struct ProfileView: View {
                                     Text("You should have received an email with instructions on how to verify your email address.")
                                 }
                             }
-                        Button {
-                            showingSignOutAlert = true
+                            if Auth.auth().currentUser?.isEmailVerified == true {
+                                Button {
+                                    presenting2FA.toggle()
+                                } label: {
+                                    Text("2-Factor Authentication")
+                                        .font(Font.custom("Jost-Regular", size: 20))
+                                        .foregroundStyle(Color.accentColor)
+                                    
+                                }
+                                .fullScreenCover(isPresented: $presenting2FA) {
+                                    PhoneLink()
+                                }
+                            }
+                            Button {
+                                showingSignOutAlert = true
                             }label: {
                                 Text("Log Out")
                                     .font(Font.custom("Jost-Regular", size: 20))
                                     .foregroundStyle(Color.accentColor)
                             }.alert("Are you sure you want to log out?", isPresented: $showingSignOutAlert) {
-                        Button(role: .destructive) {
-                                Task {
-                                    do {
-                                    try viewModel.signOut()
-                                        showSignInView = true
-                                    }catch {
-                                        print(error)
-                                            }
+                                Button(role: .destructive) {
+                                    Task {
+                                        do {
+                                            try viewModel.signOut()
+                                            showSignInView = true
+                                        }catch {
+                                            print(error)
                                         }
+                                    }
                                 }label: {
                                     Text("Log Out")
                                 }
                             }
-                        Button {
-                            showingDeleteAlert = true
+                            Button {
+                                showingDeleteAlert = true
                             }label: {
-                            Text("Delete Account")
-                                .font(Font.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.accentColor)
-                                }.alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
-                                    Button(role: .destructive) {
-                                        Task {
-                                            do {
-                                                try await viewModel.deleteAccount()
-                                                showSignInView = true
-                                            }catch {
-                                                errorText = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
-                                            }
+                                Text("Delete Account")
+                                    .font(Font.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.accentColor)
+                            }.alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
+                                Button(role: .destructive) {
+                                    Task {
+                                        do {
+                                            try await viewModel.deleteAccount()
+                                            showSignInView = true
+                                        }catch {
+                                            errorText = "This operation is sensitive and requires recent authentication. Log in again before retrying this request."
                                         }
-                                    }label: {
-                                        Text("Delete Account")
-                                            .font(Font.custom("Jost-Regular", size: 20))
                                     }
-                                }message: {
-                                    Text("This action cannot be undone. \n The info on this account will be unrecoverable")
+                                }label: {
+                                    Text("Delete Account")
+                                        .font(Font.custom("Jost-Regular", size: 20))
                                 }
+                            }message: {
+                                Text("This action cannot be undone. \n The info on this account will be unrecoverable")
                             }
+                        }
                         Text(errorText)
                             .font(Font.custom("Jost-Regular", size: 20))
                             .foregroundColor(.blue)
                     }.padding()
-
-                    }.task {
-                        let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-                        self.showSignInView = currentUser == nil
-                        try? await viewModel.loadCurrentUser()
-                        if Auth.auth().currentUser?.isEmailVerified == true {
-                            showingVerifyButton = false
-                        }
-                    }   .foregroundColor(.accentColor)
-                        .background(Color.background)
-                        .scrollContentBackground(.hidden)
-                        .listRowBackground(Color(.background))
-                }
+                    
+                }.task {
+                    let currentUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                    self.showSignInView = currentUser == nil
+                    try? await viewModel.loadCurrentUser()
+                    if Auth.auth().currentUser?.isEmailVerified == true {
+                        showingVerifyButton = false
+                    }
+                }   .foregroundColor(.accentColor)
+                    .background(Color.background)
+                    .scrollContentBackground(.hidden)
+                    .listRowBackground(Color(.background))
+            }
             .onChange(of: showSignInView) {
                 Task {
                     do {
@@ -136,9 +150,9 @@ struct ProfileView: View {
                     }
                 }
             }
-            }.navigationBarTitleDisplayMode(.inline)
-        }
+        }.navigationBarTitleDisplayMode(.inline)
     }
+}
 
 #Preview {
     ProfileView(showSignInView: .constant(false))

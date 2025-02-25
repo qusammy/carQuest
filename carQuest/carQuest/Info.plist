@@ -14,6 +14,16 @@
 				<string>com.googleusercontent.apps.430401003107-hv1ac1e0su827phcm68gd57ulu87br3s</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-430401003107-ios-49925345c34ca376cf2256</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>430401003107-hv1ac1e0su827phcm68gd57ulu87br3s.apps.googleusercontent.com</string>
@@ -22,6 +32,8 @@
 		<string>ZingRustDemo-Base.otf</string>
 		<string>Jost-Regular.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array/>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

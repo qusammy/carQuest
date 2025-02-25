@@ -83,7 +83,7 @@ final class SignInEmailViewModel: ObservableObject {
         }
     }
     
-    func signIn() async throws {
+    func signIn() {
         guard !email.isEmpty, !password.isEmpty else {
             if email.isEmpty {
                 errorText = "Please enter a vaild email"
@@ -92,7 +92,7 @@ final class SignInEmailViewModel: ObservableObject {
             }
             return
         }
-        try await AuthenticationManager.shared.signInUser(email: email, password: password)
+        AuthenticationManager.shared.signInUser(email: email, password: password)
     }
     
     func resetPassword(email: String) async throws {
