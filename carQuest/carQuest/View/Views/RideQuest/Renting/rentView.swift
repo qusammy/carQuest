@@ -183,7 +183,6 @@ struct rentView: View {
                             Picker("Make", selection: $selectedMake) {
                                 ForEach(makes, id: \.self) {
                                     Text($0)
-                                        
                                 }
                             }.font(.custom("Jost", size: 18))
                         }

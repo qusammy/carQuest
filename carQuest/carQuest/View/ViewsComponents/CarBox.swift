@@ -113,7 +113,8 @@ struct headline: View {
     var body: some View {
         HStack{
             Text(headerText)
-                .font(Font.custom("ZingRustDemo-Base", size:30))
+                .font(Font.custom("Jost", size:25))
+                .foregroundStyle(Color.foreground)
             Spacer()
         }
     }
@@ -365,6 +366,30 @@ struct RatingView: View {
             
         } else {
             Text("")
+        }
+    }
+}
+
+struct NavigateToInfo: View {
+    
+    @State var destination: AnyView
+    @State var shouldNavigateToSettingView: Bool = false
+    @State var title: String
+    
+    var body: some View {
+        VStack{
+            HStack{
+                NavigationLink(destination: destination, isActive: $shouldNavigateToSettingView) {
+                    Text(title)
+                        .font(.custom("Jost-Regular", size: 20))
+                        .foregroundColor(Color.foreground)
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                        .frame(width:35, height:30)
+                        .foregroundColor(.accentColor)
+                }
+            }
+            Divider()
         }
     }
 }
