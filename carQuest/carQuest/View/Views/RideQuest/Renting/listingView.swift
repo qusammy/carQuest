@@ -69,7 +69,7 @@ struct listingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                                 }
                                 Spacer()
                                 Button {
@@ -125,7 +125,7 @@ struct listingView: View {
                                 .foregroundColor(.foreground)
                         }
                         .fullScreenCover(isPresented: $isPresentingOtherProfileView, content: {
-                            OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView)
+                            OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView, reportReason: "")
                         })
 
                         Spacer()
@@ -197,25 +197,25 @@ struct listingView: View {
                                     ReviewView(listing: listing, review: Review())
                                 }
                             } else {
+                                HStack{
+                                    RatingView(rating: $viewModel.rating, width: 30, height:30)
+                                    Spacer()
+                                    Text("\(viewModel.rating) stars")
+                                        .font(.custom("Jost", size: 15))
+                                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                        .multilineTextAlignment(.trailing)
+                                }
+                                Button {
+                                    reviewIsShown.toggle()
+                                }label: {
+                                    Text("Leave a Review")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(.accentColor)
+                                } .fullScreenCover(isPresented: $reviewIsShown) {
+                                    ReviewView(listing: listing, review: Review())
+                                }
                                 ForEach(viewModel.reviews) { review in
                                     VStack{
-                                         HStack{
-                                             RatingView(rating: $viewModel.rating, width: 30, height:30)
-                                             Spacer()
-                                             Text("\(viewModel.rating) stars")
-                                                 .font(.custom("Jost", size: 15))
-                                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                                 .multilineTextAlignment(.trailing)
-                                         }
-                                        Button {
-                                            reviewIsShown.toggle()
-                                        }label: {
-                                            Text("Leave a Review")
-                                                .font(.custom("Jost-Regular", size: 20))
-                                                .foregroundColor(.accentColor)
-                                        } .fullScreenCover(isPresented: $reviewIsShown) {
-                                            ReviewView(listing: listing, review: Review())
-                                        }
                                         HStack {
                                             ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
                                             Spacer()

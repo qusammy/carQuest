@@ -6,10 +6,11 @@ import Combine
 import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseStorage
+import MapKit
+
 struct listingCreation: View {
     @Environment(\.dismiss) var dismiss
     
-    @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var viewModel = ProfileViewModel()
     @StateObject var carViewModel = ListingViewModel()
     
@@ -19,8 +20,8 @@ struct listingCreation: View {
     @State var location: String
     @State var carModel: String
     @State var carMake: String
-    @State var carYear = "2024"
-    let years = ["1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+    @State var carYear: String
+
     @State var listingPrice: String
     @State var carDescription: String
     @State var date = Date()
@@ -43,25 +44,38 @@ struct listingCreation: View {
     @State private var previewImages = [UIImage]()
     @State private var imageURLs: [URL] = [URL]()
     
+    @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     
+    @State var showYearPicker = false
+    @State var showMakePicker = false
+    @State var showModelPicker = false
+    @State var showTypePicker = false
     
+//    struct IdentifiableInfo: Identifiable {
+//        var id = UUID()
+//        var name: String
+//        var navigationLink: AnyView
+//    }
+//    
+//    @State var info: [IdentifiableInfo] = [
+//        IdentifiableInfo(name: "Year", navigationLink: AnyView.init(yearPickerView()))]
+//    
+    @State var yearPicker = false
     var body: some View {
         NavigationView{
             VStack{
-                Button(action: {
-                    dismiss()
-                }, label: {
-                    HStack{
-                        backButton()
-                        Spacer()
-                    }
-                })
-                .navigationBarTitleDisplayMode(.inline)
                 HStack{
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        HStack{
+                            backButton()
+                        }
+                    })
+                    Spacer()
                     Text("List a Vehicle")
-                        .font(Font.custom("Jost-Regular", size:30))
-                        .frame(maxWidth: 275, alignment: .leading)
-                    
+                        .font(Font.custom("ZingRustDemo-Base", size:32))
+                    Spacer()
                     ZStack{
                         RoundedRectangle(cornerRadius: 15)
                             .frame(maxWidth:80, maxHeight:40)
@@ -69,114 +83,21 @@ struct listingCreation: View {
                         Text("Preview")
                             .font(.custom("Jost-Regular", size: 20))
                             .foregroundColor(.white)
-                    }.onTapGesture {
+                        }.onTapGesture {
                         previewListing = true}
-                    .sheet(isPresented: $previewListing){
-                        carQuest.previewListing(carYear: carYear, make: carMake, model: carModel, carDescription: carDescription, typeOfCar: carType, date: date, listingPrice: listingPrice, listedPhotos: previewImages, isLiked: false)
+                            .sheet(isPresented: $previewListing){
+                            carQuest.previewListing(carYear: carYear, make: carMake, model: carModel, carDescription: carDescription, typeOfCar: carType, date: date, listingPrice: listingPrice, listedPhotos: previewImages, isLiked: false)
                     }
                 }
-                Divider()
                 ScrollView(showsIndicators:false){
+                    //photos
+                    Group {
+                    headline(headerText: "Photos")
                     HStack{
-                        headline(headerText: "Year")
-                        Spacer()
-                    }
-                    Picker("Select year of vehicle", selection: $carYear){
-                        ForEach(years, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .frame(width:375, height:100)
-                    .pickerStyle(.inline)
-                    
-                    headline(headerText: "Make")
-                    listingTextField(carFactor: $carMake, textFieldText: "BMW, Honda, etc.")
-                    
-                    headline(headerText: "Model")
-                    listingTextField(carFactor: $carModel, textFieldText: "Civic, 4Runner, etc.")
+                        PhotosPicker("Select images", selection: $photoItem1, matching: .images)
+                            .font(.custom("Jost-Regular", size:20))
+                            .foregroundStyle(Color.accentColor)
                         
-                    headline(headerText: "Type")
-                    listingTextField(carFactor: $carType, textFieldText: "Sedan, hatchback, etc.")
-                    
-                    headline(headerText: "Description")
-                    listingTextField(carFactor: $carDescription, textFieldText: "Description of vehicle")
-                    
-                    HStack{
-                        Text("Price")
-                            .font(Font.custom("ZingRustDemo-Base", size:30))
-                            .foregroundColor(.foreground)
-                        Text("per day")
-                            .font(.custom("Jost-Regular", size: 20))
-                            .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
-                        Spacer()
-                    }
-                    listingTextField(carFactor: $listingPrice, textFieldText: "000.00")
-                        .underline()
-                        .keyboardType(.numberPad)
-                    
-                    HStack{
-                        headline(headerText: "Location")
-                        Spacer()
-                    }
-                    Group{
-                        if locationManager.userLocation == nil {
-                            ZStack{
-                                Button(action: {
-                                    LocationManager.shared.requestLocation()
-                                }, label: {
-                                    Text("Request location")
-                                        .font(.custom("Jost-Regular", size: 20))
-                                        .frame(maxWidth: 375, alignment: .leading)
-                                        .multilineTextAlignment(.leading)
-                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                })
-                            }
-                        } else {
-                            Text("Location accessed")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .frame(maxWidth: 375, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                        }
-                    }
-                    HStack{
-                        headline(headerText: "Photos")
-                        Spacer()
-                    }
-                    Text("CarQuest recommends you upload photos with a 1:1 ratio.")
-                        .font(.custom("Jost-Regular", size: 15))
-                        .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
-                        .frame(maxWidth: 375, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width:200, height:200)
-                                    .foregroundColor(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))
-                                
-                                if  previewImages.isEmpty != true {
-                                    Image(uiImage: previewImages[0])
-                                        .resizable()
-                                        .scaledToFill()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 200, height: 200)
-                                        .clipped()
-                                        .opacity(0.5)
-                                    if previewImages.count > 1{
-                                        Text("+\(previewImages.count - 1)")
-                                            .frame(width: 30, height: 30)
-                                            .font(.custom("Jost-Regular", size: 15))
-                                            .foregroundStyle(Color.white)
-                                            .background(Color.blue)
-                                            .clipShape(Circle())
-                                            .offset(x: 75, y: 75)
-                                    }
-                                }
-                                PhotosPicker("Select image", selection: $photoItem1, matching: .images)
-                                    .font(.custom("Jost-Regular", size:20))
-                                    .foregroundColor(Color.foreground)
-                            }
                             .onChange(of: photoItem1) {
                                 Task {
                                     selectedImages.removeAll()
@@ -199,12 +120,193 @@ struct listingCreation: View {
                                     }
                                 }
                             }
+                        Spacer()
+                    }
+                    if previewImages.isEmpty != true {
+                        ScrollView(.horizontal, showsIndicators: false){
+                            HStack{
+                                Image(uiImage: previewImages[0])
+                                    .resizable()
+                                    .scaledToFill()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 200, height: 200)
+                                    .clipped()
+                                if previewImages.count > 1{
+                                    Image(uiImage: previewImages[1])
+                                        .resizable()
+                                        .scaledToFill()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 200, height: 200)
+                                        .clipped()
+                                    if previewImages.count > 2{
+                                        Image(uiImage: previewImages[2])
+                                            .resizable()
+                                            .scaledToFill()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 200, height: 200)
+                                            .clipped()
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        HStack{
+                            Text("Car Quest recommends to upload photos with a 1:1 ratio.")
+                                .font(.custom("Jost-Regular", size: 15))
+                                .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                                .multilineTextAlignment(.leading)
+                            Spacer()
                         }
                     }
                     Text(errorText)
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
                         .foregroundStyle(Color.blue)
+                }
+                
+                    Divider()
+                    
+                    //description
+                    Group{
+                        headline(headerText: "Description")
+                        TextField("eg. heated seats, all wheel drive", text: $carDescription, axis: .vertical)
+                            .padding(6)
+                            .font(.custom("Jost", size: 18))
+                            .frame(width:365, height:150, alignment: .topLeading)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 3)
+                                    .stroke(.gray.opacity(0.2), lineWidth: 2)
+                            }
+                        }
+                    
+                    Divider()
+                    
+                    // year, make, model, type
+                    Group{
+                        headline(headerText: "Vehicle Information")
+                        VStack{
+                            HStack{
+                                if carYear.isEmpty{
+                                    Text("Year")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                } else{
+                                    Text(carYear)
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.forward")
+                                    .frame(width:35, height:30)
+                                    .foregroundColor(.accentColor)
+                                }.onTapGesture {
+                                    showYearPicker.toggle()
+                                }.sheet(isPresented: $showYearPicker, content: {
+                                    yearPickerView(carYear: $carYear)
+                                })
+                           Divider()
+                            HStack{
+                                if carMake.isEmpty{
+                                    Text("Make")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                } else{
+                                    Text(carMake)
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.forward")
+                                    .frame(width:35, height:30)
+                                    .foregroundColor(.accentColor)
+                                }.onTapGesture {
+                                    showMakePicker.toggle()
+                                }.sheet(isPresented: $showMakePicker, content: {
+                                    makePickerView(carMake: $carMake)
+                                })
+                            Divider()
+                            HStack{
+                                if carModel.isEmpty{
+                                    Text("Model")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                } else{
+                                    Text(carModel)
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.forward")
+                                    .frame(width:35, height:30)
+                                    .foregroundColor(.accentColor)
+                                }.onTapGesture {
+                                    showModelPicker.toggle()
+                                }.sheet(isPresented: $showModelPicker, content: {
+                                    modelPickerView(carModel: $carModel)
+                                })
+                            Divider()
+                            HStack{
+                                if carType.isEmpty{
+                                    Text("Type")
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                } else{
+                                    Text(carType)
+                                        .font(.custom("Jost-Regular", size: 20))
+                                        .foregroundColor(Color.foreground)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.forward")
+                                    .frame(width:35, height:30)
+                                    .foregroundColor(.accentColor)
+                                }.onTapGesture {
+                                    showTypePicker.toggle()
+                                }.sheet(isPresented: $showTypePicker, content: {
+                                    typePickerView(carType: $carType)
+                                })
+                        }.frame(width:350)
+                    }
+                    
+                    Divider()
+                    
+                    // price
+                    Group{
+                        HStack{
+                            Text("Price")
+                                .font(Font.custom("Jost", size:25))
+                                .foregroundStyle(Color.foreground)
+                            Spacer()
+                            Text("$")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .italic()
+                                .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                            TextField("000.00", text: $listingPrice)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(width:100, height:35)
+                                .font(.custom("Jost-Regular", size: 20))
+                                .keyboardType(.numberPad)
+                            Text("*per day")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .italic()
+                                .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        }
+                    }
+                    
+                    
+                    
+                    HStack{
+                        headline(headerText: "Location")
+                        Spacer()
+                    }
+                    HStack{
+                        Map(position: $position){
+                            
+                        }
+                        .frame(width:300, height:300)
+                        .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                        Spacer()
+                    }
+                    
                     Button {
                         Task{
                             do{
@@ -234,9 +336,15 @@ struct listingCreation: View {
                         .font(Font.custom("Jost-Regular", size:20))
                         .foregroundStyle(Color.accentColor)
                 }
-            }.padding()
+            }
+            .padding()
+            .onAppear(){
+                CLLocationManager().requestWhenInUseAuthorization()
+            }
         }
+        
     }
+    
     func createListingRenting() async throws {
         var additionalListing: Int = 0
         var additionalPhoto: Int = 0
@@ -320,11 +428,9 @@ struct listingCreation: View {
                         AuthenticationManager.shared.updateImage(imageURL: url.absoluteString,additionalListing: additionalListing, listingLetter: listingLetter!)
                     }
                 }
-                
             }
             additionalPhoto += 1
         }
-
     }
     
 }
@@ -339,5 +445,8 @@ extension Image {
     }
 }
 #Preview {
-    listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", showSignInView: .constant(false))
+    listingCreation(carType: "", location: "", carModel: "", carMake: "", carYear: "",  listingPrice: "", carDescription: "", showSignInView: .constant(false))
 }
+
+
+

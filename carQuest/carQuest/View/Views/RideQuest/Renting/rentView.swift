@@ -78,7 +78,7 @@ struct rentView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(carType: "", location: "", carModel: "", carMake: "", listingPrice: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                        listingCreation(carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -183,7 +183,6 @@ struct rentView: View {
                             Picker("Make", selection: $selectedMake) {
                                 ForEach(makes, id: \.self) {
                                     Text($0)
-                                        
                                 }
                             }.font(.custom("Jost", size: 18))
                         }
