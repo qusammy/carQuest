@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 struct listingCreation: View {
     @Environment(\.dismiss) var dismiss
     
-    @ObservedObject var locationManager = LocationManager.shared
+    @StateObject var locationManager = LocationManager()
     @StateObject private var viewModel = ProfileViewModel()
     @StateObject var carViewModel = ListingViewModel()
     
@@ -22,7 +22,7 @@ struct listingCreation: View {
     @State var location: String
     @State var carModel: String
     @State var carMake: String
-    @State var carYear: String
+    @State var carYear: String = "2025"
     let years = ["1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
     @State var listingPrice: String
     @State var carDescription: String
@@ -45,6 +45,7 @@ struct listingCreation: View {
     @State private var selectedImages = [Data]()
     @State private var previewImages = [UIImage]()
     @State var imageURLs: [String] = [""]
+    
     
     
     
@@ -122,25 +123,21 @@ struct listingCreation: View {
                         Spacer()
                     }
                     Group{
-                        if locationManager.userLocation == nil {
-                            ZStack{
-                                Button(action: {
-                                    LocationManager.shared.requestLocation()
-                                }, label: {
-                                    Text("Request location")
-                                        .font(.custom("Jost-Regular", size: 20))
-                                        .frame(maxWidth: 375, alignment: .leading)
-                                        .multilineTextAlignment(.leading)
-                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                })
-                            }
-                        } else {
-                            Text("Location accessed")
+                            Text(location)
+                                .font(.custom("Jost-Regular", size: 20))
+                                .frame(maxWidth: 375, alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                        Button(action: {
+                            locationManager.checkLocationAuthorization()
+                            locationManager.update()
+                            location = "\(locationManager.city), \(locationManager.state)"
+                        }, label: {
+                            Text("Request location")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .frame(maxWidth: 375, alignment: .leading)
                                 .multilineTextAlignment(.leading)
                                 .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                        }
+                        })
                     }
                     HStack{
                         headline(headerText: "Photos")
@@ -332,9 +329,8 @@ struct listingCreation: View {
             "listingID" : listingID,
             "dateCreated" : date,
             "usersLiked" : [],
-            "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)"
-            
-            
+            "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)",
+            "location": location
         ], merge: true)
         if selectedImages.isEmpty == false {
             try await db.collection("carListings").document(listingID).setData([

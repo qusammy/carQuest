@@ -200,11 +200,17 @@ struct listingView: View {
                             Spacer()
                         }
                         HStack{
-                            Text("Last edited on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                .frame(alignment: .leading)
-                            Spacer()
+                            VStack{
+                                Text(listing?.location ?? "No Data")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                    .frame(alignment: .leading)
+                                Text("Last edited on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                                    .frame(alignment: .leading)
+                                Spacer()
+                            }
                         }
                         Divider()
                         HStack{

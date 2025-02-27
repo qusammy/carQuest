@@ -231,7 +231,7 @@ struct listingTextField: View {
     @State var textFieldText: String
     var body: some View {
         TextField("\(textFieldText)", text: $carFactor)
-            .foregroundColor(.black)
+            .foregroundStyle(Color.foreground)
             .frame(width:375, height:50)
             .font(.custom("Jost-Regular", size: 20))
             .background(Color(hue: 1.0, saturation: 0.005, brightness: 0.927))

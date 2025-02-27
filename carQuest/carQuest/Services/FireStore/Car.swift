@@ -20,6 +20,7 @@ struct carListing: Codable, Identifiable, Equatable {
     var timeAccessed: Date?
     var usersLiked: [String?]
     var listingTitle: String?
+    var location: String?
     
 
 }
