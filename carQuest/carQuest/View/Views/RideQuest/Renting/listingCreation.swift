@@ -7,11 +7,12 @@ import FirebaseAuth
 import FirebaseAnalytics
 import FirebaseStorage
 import SDWebImage
+import MapKit
 import SDWebImageSwiftUI
 struct listingCreation: View {
     @Environment(\.dismiss) var dismiss
     
-    @ObservedObject var locationManager = LocationManager.shared
+   // @ObservedObject var locationManager = LocationManager.shared
     @StateObject private var viewModel = ProfileViewModel()
     @StateObject var carViewModel = ListingViewModel()
     
@@ -121,27 +122,27 @@ struct listingCreation: View {
                         headline(headerText: "Location")
                         Spacer()
                     }
-                    Group{
-                        if locationManager.userLocation == nil {
-                            ZStack{
-                                Button(action: {
-                                    LocationManager.shared.requestLocation()
-                                }, label: {
-                                    Text("Request location")
-                                        .font(.custom("Jost-Regular", size: 20))
-                                        .frame(maxWidth: 375, alignment: .leading)
-                                        .multilineTextAlignment(.leading)
-                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                                })
-                            }
-                        } else {
-                            Text("Location accessed")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .frame(maxWidth: 375, alignment: .leading)
-                                .multilineTextAlignment(.leading)
-                                .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
-                        }
-                    }
+//                    Group{
+//                        if locationManager.userLocation == nil {
+//                            ZStack{
+//                                Button(action: {
+//                                //    LocationManager.shared.requestLocation()
+//                                }, label: {
+//                                    Text("Request location")
+//                                        .font(.custom("Jost-Regular", size: 20))
+//                                        .frame(maxWidth: 375, alignment: .leading)
+//                                        .multilineTextAlignment(.leading)
+//                                        .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+//                                })
+//                            }
+//                        } else {
+//                            Text("Location accessed")
+//                                .font(.custom("Jost-Regular", size: 20))
+//                                .frame(maxWidth: 375, alignment: .leading)
+//                                .multilineTextAlignment(.leading)
+//                                .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+//                        }
+//                    }
                     HStack{
                         headline(headerText: "Photos")
                         Spacer()

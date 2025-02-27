@@ -69,7 +69,7 @@ struct listingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
                                 }
                                 Spacer()
                                 Button {
