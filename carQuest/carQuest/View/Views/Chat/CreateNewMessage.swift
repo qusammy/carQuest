@@ -9,7 +9,7 @@ struct CreateNewMessage: View{
     
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = CreateNewMessageViewModel()
-    @State private var userSearch = ""
+    @State var userSearch = ""
     @State var createNewMessageIsPresented: Bool = false
     @Environment(\.dismiss) var dismiss
 
