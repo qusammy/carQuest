@@ -36,7 +36,6 @@ struct listingCreation: View {
     @State var previewListing = false
     @State private var errorText = ""
     @State private var showError: Bool = false
-    @State private var carPhoto: UIImage?
     @State var listingLetter: String?
     
     
@@ -45,15 +44,14 @@ struct listingCreation: View {
     @State var selection: Int?
     @State private var selectedImages = [Data]()
     @State private var previewImages = [UIImage]()
-    @State var imageURLs: [String] = [""]
+    @State var imageURLs: [URL] = [URL]()
     
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
 
-       @State var showYearPicker = false
-       @State var showMakePicker = false
-       @State var showModelPicker = false
-       @State var showTypePicker = false
-
+    @State var showYearPicker = false
+    @State var showMakePicker = false
+    @State var showModelPicker = false
+    @State var showTypePicker = false
     
     var body: some View {
         NavigationView{
@@ -88,6 +86,34 @@ struct listingCreation: View {
                 }
                 Divider()
                 ScrollView(showsIndicators:false){
+                    HStack{
+                        PhotosPicker("Select images", selection: $photoItem1, matching: .images)
+                            .font(.custom("Jost-Regular", size:20))
+                            .foregroundStyle(Color.accentColor)
+                            .onChange(of: photoItem1) {
+                       Task {
+                           selectedImages.removeAll()
+                           previewImages.removeAll()
+                                                               for item in photoItem1 {
+                                                                   if let loaded = try? await item.loadTransferable(type: Data.self) {
+                                                                       selectedImages.append(loaded)
+                                                                   } else {
+                                                                       print("Failed")
+                                                                   }
+                                                               }
+                                                               for item in photoItem1 {
+                                                                   if let loaded = try? await item.loadTransferable(type: Image.self) {
+                                                                       let size = CGSize(width: 300, height: 300)
+                                                                       let uiImage = loaded.getUIImage(newSize: size)
+                                                                       previewImages.append(uiImage!)
+                                                                   } else {
+                                                                       print("Failed")
+                                                                   }
+                                                               }
+                                                           }
+                                                       }
+                        Spacer()
+                    }
                     if previewImages.isEmpty != true {
                         ScrollView(.horizontal, showsIndicators: false){
                             HStack{
@@ -128,6 +154,8 @@ struct listingCreation: View {
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
                         .foregroundStyle(Color.blue)
+                                       
+                        
                     
                     Divider()
                     
@@ -256,6 +284,32 @@ struct listingCreation: View {
                                 .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
                         }
                     }
+                    Button {
+                        Task{
+                            do{
+                                try await createListingRenting(listingExists: false, listingName: "")
+                                photo1Data = Data()
+                                showError = false
+                                dismiss()
+                            }catch {
+                                showError.toggle()
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(maxWidth:150, maxHeight:100)
+                                .foregroundColor(Color(red: 1.0, green: 0.11372549019607843, blue: 0.11372549019607843))
+                            Text("Post Listing")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    Text("Users are only allowed to create three listings of each type!")
+                        .font(.custom("Jost-Regular", size: 15))
+                        .foregroundColor(Color(red: 0.723, green: 0.717, blue: 0.726))
+                        .font(Font.custom("Jost-Regular", size:20))
+                        .foregroundStyle(Color.accentColor)
                 }
             }.padding()
         }
