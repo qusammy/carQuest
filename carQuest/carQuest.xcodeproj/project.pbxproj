@@ -315,6 +315,7 @@
 			children = (
 				004B33C12CDBB85100571C1C /* MainChatView.swift */,
 				004B33C32CDBBC2100571C1C /* ChatView.swift */,
+				6F2EBC8F2C9491DA00EF07FC /* RideDetails */,
 				00F494852CE644E40047BC56 /* CreateNewMessage.swift */,
 			);
 			path = Chat;
@@ -375,7 +376,6 @@
 				6F2EBC922C9492CD00EF07FC /* Home */,
 				6F2EBC912C94923A00EF07FC /* RideQuest */,
 				00F494842CE644160047BC56 /* Chat */,
-				6F2EBC8F2C9491DA00EF07FC /* RideDetails */,
 				6F2EBC902C94921600EF07FC /* Settings */,
 				6F2EBC8E2C9491CC00EF07FC /* Profile */,
 				6F2EBC8C2C948FEA00EF07FC /* OnBoarding */,

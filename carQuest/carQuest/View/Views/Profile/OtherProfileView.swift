@@ -12,6 +12,8 @@ import MessageUI
 struct OtherProfileView: View {
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.openURL) private var openUrl
+
     @State var username: String
     @State var profilePic: String
     @State var description: String
@@ -164,6 +166,9 @@ struct OtherProfileView: View {
                                 .foregroundStyle(Color.accentColor)
                         })
                     }
+                    Text("Thie feature is only available if you have a mail app!")
+                        .foregroundStyle(Color.blue)
+                        .font(.custom("Jost", size: 20))
                     ScrollView(showsIndicators: false){
                         HStack{
                             Text("Why are you reporting this user?")
@@ -218,7 +223,7 @@ struct OtherProfileView: View {
                 }
                 .padding()
                 .sheet(isPresented: $isShowingMailView) {
-                    MailComposerViewController(recipients: ["carquestreports@gmail.com"], subject: "\(selectedReason)", messageBody: "User reported: \(userID) \n Reason for report: \(reportReason)")
+                    MailComposerViewController(recipients: ["carquestreports@gmail.com"], subject: "\(selectedReason)", messageBody: "User reported: \(username)(userID: \(userID)) \n Reason for report: \(reportReason)")
                        }
             }
         }
