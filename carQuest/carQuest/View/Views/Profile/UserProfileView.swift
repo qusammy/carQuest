@@ -33,6 +33,9 @@ struct UserProfileView: View {
        
     @State private var descriptionEditor = false
 
+    @State var instagram: String = ""
+    @State var facebook: String = ""
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -68,7 +71,26 @@ struct UserProfileView: View {
                         .font(.custom("Jost-Regular", size: 15))
                         .foregroundColor(Color.accentColor)
                 })
-                
+                HStack{
+                    Spacer()
+                    if instagram != "" {
+                        Image("instagram")
+                            .resizable()
+                            .frame(width:30, height:30)
+                            .onTapGesture {
+                                UIApplication.shared.open(URL(string: instagram)!)
+                            }
+                    }
+                    if facebook != "" {
+                        Image("facebook")
+                            .resizable()
+                            .frame(width:30, height:30)
+                            .onTapGesture {
+                                UIApplication.shared.open(URL(string: facebook)!)
+                            }
+                    }
+                    Spacer()
+                }
                 List{
                     Text(vm.carUser?.display_name ?? "$username")
                         .font(.custom("Jost-Regular", size:25))
@@ -85,6 +107,7 @@ struct UserProfileView: View {
                     
                     
                 }.listStyle(.plain)
+                
                 if let user = vm.carUser {
                     Text("User ID: \(user.user_id)")
                         .font(.custom("Jost-Regular", size:15))
@@ -110,6 +133,12 @@ struct UserProfileView: View {
             }
         }.onAppear{
             print(vm.carUser?.description ?? "default")
+            Task{
+                do{
+                    try await fetchUserInstagram(userID: vm.carUser?.user_id ?? "")
+                    try await fetchUserFacebook(userID: vm.carUser?.user_id ?? "")
+                } catch{ }
+            }
         }.padding()
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil){
             ImagePicker(image: $image)
@@ -138,6 +167,22 @@ struct UserProfileView: View {
                 guard let url = url else { return }
                 AuthenticationManager.shared.updateProfilePicture(photoURL: url)
             }
+        }
+    }
+    func fetchUserInstagram(userID: String) async throws{
+        let db = Firestore.firestore()
+            
+        let document = try await db.collection("users").document(userID).getDocument()
+        if document.exists {
+            self.instagram = document.get("userInstagram") as? String ?? ""
+        }
+    }
+    func fetchUserFacebook(userID: String) async throws{
+        let db = Firestore.firestore()
+            
+        let document = try await db.collection("users").document(userID).getDocument()
+        if document.exists {
+            self.facebook = document.get("userFacebook") as? String ?? ""
         }
     }
 }
@@ -203,5 +248,6 @@ struct AddDescriptionView: View {
                 }
             }
     }
+    
 }
 

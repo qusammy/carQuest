@@ -30,7 +30,7 @@ struct ContentView: View {
                             Label("", systemImage: "house.fill")
                         }.tag(3)
                     
-                    BuyingView(showSignInView: $showSignInView)
+                    BuyingView(showSignInView: $showSignInView, searchText: "")
                         .tabItem{
                             Label("", systemImage: "dollarsign")
                         }.tag(4)

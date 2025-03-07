@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import MessageUI
+import Firebase
 
 struct OtherProfileView: View {
     
@@ -16,6 +17,8 @@ struct OtherProfileView: View {
     @State var profilePic: String
     @State var description: String
     @State var userID: String
+    @State var instagram: String = ""
+    @State var facebook: String = ""
     @StateObject var viewModel = ListingViewModel()
     @Binding var showSignInView: Bool
     @State private var reportIsPresented: Bool = false
@@ -26,6 +29,7 @@ struct OtherProfileView: View {
     var body: some View {
         NavigationStack{
             ScrollView(showsIndicators: false){
+                VStack{
                 HStack{
                     WebImage(url: URL(string: profilePic))
                         .resizable()
@@ -36,8 +40,31 @@ struct OtherProfileView: View {
                     Text(username)
                         .foregroundStyle(Color.foreground)
                         .font(Font.custom("ZingRustDemo-Base", size: 35))
+                    if instagram != "" {
+                        HStack{
+                            Image("instagram")
+                                .resizable()
+                                .frame(width:30, height:30)
+                                .onTapGesture {
+                                    UIApplication.shared.open(URL(string: instagram)!)
+                            }
+                            Spacer()
+                        }
+                    }
+                    if facebook != "" {
+                        HStack{
+                            Image("facebook")
+                                .resizable()
+                                .frame(width:30, height:30)
+                                .onTapGesture {
+                                    UIApplication.shared.open(URL(string: facebook)!)
+                            }
+                            Spacer()
+                        }
+                    }
                     Spacer()
                 }
+                
                 HStack{
                     Text(description)
                         .foregroundColor(.gray)
@@ -203,6 +230,7 @@ struct OtherProfileView: View {
                                     Spacer()
                                     Button(action: {
                                         self.isShowingMailView = true
+                                        dismiss()
                                     }, label: {
                                         HStack{
                                             Text("Send to Car Quest")
@@ -219,15 +247,36 @@ struct OtherProfileView: View {
                 .padding()
                 .sheet(isPresented: $isShowingMailView) {
                     MailComposerViewController(recipients: ["carquestreports@gmail.com"], subject: "\(selectedReason)", messageBody: "User reported: \(userID) \n Reason for report: \(reportReason)")
-                       }
+                }
             }
         }
+    }
         .onAppear(){
             Task{
                 do{
                     try viewModel.generateUserRentListings(userID: userID)
+                    try await fetchUserInstagram(userID: userID)
+                    try await fetchUserFacebook(userID: userID)
+
+                    print(instagram)
                 } catch{ }
             }
+        }
+    }
+    func fetchUserInstagram(userID: String) async throws{
+        let db = Firestore.firestore()
+            
+        let document = try await db.collection("users").document(userID).getDocument()
+        if document.exists {
+            self.instagram = document.get("userInstagram") as? String ?? ""
+        }
+    }
+    func fetchUserFacebook(userID: String) async throws{
+        let db = Firestore.firestore()
+            
+        let document = try await db.collection("users").document(userID).getDocument()
+        if document.exists {
+            self.facebook = document.get("userFacebook") as? String ?? ""
         }
     }
     struct MailComposerViewController: UIViewControllerRepresentable {

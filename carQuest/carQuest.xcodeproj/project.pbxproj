@@ -23,6 +23,7 @@
 		00A723692D09E47700AF6CEC /* SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A723682D09E47700AF6CEC /* SettingsViews.swift */; };
 		00A7236B2D09FC2F00AF6CEC /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7236A2D09FC2F00AF6CEC /* NotificationsView.swift */; };
 		00A7236E2D0A014400AF6CEC /* BuyingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A7236D2D0A014400AF6CEC /* BuyingView.swift */; };
+		00B8BAAB2D76228100A3B393 /* SwiftSMTP in Frameworks */ = {isa = PBXBuildFile; productRef = 00B8BAAA2D76228100A3B393 /* SwiftSMTP */; };
 		00BF079C2C80D21E000404AA /* listingCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BF079B2C80D21E000404AA /* listingCreation.swift */; };
 		00CF05332CA313B900E53D2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00CF05322CA313B900E53D2F /* GoogleService-Info.plist */; };
 		00CF05352CA3144000E53D2F /* listingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF05342CA3144000E53D2F /* listingView.swift */; };
@@ -173,6 +174,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00B8BAAB2D76228100A3B393 /* SwiftSMTP in Frameworks */,
 				22E10F2E2CE66CC800BA1272 /* FirebaseAppCheck in Frameworks */,
 				22E4F9982CD3CA1E003A43AA /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				22E4F9812CD3BEB9003A43AA /* FirebaseAppCheck in Frameworks */,
@@ -543,6 +545,7 @@
 				22788B722D664D8E002F519A /* FirebaseAppCheck */,
 				22788B742D664D8E002F519A /* FirebaseAppDistribution-Beta */,
 				22788B762D664D9A002F519A /* SDWebImageSwiftUI */,
+				00B8BAAA2D76228100A3B393 /* SwiftSMTP */,
 			);
 			productName = carQuest;
 			productReference = 002ABF672C73A3A100FFCC86 /* carQuest.app */;
@@ -576,6 +579,7 @@
 				22E4F9792CD3BEB9003A43AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				22E4F9842CD3BEE8003A43AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				22E4F9892CD3BF00003A43AA /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				00B8BAA92D76228100A3B393 /* XCRemoteSwiftPackageReference "Swift-SMTP" */,
 			);
 			productRefGroup = 002ABF682C73A3A100FFCC86 /* Products */;
 			projectDirPath = "";
@@ -785,7 +789,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"carQuest/Preview Content\"";
-				DEVELOPMENT_TEAM = K54C8RV3DL;
+				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;
@@ -818,7 +822,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"carQuest/Preview Content\"";
-				DEVELOPMENT_TEAM = K54C8RV3DL;
+				DEVELOPMENT_TEAM = ATR84KT8F5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = carQuest/Info.plist;
@@ -867,6 +871,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		00B8BAA92D76228100A3B393 /* XCRemoteSwiftPackageReference "Swift-SMTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/Swift-SMTP";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
 		22E4F9792CD3BEB9003A43AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -894,6 +906,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		00B8BAAA2D76228100A3B393 /* SwiftSMTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00B8BAA92D76228100A3B393 /* XCRemoteSwiftPackageReference "Swift-SMTP" */;
+			productName = SwiftSMTP;
+		};
 		222323BD2D148A8F00CD7B68 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 22E4F9842CD3BEE8003A43AA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;

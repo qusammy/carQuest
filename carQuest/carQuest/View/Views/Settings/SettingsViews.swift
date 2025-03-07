@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Firebase
 
 struct NavigateToSetting: View {
     
@@ -44,7 +45,153 @@ struct PushNotificationView: View {
         }
     }
 }
+struct ConnectionsView: View {
+    
+    @Binding var showSignInView: Bool
+    @State private var instagramEditor = false
+    @State private var facebookEditor = false
 
+
+    var body: some View {
+                VStack{
+                    HStack{
+                        Text("Connections")
+                            .font(Font.custom("ZingRustDemo-Base", size: 40))
+                            .foregroundColor(Color.foreground)
+                        Spacer()
+                    }
+                    List{
+                        NavigationLink(destination: AddInstagramView(), isActive: $instagramEditor) {
+                            Text("Instagram")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(Color.foreground)
+                                .lineLimit(1)
+                        }
+                        NavigationLink(destination: AddFacebookView(), isActive: $facebookEditor) {
+                            Text("Facebook")
+                                .font(.custom("Jost-Regular", size:20))
+                                .foregroundColor(Color.foreground)
+                                .lineLimit(1)
+                        }
+
+                    }.listStyle(.plain)
+                }.padding()
+            }
+        }
+struct AddInstagramView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var vm = UserProfileViewModel()
+    
+    @State var userInstagram: String = ""
+    @State var instagram: String = ""
+    var body: some View {
+        VStack{
+            HStack{
+                Text("Add your Instagram")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+                }
+            
+            TextField("Instagram", text: $userInstagram)
+                    .font(Font.custom("Jost-Regular", size: 25))
+                    .foregroundColor(Color.foreground)
+                    .textFieldStyle(.roundedBorder)
+            
+                Spacer()
+            Divider()
+        }.padding()
+            .toolbar{
+                ToolbarItem {
+                    Button(action: {
+                        insertUserInstagram(userInstagram: "https://instagram.com/\(userInstagram)")
+                        dismiss()
+
+                    }, label: {
+                        Image(systemName:"checkmark")
+                            .resizable()
+                            .foregroundStyle(Color.accentColor)
+                            .frame(width:25, height:25)
+                    }).toolbarTitleDisplayMode(.inline)
+                }
+            }
+    }
+    func insertUserInstagram(userInstagram: String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
+            return
+        }
+        
+        let userInstagramData = [
+            "userInstagram": userInstagram
+        ]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userInstagramData, merge: true){ err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+            }
+    }
+}
+struct AddFacebookView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var vm = UserProfileViewModel()
+    
+    @State var userFacebook: String = ""
+    @State var facebook: String = ""
+    var body: some View {
+        VStack{
+            HStack{
+                Text("Add your Facebook")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+                }
+            
+            TextField("Facebook profile link", text: $userFacebook)
+                    .font(Font.custom("Jost-Regular", size: 25))
+                    .foregroundColor(Color.foreground)
+                    .textFieldStyle(.roundedBorder)
+            HStack{
+                Text("On Facebook, go to profile > three dots > copy profile link")
+                    .font(Font.custom("Jost", size: 20))
+                    .foregroundColor(Color.foreground)
+            }
+                Spacer()
+            Divider()
+        }.padding()
+            .toolbar{
+                ToolbarItem {
+                    Button(action: {
+                        insertUserFacebook(userFacebook: "\(userFacebook)")
+                        dismiss()
+
+                    }, label: {
+                        Image(systemName:"checkmark")
+                            .resizable()
+                            .foregroundStyle(Color.accentColor)
+                            .frame(width:25, height:25)
+                    }).toolbarTitleDisplayMode(.inline)
+                }
+            }
+    }
+    func insertUserFacebook(userFacebook: String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{
+            return
+        }
+        
+        let userFacebookData = [
+            "userFacebook": userFacebook
+        ]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userFacebookData, merge: true){ err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+            }
+    }
+}
 struct MyListingsView: View {
     
     @Binding var showSignInView: Bool

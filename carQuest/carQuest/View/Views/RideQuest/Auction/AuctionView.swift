@@ -60,7 +60,7 @@ struct AuctionView: View {
                 HStack{
                     Text("Auction services")
                         .foregroundColor(Color.foreground)
-                        .font(.custom("ZingRustDemo-Base", size: 32))
+                        .font(.custom("ZingRustDemo-Base", size: 35))
                     Spacer()
                     Button{
                         creationIsPresented.toggle()
@@ -74,7 +74,7 @@ struct AuctionView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 1)
+                        listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -111,6 +111,7 @@ struct AuctionView: View {
                                 }
                             }
                         }
+                // listings showing up based on filters
                 ScrollView(showsIndicators: false){
                     if filteredList.isEmpty {
                         Text("Please reset your filters.")
@@ -120,13 +121,15 @@ struct AuctionView: View {
                         ForEach(filteredList){
                             listing in
                             NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName:URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
                             }
                         }
+                        
                     }
                 }
+                
+                .foregroundStyle(Color.foreground)
             }
-            .padding()
             .fullScreenCover(isPresented: $isPresented, content: {
                 VStack{
                     HStack{

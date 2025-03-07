@@ -33,7 +33,7 @@ struct ProfileView: View {
                         NavigateToSetting(destination: AnyView.init(MyListingsView( showSignInView: $showSignInView)), title: "Listings")
                         NavigateToSetting(destination: AnyView.init(PurchasesView(showSignInView: $showSignInView)), title: "Purchases & Payment")
                         NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Push Notifications")
-                        NavigateToSetting(destination: AnyView.init(PushNotificationView(showSignInView: $showSignInView)), title: "Connections")
+                            NavigateToSetting(destination: AnyView.init(ConnectionsView(showSignInView: $showSignInView)), title: "Connections")
                         NavigateToSetting(destination: AnyView.init(PrivacyView(showSignInView: $showSignInView)), title: "Privacy")
                         NavigateToSetting(destination: AnyView.init(AboutCarQuest(showSignInView: $showSignInView)), title: "About Car Quest")
                             if Auth.auth().currentUser?.isEmailVerified == false {

@@ -21,26 +21,6 @@ struct ChatView: View {
 
     var body: some View {
         VStack{
-            Button(action: {
-                dismiss()
-            }, label: {
-                HStack{
-                    backButton()
-                    Spacer()
-                }
-            })
-            .padding()
-            .navigationBarTitleDisplayMode(.inline)
-            HStack {
-                WebImage(url: URL(string: carUser?.profileImageURL ?? ""))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width:55, height:55)
-                    .clipShape(Circle())
-                Text(carUser?.display_name ?? "")
-                    .font(.custom("Jost-Regular", size: 20))
-                    .foregroundColor(.foreground)
-            }
             ScrollView{
                 ScrollViewReader { ScrollViewProxy in
                     Text("Keep your messages appropriate. You can always report another user by going to their profile and clicking 'Report'")
