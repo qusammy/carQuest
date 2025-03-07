@@ -103,6 +103,7 @@ struct rentView: View {
                             TextField("Search for a dream car...", text: $searchText)
                                 .frame(width:200, height:30)
                                 .font(.custom("Jost-Regular", size: 18))
+                                .foregroundStyle(Color.foreground)
                             }
                         if searchText != "" {
                                 Button(action: {
