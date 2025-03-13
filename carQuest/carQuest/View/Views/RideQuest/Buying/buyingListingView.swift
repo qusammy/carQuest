@@ -4,7 +4,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import SDWebImageSwiftUI
 
-struct listingView: View {
+struct buyingListingView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var isLiked: Bool = false
@@ -160,6 +160,24 @@ struct listingView: View {
                             Spacer()
                             }
                         HStack{
+                            Text("Mileage")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.gray)
+                            Spacer()
+                            Text(listing?.carMileage ?? "")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.gray)
+                        }
+                        HStack{
+                            Text("Title")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.gray)
+                            Spacer()
+                            Text(listing?.carTitle ?? "")
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(.gray)
+                        }
+                        HStack{
                             Text("Last edited on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
                                 .font(.custom("Jost-Regular", size: 20))
                                 .foregroundColor(Color(.init(white:0.65, alpha:1)))
@@ -169,7 +187,7 @@ struct listingView: View {
                             
                         Divider()
                         HStack{
-                            Text("$\(listing?.listingPrice ?? "000.00") per day")
+                            Text("$\(listing?.listingPrice ?? "000.00")")
                                 .font(.custom("Jost-Regular", size: 22))
                                 .foregroundColor(.foreground)
                             Spacer()
@@ -181,7 +199,7 @@ struct listingView: View {
                                         RoundedRectangle(cornerRadius: 15)
                                             .frame(width: 65, height: 35)
                                             .foregroundColor(Color("appColor"))
-                                        Text("Book")
+                                        Text("Purchase")
                                             .font(.custom("Jost-Regular", size:20))
                                             .foregroundColor(.white)
                                     }
@@ -192,7 +210,7 @@ struct listingView: View {
                         VStack{
                             Spacer()
                             if viewModel.reviews.isEmpty {
-                                Text("There are no reviews for this vehicle yet.")
+                                Text("There are no reviews for this seller yet.")
                                     .font(.custom("Jost-Regular", size: 20))
                                     .foregroundColor(.foreground)
                                 Button {
@@ -203,33 +221,6 @@ struct listingView: View {
                                         .foregroundColor(.accentColor)
                                 } .fullScreenCover(isPresented: $reviewIsShown) {
                                     ReviewView(listing: listing, review: Review())
-                                }
-                            } else {
-                                HStack{
-                                    RatingView(rating: $viewModel.rating, width: 30, height:30)
-                                    Spacer()
-                                    Text("\(viewModel.rating) stars")
-                                        .font(.custom("Jost", size: 15))
-                                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                        .multilineTextAlignment(.trailing)
-                                }
-                                Button {
-                                    reviewIsShown.toggle()
-                                }label: {
-                                    Text("Leave a Review")
-                                        .font(.custom("Jost-Regular", size: 20))
-                                        .foregroundColor(.accentColor)
-                                } .fullScreenCover(isPresented: $reviewIsShown) {
-                                    ReviewView(listing: listing, review: Review())
-                                }
-                                ForEach(viewModel.reviews) { review in
-                                    VStack{
-                                        HStack {
-                                            ReviewPod(userImage: URL(string: review.userImage), width: 30 , height: 30, textSize: 20, userName: review.userName, title: review.title, textBody: review.body, rating: Double(review.rating))
-                                            Spacer()
-                                        }
-                                        Divider()
-                                    }
                                 }
                             }
                         }
@@ -303,7 +294,7 @@ struct listingView: View {
 
 
 #Preview {
-    listingView(showSignInView: .constant(false))
+    buyingListingView(showSignInView: .constant(false))
 }
 
 

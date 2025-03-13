@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BuyingView: View {
+    
     @Binding var showSignInView: Bool
     @State var userPreferences = ""
     @State private var creationIsPresented: Bool = false
@@ -74,7 +75,7 @@ struct BuyingView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 2)
+                        BuyingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -120,15 +121,20 @@ struct BuyingView: View {
                     } else {
                         ForEach(filteredList){
                             listing in
-                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                            NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
                                 imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
                             }
                         }
                         
                     }
                 }
-                
                 .foregroundStyle(Color.foreground)
+            }
+            .onAppear(){
+                vm.generateBuyListings()
+            }
+            .onChange(of: vm.buyListings){
+                shuffledList = vm.buyListings
             }
             .fullScreenCover(isPresented: $isPresented, content: {
                 VStack{
@@ -198,9 +204,7 @@ struct BuyingView: View {
                 }.padding()
             })
             .padding()
-            .task {
-                vm.generateAuctionListings()
-            }
+            
         }
     }
 }

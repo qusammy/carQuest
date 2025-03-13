@@ -134,9 +134,6 @@ struct previewListing: View {
     @ObservedObject var vm = UserProfileViewModel()
     var body: some View{
         VStack{
-            RoundedRectangle(cornerRadius: 70)
-                .frame(width:345, height:2)
-                .padding(.top, 5.0)
             Text("Preview listing")
                 .font(.custom("Jost-Regular", size: 30))
                 .foregroundColor(.black)
@@ -194,16 +191,27 @@ struct previewListing: View {
                             }
                         })
                     }
-                    Text("\(carDescription)")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(3)
+                    HStack{
+                        Text("\(carDescription)")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(Color(.init(white:0.65, alpha:1)))
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(3)
+                        Spacer()
+                    }
+                    HStack{
+                        Text("Listed \(date)")
+                            .font(.custom("Jost-Regular", size: 20))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: 375, alignment: .leading)
+                        Spacer()
+                    }
                     Divider()
                     HStack{
                         Text("Price per day: $\(listingPrice)")
                             .font(.custom("Jost-Regular", size: 22))
                             .foregroundColor(.black)
+                        Spacer()
                         Button(action: {
                             //brings up booking view
                         }, label: {
@@ -217,10 +225,7 @@ struct previewListing: View {
                             }
                         })
                     }
-                    Text("Listed \(date)")
-                        .font(.custom("Jost-Regular", size: 20))
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: 375, alignment: .leading)
+                    
                 }
             }
         }.padding()

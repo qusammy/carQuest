@@ -6,7 +6,6 @@ struct AuctionView: View {
     @State private var creationIsPresented: Bool = false
     @StateObject private var vm = ListingViewModel()
     @State private var isPresented = false
-    
     @State private var shuffledList: [carListing] = [carListing]()
     
     // selections for filter pickers
@@ -198,9 +197,7 @@ struct AuctionView: View {
                 }.padding()
             })
             .padding()
-            .task {
-                vm.generateAuctionListings()
-            }
+            
         }
     }
 }
