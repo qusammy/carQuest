@@ -13,20 +13,66 @@ struct imageBox: View {
     var height: CGFloat
     var userID: String?
     var textSize: CGFloat?
+    var subTextSize: CGFloat?
+    var endTime: Date?
+    var startBid: String?
+    var currentBid: String?
     var body: some View {
         VStack{
-            WebImage(url: imageName ?? URL(string: "4.png"))
-                .resizable()
-                .frame(width: width, height: height)
-                .scaledToFill()
-                .clipped()
-            if carYear != nil && carModel != nil && carMake != nil && carType != nil {
-                Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
-                    .font(.custom("Jost-Regular", size: textSize ?? 20))
-                    .foregroundColor(Color.foreground)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
+            if startBid == nil && endTime == nil && startBid == nil {
+                WebImage(url: imageName ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5"))
+                    .resizable()
+                    .frame(width: width, height: height)
+                    .scaledToFill()
+                    .clipped()
+                if carYear != nil && carModel != nil && carMake != nil && carType != nil {
+                    Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
+                        .font(.custom("Jost-Regular", size: textSize ?? 20))
+                        .foregroundColor(Color.foreground)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+            else {
+                ZStack(alignment: .bottomLeading) {
+                    WebImage(url: imageName ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5"))
+                        .resizable()
+                        .frame(width: width, height: height)
+                        .scaledToFill()
+                        .clipped()
+                    let range = Date.now...endTime!
+                    let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: endTime!)
+                    let days = diffComponents.day
+                    if days! >= 1 {
+                        Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(diffComponents.day!) days ")
+                            .background(Color.gray)
+                            .font(.custom("Jost-Regular", size: subTextSize ?? 17))
+                            .foregroundColor(Color.white)
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .padding()
+                    }
+                    else {
+                        Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(Text(timerInterval: range, countsDown: true)) ")
+                            .background(Color.accentColor)
+                            .font(.custom("Jost-Regular", size: subTextSize ?? 17))
+                            .foregroundColor(Color.white)
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .padding()
+
+                    }
                     
+                }
+                if carYear != nil && carModel != nil && carMake != nil && carType != nil {
+                    Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
+                        .font(.custom("Jost-Regular", size: textSize ?? 20))
+                        .foregroundColor(Color.foreground)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                }
             }
         }
     }

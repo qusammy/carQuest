@@ -21,7 +21,9 @@ struct carListing: Codable, Identifiable, Equatable {
     var usersLiked: [String?]
     var listingTitle: String?
     var location: String?
-    
+    var startBid: String?
+    var buyout: String?
+    var endTime: Date?
 
 }
 

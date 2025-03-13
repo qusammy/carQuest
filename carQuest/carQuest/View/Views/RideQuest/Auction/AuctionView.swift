@@ -74,7 +74,7 @@ struct AuctionView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 2)
+                        AuctionCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", carDescription: "", startBid: "", buyout: "", endTime: Date(), listingLetter: "A", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -120,8 +120,8 @@ struct AuctionView: View {
                     } else {
                         ForEach(filteredList){
                             listing in
-                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
+                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: "", isLiked: listing.isLiked!)) {
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 20, endTime: listing.endTime!, startBid: listing.startBid!)
                             }
                         }
                         
@@ -200,6 +200,10 @@ struct AuctionView: View {
             .padding()
             .task {
                 vm.generateAuctionListings()
+            }
+            .onChange(of: vm.auctionListings) {
+                shuffledList = vm.auctionListings
+                shuffledList.sort(by: {$0.endTime ?? Date() < $1.endTime ?? Date()})
             }
         }
     }
