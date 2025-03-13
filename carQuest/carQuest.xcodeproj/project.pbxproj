@@ -50,6 +50,7 @@
 		22C6DF092C91D31A00F41EB3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C6DF082C91D31A00F41EB3 /* RootView.swift */; };
 		22CB13652CA5A63A00BACD8F /* AuthenticationViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CB13642CA5A63A00BACD8F /* AuthenticationViewModels.swift */; };
 		22CB13672CA5B5C500BACD8F /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CB13662CA5B5C500BACD8F /* SignUpView.swift */; };
+		22CE917F2D8312C5002D5417 /* AuctionCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CE917E2D8312C5002D5417 /* AuctionCreation.swift */; };
 		22D59B652D4D154A00E8961A /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D59B642D4D154A00E8961A /* ReviewView.swift */; };
 		22D59B672D4D208900E8961A /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D59B662D4D208900E8961A /* Review.swift */; };
 		22E10F282CE66CC800BA1272 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 22E10F272CE66CC800BA1272 /* FirebaseAnalytics */; };
@@ -150,6 +151,7 @@
 		22C6DF082C91D31A00F41EB3 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		22CB13642CA5A63A00BACD8F /* AuthenticationViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModels.swift; sourceTree = "<group>"; };
 		22CB13662CA5B5C500BACD8F /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		22CE917E2D8312C5002D5417 /* AuctionCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionCreation.swift; sourceTree = "<group>"; };
 		22D59B642D4D154A00E8961A /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		22D59B662D4D208900E8961A /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		6F2EBC832C948E7100EF07FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 			children = (
 				005577842CDE7CC300E9A69A /* AuctionListingView.swift */,
 				005577822CDE777C00E9A69A /* AuctionView.swift */,
+				22CE917E2D8312C5002D5417 /* AuctionCreation.swift */,
 			);
 			path = Auction;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				001111442CB58C41001F877D /* ImageManager.swift in Sources */,
 				00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */,
 				004B33C42CDBBC2100571C1C /* ChatView.swift in Sources */,
+				22CE917F2D8312C5002D5417 /* AuctionCreation.swift in Sources */,
 				6F2EBC962C94934000EF07FC /* CarDetails.swift in Sources */,
 				227AF15B2CAD86D2005A23F0 /* ResetPassword.swift in Sources */,
 				22D59B672D4D208900E8961A /* Review.swift in Sources */,
