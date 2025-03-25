@@ -225,8 +225,8 @@ struct MyListingsView: View {
                     HStack{
                         Spacer()
                         ForEach(viewModel.myauctionListings) { listing in
-                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: "")) {
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10, endTime: listing.endTime!, startBid: listing.startBid!)
                             }
                         }
                         Spacer()
@@ -288,7 +288,7 @@ struct MyListingsView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack{
                         ForEach(viewModel.mybuyListings) { listing in
-                            NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                            NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
                                 imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                             }
                         }
