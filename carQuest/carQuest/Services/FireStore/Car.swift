@@ -14,6 +14,8 @@ struct carListing: Codable, Identifiable, Equatable {
     var listingType: String?
     var listingPrice: String?
     var carDescription: String?
+    var carMileage: String?
+    var carTitle: String?
     var imageData: Data?
     var listingID: String?
     var dateCreated: Date?

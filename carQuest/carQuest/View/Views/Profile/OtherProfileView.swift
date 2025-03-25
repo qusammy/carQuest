@@ -108,16 +108,12 @@ struct OtherProfileView: View {
                         }
                     }
                 }
-                Divider()
-                if viewModel.userRentListings.isEmpty {
-                    HStack{
-                        Text("No auctions")
-                            .foregroundColor(.gray)
-                            .font(Font.custom("Jost-Regular", size: 20))
-                            .multilineTextAlignment(.leading)
-                        Spacer()
-                    }
+                if viewModel.userAuctionListings.isEmpty {
+                    
+                    
+                    
                 } else {
+                    Divider()
                     HStack{
                         Text("Auctions")
                             .foregroundStyle(Color.foreground)
@@ -130,16 +126,11 @@ struct OtherProfileView: View {
                         }
                     }
                 }
-                Divider()
-                if viewModel.userRentListings.isEmpty {
-                    HStack{
-                        Text("No listings for sale")
-                            .foregroundColor(.gray)
-                            .font(Font.custom("Jost-Regular", size: 20))
-                            .multilineTextAlignment(.leading)
-                        Spacer()
-                    }
+                    if viewModel.userAuctionListings.isEmpty {
+                   
+                    
                 } else {
+                    Divider()
                     HStack{
                         Text("For sale")
                             .foregroundStyle(Color.foreground)
