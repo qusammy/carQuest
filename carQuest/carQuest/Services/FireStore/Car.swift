@@ -26,6 +26,7 @@ struct carListing: Codable, Identifiable, Equatable {
     var startBid: String?
     var buyout: String?
     var endTime: Date?
+    var currentBid: String?
 
 }
 

@@ -118,13 +118,13 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateUserAuctionListings(userID: String) throws {
-        let user = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").whereField("userID", isEqualTo: userID).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.userAuctionListings = snapshot!.documents.map { doc in
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")                }
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                }
             }
         }
     }
