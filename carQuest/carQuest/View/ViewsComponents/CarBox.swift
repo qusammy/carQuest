@@ -13,7 +13,6 @@ struct imageBox: View {
     var height: CGFloat
     var userID: String?
     var textSize: CGFloat?
-    var subTextSize: CGFloat?
     var endTime: Date?
     var startBid: String?
     var currentBid: String?
@@ -43,10 +42,20 @@ struct imageBox: View {
                     let range = Date.now...endTime!
                     let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: endTime!)
                     let days = diffComponents.day
-                    if days! >= 1 {
+                    if endTime! < Date.now {
+                        Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Ended")
+                            .background(Color.gray)
+                            .font(.custom("Jost-Regular", size: 17))
+                            .foregroundColor(Color.white)
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .padding()
+                    }
+                    else if days! >= 1 {
                         Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(diffComponents.day!) days ")
                             .background(Color.gray)
-                            .font(.custom("Jost-Regular", size: subTextSize ?? 17))
+                            .font(.custom("Jost-Regular", size: 17))
                             .foregroundColor(Color.white)
                             .lineLimit(1)
                             .multilineTextAlignment(.leading)
@@ -56,7 +65,7 @@ struct imageBox: View {
                     else {
                         Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(Text(timerInterval: range, countsDown: true)) ")
                             .background(Color.accentColor)
-                            .font(.custom("Jost-Regular", size: subTextSize ?? 17))
+                            .font(.custom("Jost-Regular", size: 17))
                             .foregroundColor(Color.white)
                             .lineLimit(1)
                             .multilineTextAlignment(.leading)
