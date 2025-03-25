@@ -119,8 +119,8 @@ struct AuctionView: View {
                     } else {
                         ForEach(filteredList){
                             listing in
-                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: listing.currentBid!, isLiked: listing.isLiked!)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, endTime: listing.endTime!, currentBid: listing.currentBid!)
+                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, listing: listing)) {
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear, carMake: listing.carMake, carModel: listing.carModel, carType: listing.carType, width: 250, height: 250, endTime: listing.endTime, currentBid: listing.currentBid)
                             }
                         }
                         

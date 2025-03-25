@@ -39,10 +39,7 @@ struct imageBox: View {
                         .frame(width: width, height: height)
                         .scaledToFill()
                         .clipped()
-                    let range = Date.now...endTime!
-                    let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: endTime!)
-                    let days = diffComponents.day
-                    if endTime! < Date.now {
+                    if endTime! <= Date.now {
                         Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Ended")
                             .background(Color.gray)
                             .font(.custom("Jost-Regular", size: 17))
@@ -52,26 +49,31 @@ struct imageBox: View {
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                             .padding()
                     }
-                    else if days! >= 1 {
-                        Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(diffComponents.day!) days ")
-                            .background(Color.gray)
-                            .font(.custom("Jost-Regular", size: 17))
-                            .foregroundColor(Color.white)
-                            .lineLimit(1)
-                            .multilineTextAlignment(.leading)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                            .padding()
-                    }
                     else {
-                        Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(Text(timerInterval: range, countsDown: true)) ")
-                            .background(Color.accentColor)
-                            .font(.custom("Jost-Regular", size: 17))
-                            .foregroundColor(Color.white)
-                            .lineLimit(1)
-                            .multilineTextAlignment(.leading)
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                            .padding()
-
+                        let range = Date.now...endTime!
+                        let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: endTime!)
+                        let days = diffComponents.day
+                        if days! >= 1 {
+                            Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(diffComponents.day!) days ")
+                                .background(Color.gray)
+                                .font(.custom("Jost-Regular", size: 17))
+                                .foregroundColor(Color.white)
+                                .lineLimit(1)
+                                .multilineTextAlignment(.leading)
+                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                .padding()
+                        }
+                        else {
+                            Text(" Bid: $\(currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) \(Text(timerInterval: range, countsDown: true)) ")
+                                .background(Color.accentColor)
+                                .font(.custom("Jost-Regular", size: 17))
+                                .foregroundColor(Color.white)
+                                .lineLimit(1)
+                                .multilineTextAlignment(.leading)
+                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                .padding()
+                            
+                        }
                     }
                     
                 }

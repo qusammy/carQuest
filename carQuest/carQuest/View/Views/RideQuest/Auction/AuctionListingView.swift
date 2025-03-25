@@ -34,6 +34,42 @@ struct AuctionListingView: View {
                         }
                     }
                     VStack{
+                        if (listing?.endTime!)! <= Date.now {
+                            Text(" Current Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Ended")
+                                .background(Color.gray)
+                                .font(.custom("Jost-Regular", size: 20))
+                                .foregroundColor(Color.white)
+                                .lineLimit(1)
+                                .multilineTextAlignment(.leading)
+                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                .padding()
+                        }
+                        else {
+                            let range = Date.now...(listing?.endTime!)!
+                            let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: (listing?.endTime!)!)
+                            let days = diffComponents.day
+                            if days! >= 1 {
+                                Text(" Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill"))   \(diffComponents.day!) days ")
+                                    .background(Color.gray)
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .foregroundColor(Color.white)
+                                    .lineLimit(1)
+                                    .multilineTextAlignment(.leading)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                    .padding()
+                            }
+                            else {
+                                Text(" Current Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Time Left:  \(Text(timerInterval: range, countsDown: true)) ")
+                                    .background(Color.accentColor)
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .foregroundColor(Color.white)
+                                    .lineLimit(1)
+                                    .multilineTextAlignment(.leading)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                    .padding()
+                                
+                            }
+                        }
                         HStack{
                             Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
                                 .font(.custom("Jost-Regular", size: 25))
@@ -69,7 +105,7 @@ struct AuctionListingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    AuctionCreation(editListing: true, carType: listing?.carType ?? "", location: listing?.location ?? "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carDescription: listing?.carDescription ?? "", startBid: listing?.startBid ?? "", buyout: listing?.buyout ?? "", endTime: listing?.endTime ?? Date(), showSignInView: $showSignInView)
                                 }
                                 Spacer()
                                 Button {
@@ -300,5 +336,5 @@ struct AuctionListingView: View {
 }
 
 #Preview {
-    AuctionListingView(showSignInView: .constant(false), bid: "")
+    AuctionListingView(showSignInView: .constant(false))
 }

@@ -58,9 +58,19 @@ struct HomeView: View {
                             HStack{
                                 Spacer()
                                 ForEach(shuffledList2) { listing in
-                                    NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
-                                        imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
-                                    }.frame(width:115)
+                                    if listing.listingType == "auction" {
+                                        NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, listing: listing)) {
+                                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear, carMake: listing.carMake, carModel: listing.carModel, carType: listing.carType, width: 100, height: 100, textSize: 10)
+                                        }
+                                    }
+                                    else if listing.listingType == "renting" {
+                                        NavigationLink(destination: listingView(showSignInView: $showSignInView, listing: listing)) {
+                                            imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
+                                        }.frame(width:115)
+                                    }
+                                    else {
+                                        
+                                    }
                                 }
                             }
                         }
