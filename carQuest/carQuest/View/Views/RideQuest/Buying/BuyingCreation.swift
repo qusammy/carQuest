@@ -335,7 +335,12 @@ struct BuyingCreation: View {
                             
                             Task{
                                 do{
-                                    try await createBuyingListing(listingExists: false, listingName: "")
+                                    if carViewModel.mybuyListings.count >= 3 {
+                                        errorText = "You already have three listings of this type!"
+                                    }
+                                    else {
+                                        try await createBuyingListing(listingExists: false, listingName: "")
+                                    }
                                     photo1Data = Data()
                                     showError = false
                                     dismiss()
@@ -360,6 +365,15 @@ struct BuyingCreation: View {
                         .foregroundStyle(Color.accentColor)
                 }
             }.padding()
+        }
+        .onAppear {
+            Task{
+                do{
+                    try carViewModel.generateMyBuyListings()
+                }catch {
+                    
+                }
+            }
         }
     }
     func createBuyingListing(listingExists: Bool, listingName: String) async throws {
