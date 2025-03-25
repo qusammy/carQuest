@@ -159,6 +159,7 @@ struct buyingListingView: View {
                                 .lineLimit(4)
                             Spacer()
                             }
+                        Divider()
                         HStack{
                             Text("Mileage")
                                 .font(.custom("Jost-Regular", size: 20))

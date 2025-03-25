@@ -75,7 +75,7 @@ struct BuyingView: View {
                                 .font(.custom("Jost-Regular", size: 20))
                         }
                     } .fullScreenCover(isPresented: $creationIsPresented) {
-                        BuyingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "A", showSignInView: $showSignInView, selection: 2)
+                        BuyingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", listingLetter: "B", showSignInView: $showSignInView, selection: 2)
                     }
                 }
                 HStack{
@@ -122,7 +122,7 @@ struct BuyingView: View {
                         ForEach(filteredList){
                             listing in
                             NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 250, height: 250, textSize: 22)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, listingPrice: listing.listingPrice!, listingType: listing.listingType!, width: 250, height: 250, textSize: 22)
                             }
                         }
                         

@@ -9,6 +9,8 @@ struct imageBox: View {
     var carMake: String?
     var carModel: String?
     var carType: String?
+    var listingPrice: String?
+    var listingType: String?
     var width: CGFloat
     var height: CGFloat
     var userID: String?
@@ -26,6 +28,20 @@ struct imageBox: View {
                     .clipped()
                 if carYear != nil && carModel != nil && carMake != nil && carType != nil {
                     Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
+                        .font(.custom("Jost-Regular", size: textSize ?? 20))
+                        .foregroundColor(Color.foreground)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+            else if startBid == nil && endTime == nil && startBid == nil && listingType == "buying" {
+                VStack{
+                    WebImage(url: imageName ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5"))
+                        .resizable()
+                        .frame(width: width, height: height)
+                        .scaledToFill()
+                        .clipped()
+                    Text("$\(listingPrice!) \(carYear!) \(carMake!) \(carModel!) \(carType!)")
                         .font(.custom("Jost-Regular", size: textSize ?? 20))
                         .foregroundColor(Color.foreground)
                         .lineLimit(1)
@@ -76,13 +92,6 @@ struct imageBox: View {
                         }
                     }
                     
-                }
-                if carYear != nil && carModel != nil && carMake != nil && carType != nil {
-                    Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
-                        .font(.custom("Jost-Regular", size: textSize ?? 20))
-                        .foregroundColor(Color.foreground)
-                        .lineLimit(1)
-                        .multilineTextAlignment(.leading)
                 }
             }
         }

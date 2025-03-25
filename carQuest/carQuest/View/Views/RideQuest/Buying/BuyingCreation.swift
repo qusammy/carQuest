@@ -321,7 +321,7 @@ struct BuyingCreation: View {
                                 .keyboardType(.numberPad)
                         }
                     }
-                    if carMake.isEmpty || carModel.isEmpty || carType.isEmpty || carYear.isEmpty || carDescription.isEmpty || listingPrice.isEmpty || selectedImages.isEmpty || selectedTitle.isEmpty || selectedTitle == "Select a title" {
+                    if carMake.isEmpty || carModel.isEmpty || carType.isEmpty || carYear.isEmpty || carDescription.isEmpty || listingPrice.isEmpty || selectedImages.isEmpty || selectedTitle.isEmpty || selectedTitle == "Select a title" || carMileage.isEmpty {
                         HStack{
                             Spacer()
                             Text("You MUST complete all fields before listing your vehicle.")
