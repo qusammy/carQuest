@@ -226,7 +226,7 @@ struct MyListingsView: View {
                         Spacer()
                         ForEach(viewModel.myauctionListings) { listing in
                             NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, listing: listing)) {
-                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10, endTime: listing.endTime!, startBid: listing.startBid!)
+                                imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10)
                             }
                         }
                         Spacer()
