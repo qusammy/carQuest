@@ -148,23 +148,23 @@ struct AuctionListingView: View {
                         }
                         Divider()
                         HStack{
-                        Button {
-                            isPresentingOtherProfileView.toggle()
-                        } label: {
-                            WebImage(url: URL(string: userViewModel.photoURL))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width:55, height:55)
-                                .clipShape(Circle())
-                            Text("\(userViewModel.displayName)")
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(.foreground)
-                        }
-                        .fullScreenCover(isPresented: $isPresentingOtherProfileView, content: {
-                            OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView, reportReason: "")
-                        })
-
-                        Spacer()
+                            Button {
+                                isPresentingOtherProfileView.toggle()
+                            } label: {
+                                WebImage(url: URL(string: userViewModel.photoURL))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width:55, height:55)
+                                    .clipShape(Circle())
+                                Text("\(userViewModel.displayName)")
+                                    .font(.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(.foreground)
+                            }
+                            .fullScreenCover(isPresented: $isPresentingOtherProfileView, content: {
+                                OtherProfileView(username: userViewModel.displayName, profilePic: userViewModel.photoURL, description: userViewModel.description, userID: listing?.userID ?? "", showSignInView: $showSignInView, reportReason: "")
+                            })
+                            
+                            Spacer()
                             if listing?.userID != user {
                                 Button(action: {
                                     //brings up message view
@@ -202,24 +202,42 @@ struct AuctionListingView: View {
                             }
                         }
                         Divider()
-                        HStack{
-                            Text("$\(listing?.listingPrice ?? "000.00") per day")
-                                .font(.custom("Jost-Regular", size: 22))
-                                .foregroundColor(.foreground)
-                            Spacer()
-                            if listing?.userID != user {
-                                Button(action: {
-                                    //brings up message view
-                                }, label: {
-                                    ZStack{
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .frame(width: 65, height: 35)
-                                            .foregroundColor(Color("appColor"))
-                                        Text("Book")
-                                            .font(.custom("Jost-Regular", size:20))
-                                            .foregroundColor(.white)
+                        VStack {
+                            HStack {
+                                Text("Statr Bid: $\(listing?.startBid ?? "000.00")")
+                                    .font(.custom("Jost-Regular", size: 22))
+                                    .foregroundColor(.foreground)
+                                Text("Current Bid: $\(listing?.currentBid ?? "000.00")")
+                                    .font(.custom("Jost-Regular", size: 22))
+                                    .foregroundColor(.foreground)
+                                Button {
+                                    Task {
+                                        do {
+                                            try await checkForBid()
+                                        }catch {
+                                            
+                                        }
                                     }
-                                })
+                                }label: {
+                                    Image(systemName: "arrow.clockwise")
+                                        .frame(width: 22, height: 22)
+                                        .foregroundStyle(Color.accentColor)
+                                }
+                                Spacer()
+                                if listing?.userID != user {
+                                    Button(action: {
+                                        //brings up payment view
+                                    }, label: {
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .frame(width: 65, height: 35)
+                                                .foregroundColor(Color("appColor"))
+                                            Text("Place Bid")
+                                                .font(.custom("Jost-Regular", size:20))
+                                                .foregroundColor(.white)
+                                        }
+                                    })
+                                }
                             }
                         }
                         Divider()
@@ -269,7 +287,7 @@ struct AuctionListingView: View {
                         }
                     }
                 }
-                .onAppear{
+                .onAppear {
                     viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
                         Task {
@@ -286,11 +304,20 @@ struct AuctionListingView: View {
                         }
                     }
                 }
-
+                
             }.padding()
-            .onChange(of: viewModel.reviews) {
-                reviews = viewModel.reviews.shuffled()
-            }
+                .onChange(of: viewModel.reviews) {
+                    reviews = viewModel.reviews.shuffled()
+                }
+                .task {
+                    Task {
+                        do {
+                            try await checkForBid()
+                        }catch {
+                            
+                        }
+                    }
+                }
         }
     }
     func appendLikedUser(usersLiked: String, isLiked: Bool, listingID: String) async throws {
@@ -332,7 +359,19 @@ struct AuctionListingView: View {
             print("Error getting documents: \(error)")
         }
     }
-
+    
+    func checkForBid() async throws{
+        let document = try await Firestore.firestore().collection("carListings").document((listing?.listingID!)!).getDocument()
+        if document.exists {
+            let startBid = Double(listing?.startBid ?? "0.0")
+            let newBid = Double(document.get("currentBid") as? String ?? "0.0")
+            let oldBid = Double(listing?.currentBid ?? "0.0")
+            let biggest = [newBid!, oldBid!, startBid!].max() ?? 0.0
+            if newBid == biggest {
+                listing?.currentBid = document.get("currentBid") as? String ?? ""
+            }
+        }
+    }
 }
 
 #Preview {
