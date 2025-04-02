@@ -53,6 +53,10 @@ struct listingCreation: View {
     @State var showModelPicker = false
     @State var showTypePicker = false
     
+    @State var modified = false
+    @State var modifications: String
+
+    
     
     var body: some View {
         NavigationView{
@@ -260,7 +264,29 @@ struct listingCreation: View {
                             })
                         }.frame(width:350)
                     }
-                    
+                //modifications
+                    Group {
+                        headline(headerText: "Vehicle Details")
+                        HStack{
+                            Spacer()
+                            Toggle(isOn: $modified) {
+                                Text("Is this car modified?")
+                                    .font(Font.custom("Jost-Regular", size: 20))
+                                    .foregroundColor(Color.foreground)
+                            }.toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                                .padding()
+                        }
+                        if modified == true {
+                            TextField("List all modifications", text: $modifications, axis: .vertical)
+                                .padding(6)
+                                .font(.custom("Jost", size: 18))
+                                .frame(width:365, height:150, alignment: .topLeading)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 3)
+                                        .stroke(.gray.opacity(0.2), lineWidth: 2)
+                                }
+                        }
+                    }
                     Divider()
                     
                     // price
@@ -366,6 +392,8 @@ struct listingCreation: View {
             "listingType" : "renting",
             "imageName" : "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5",
             "listingPrice": listingPrice,
+            "modified": modified,
+            "modifications": modifications,
             "carDescription": carDescription,
             "listingID" : listingID,
             "dateCreated" : date,
@@ -429,5 +457,5 @@ extension Image {
     }
 }
 #Preview {
-    listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", showSignInView: .constant(false))
+    listingCreation(editListing: false, carType: "", location: "", carModel: "", carMake: "", carYear: "", listingPrice: "", carDescription: "", showSignInView: .constant(false), modifications: "")
 }

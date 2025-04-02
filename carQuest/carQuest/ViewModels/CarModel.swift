@@ -17,6 +17,7 @@ class ListingViewModel: ObservableObject {
     @Published var recentListings: [carListing] = [carListing]()
     @Published var userID: String = ""
     @Published var likedVehicles: [carListing] = [carListing]()
+    @Published var pendingVehicles: [carListing] = [carListing]()
     @Published var rating = Double()
     @Published var reviews = [Review]()
     
@@ -27,7 +28,7 @@ class ListingViewModel: ObservableObject {
                     //transforms firbase type "Timestamp" into type "Date"
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", status: doc["status"] as? String ?? "")
                     
                 }
             }
@@ -42,7 +43,7 @@ class ListingViewModel: ObservableObject {
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
                     
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", modified: doc["modified"] as? Bool ?? false, modifications: doc["modifications"] as? String ?? "")
                     
                 }
             }
@@ -55,6 +56,20 @@ class ListingViewModel: ObservableObject {
         Firestore.firestore().collection("carListings").whereField("usersLiked", arrayContains: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.likedVehicles = snapshot!.documents.map { doc in
+                    
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                    
+                }
+            }
+        }
+    }
+    
+    func generateMyPendingListings() throws{
+        let user = try AuthenticationManager.shared.getAuthenticatedUser()
+        
+        Firestore.firestore().collection("carListings").whereField("userID", isEqualTo: user.uid).whereField("status", isEqualTo: "pending").getDocuments() {snapshot, error in
+            if error == nil && snapshot != nil {
+                self.pendingVehicles = snapshot!.documents.map { doc in
                     
                     return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
                     
@@ -85,7 +100,7 @@ class ListingViewModel: ObservableObject {
                     //transforms firbase type "Timestamp" into type "Date"
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", carMileage: doc["carMileage"] as? String ?? "", carTitle: doc ["carTitle"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", carMileage: doc["carMileage"] as? String ?? "", carTitle: doc ["carTitle"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", status: doc["status"] as? String ?? "")
                 }
             }
         }
@@ -137,7 +152,7 @@ class ListingViewModel: ObservableObject {
                     //transforms firbase type "Timestamp" into type "Date"
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", carMileage: doc["carMileage"] as? String ?? "", carTitle: doc ["carTitle"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "")
+                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", listingPrice: doc["listingPrice"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", carMileage: doc["carMileage"] as? String ?? "", carTitle: doc ["carTitle"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", status: doc["status"] as? String ?? "")
                 }
             }
         }

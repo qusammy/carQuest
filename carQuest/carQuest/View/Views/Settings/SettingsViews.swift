@@ -39,6 +39,7 @@ struct PushNotificationView: View {
                             .font(Font.custom("Jost-Regular", size: 20))
                             .foregroundColor(Color.foreground)
                     }.toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                    .padding()
                     Spacer()
                 Divider()
             }.padding()
@@ -225,7 +226,7 @@ struct MyListingsView: View {
                     HStack{
                         Spacer()
                         ForEach(viewModel.myauctionListings) { listing in
-                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, bid: "")) {
+                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView)) {
                                 imageBox(imageName: URL(string: listing.imageName![0]), carYear: listing.carYear!, carMake: listing.carMake!, carModel: listing.carModel!, carType: listing.carType!, width: 100, height: 100, textSize: 10, endTime: listing.endTime!, startBid: listing.startBid!)
                             }
                         }
@@ -318,7 +319,20 @@ struct AboutCarQuest: View {
                         .foregroundColor(Color.foreground)
                     Spacer()
                 }
-               Text("Hi")
+                HStack{
+                    Image("carQuestLogo")
+                        .resizable()
+                        .frame(width:150, height:150)
+                        .clipShape(RoundedRectangle(cornerRadius: 25.0))
+                    
+                    Text("CarQuest is a High School project made by James H. and Maddy Q. in their second year of Mobile Makers.\nCarQuest is a representation of James' and Maddy's SwiftUI, Firebase, and UI design skills.")
+                        .font(.custom("Jost-Regular", size: 16))
+                        .foregroundStyle(Color.foreground)
+                        .multilineTextAlignment(.leading)
+                }
+                Image("mobileMakersStudio")
+                    .resizable()
+                    .frame(width:350, height:75)
             }.padding()
         }
     }
@@ -336,6 +350,15 @@ struct PrivacyView: View {
                         .foregroundColor(Color.foreground)
                     Spacer()
                 }
+                Text("CarQuest ensures its user's privacy by minimizing the collection of user data, promoting 2FA, and using a secure database, Firebase, to store user data.")
+                    .font(.custom("Jost-Regular", size: 20))
+                    .foregroundStyle(Color.foreground)
+                    .multilineTextAlignment(.center)
+                Divider()
+                Link("Privacy and Security in Firebase", destination: URL(string: "https://firebase.google.com/support/privacy")!)
+                    .font(.custom("Jost", size: 20))
+                    .foregroundStyle(Color.accent)
+
             }.padding()
         }
     }
@@ -421,7 +444,7 @@ struct makePickerView: View {
 struct typePickerView: View {
     @Environment(\.dismiss) var dismiss
 
-    var types = ["Sedan", "Coupe", "Hatchback", "Convertible", "Sport", "Wagon", "Crossover", "SUV", "Pickup", "Minivan", "Van", "Luxury", "EV", "Hybrid", "Off-Road", "Hypercar", "Roadster", "Microcar", "Kei", "Grand Tourer", "Limousine" ]
+    var types = ["Sedan", "Coupe", "Hatchback", "Convertible", "Wagon", "Crossover", "SUV", "Pickup", "Minivan", "Van", "EV", "Hybrid", "Off-Road", "Hypercar", "Roadster", "Microcar", "Kei", "Grand Tourer", "Limousine" ]
     
     @State var typeSearch = ""
 

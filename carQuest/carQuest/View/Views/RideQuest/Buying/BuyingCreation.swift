@@ -420,7 +420,8 @@ struct BuyingCreation: View {
             "dateCreated" : date,
             "usersLiked" : [],
             "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)",
-            "location": location
+            "location": location,
+            "status": "For sale"
         ], merge: true)
         if selectedImages.isEmpty == false {
             try await db.collection("carListings").document(listingID).setData([

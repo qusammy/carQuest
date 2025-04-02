@@ -1,7 +1,15 @@
 import SwiftUI
+import Firebase
 
 struct NotificationsView: View {
     @State var notificationAlert: Bool = true
+    @State var notifications: [String] = [""]
+    @State var message: String = "Not changed"
+    @StateObject private var viewModel = ListingViewModel()
+    @State private var pendingList: [carListing] = [carListing]()
+    
+    @Binding var showSignInView: Bool
+    
     var body: some View {
         VStack{
             HStack{
@@ -9,27 +17,51 @@ struct NotificationsView: View {
                     .font(Font.custom("ZingRustDemo-Base", size: 40))
                     .foregroundColor(Color.foreground)
                 Spacer()
-            }
+                }
             ScrollView{
-                VStack{
-                    ForEach(0..<10) { num in
-                        HStack{
-                            Text("Listing")
-                                .font(Font.custom("Jost-Regular", size: 25))
-                                .foregroundColor(Color.foreground)
-                            Spacer()
-                            Text("$username sent you a message about your listing.")
-                                .foregroundColor(Color(.init(white:0.65, alpha:1)))
-                                .multilineTextAlignment(.leading)
+                ForEach(pendingList) {listing in
+                    NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
+                        VStack{
+                            HStack{
+                                Image(systemName: "exclamationmark.transmission")
+                                    .resizable()
+                                    .frame(width:30, height:30)
+                                    .foregroundStyle(Color.accentColor)
+                                VStack{
+                                    HStack{
+                                        Text("Vehicle pending")
+                                            .font(.custom("Jost", size: 20))
+                                            .foregroundStyle(Color.foreground)
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        Text("\(listing.listingTitle ?? "") has been bought and is waiting for your approval.")
+                                            .font(.custom("Jost", size: 16))
+                                            .foregroundStyle(Color.foreground)
+                                            .multilineTextAlignment(.leading)
+                                        Spacer()
+                                    }
+                                }
+                            }
                             Divider()
                         }
                     }
                 }
             }
-        }.padding()
+        }
+        .padding()
+        .onAppear(){
+            Task{
+                do{
+                    try viewModel.generateMyPendingListings()
+                        
+                } catch{
+                
+                }
+            }
+        }
+        .onChange(of: viewModel.pendingVehicles) {
+            pendingList = viewModel.pendingVehicles
+        }
     }
-}
-
-#Preview {
-    NotificationsView()
 }
