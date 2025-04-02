@@ -96,27 +96,27 @@ struct listingCreation: View {
                             .font(.custom("Jost-Regular", size:20))
                             .foregroundStyle(Color.accentColor)
                             .onChange(of: photoItem1) {
-                       Task {
-                           selectedImages.removeAll()
-                           previewImages.removeAll()
-                                                               for item in photoItem1 {
-                                                                   if let loaded = try? await item.loadTransferable(type: Data.self) {
-                                                                       selectedImages.append(loaded)
-                                                                   } else {
-                                                                       print("Failed")
-                                                                   }
-                                                               }
-                                                               for item in photoItem1 {
-                                                                   if let loaded = try? await item.loadTransferable(type: Image.self) {
-                                                                       let size = CGSize(width: 300, height: 300)
-                                                                       let uiImage = loaded.getUIImage(newSize: size)
-                                                                       previewImages.append(uiImage!)
-                                                                   } else {
-                                                                       print("Failed")
-                                                                   }
-                                                               }
-                                                           }
-                                                       }
+                                Task {
+                                    selectedImages.removeAll()
+                                    previewImages.removeAll()
+                                    for item in photoItem1 {
+                                        if let loaded = try? await item.loadTransferable(type: Data.self) {
+                                            selectedImages.append(loaded)
+                                        } else {
+                                            print("Failed")
+                                        }
+                                    }
+                                    for item in photoItem1 {
+                                        if let loaded = try? await item.loadTransferable(type: Image.self) {
+                                            let size = CGSize(width: 300, height: 300)
+                                            let uiImage = loaded.getUIImage(newSize: size)
+                                            previewImages.append(uiImage!)
+                                        } else {
+                                            print("Failed")
+                                        }
+                                    }
+                                }
+                            }
                         Spacer()
                     }
                     if previewImages.isEmpty != true {
@@ -159,8 +159,8 @@ struct listingCreation: View {
                         .font(Font.custom("Jost-Regular", size:20))
                         .frame(maxWidth: 275)
                         .foregroundStyle(Color.blue)
-                                       
-                        
+                    
+                    
                     
                     Divider()
                     
@@ -314,7 +314,12 @@ struct listingCreation: View {
                     Button {
                         Task{
                             do{
-                                try await createListingRenting(listingExists: false, listingName: "")
+                                if carViewModel.myrentListings.count >= 3 {
+                                    errorText = "You already have three listings of this type!"
+                                }
+                                else {
+                                    try await createListingRenting(listingExists: false, listingName: "")
+                                }
                                 photo1Data = Data()
                                 showError = false
                                 dismiss()
@@ -339,6 +344,15 @@ struct listingCreation: View {
                         .foregroundStyle(Color.accentColor)
                 }
             }.padding()
+        }
+        .onAppear{
+            Task {
+                do {
+                    try carViewModel.generateMyRentListings()
+                }catch {
+                    
+                }
+            }
         }
     }
     func createListingRenting(listingExists: Bool, listingName: String) async throws {

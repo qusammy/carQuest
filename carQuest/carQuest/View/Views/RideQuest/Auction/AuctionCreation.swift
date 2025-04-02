@@ -319,8 +319,12 @@ struct AuctionCreation: View {
                     Button {
                         Task{
                             do{
-                                listingType = "auction"
-                                try await createListingAuction(listingExists: false, listingName: "")
+                                if carViewModel.myauctionListings.count >= 3 {
+                                    errorText = "You already have three listings of this type!"
+                                }
+                                else {
+                                    try await createListingAuction(listingExists: false, listingName: "")
+                                }
                                 photo1Data = Data()
                                 showError = false
                                 dismiss()
@@ -345,6 +349,15 @@ struct AuctionCreation: View {
                         .foregroundStyle(Color.accentColor)
                 }
             }.padding()
+        }
+        .onAppear {
+            Task {
+                do {
+                    try carViewModel.generateMyAuctionListings()
+                }catch {
+                    
+                }
+            }
         }
     }
     func createListingAuction(listingExists: Bool, listingName: String) async throws {
