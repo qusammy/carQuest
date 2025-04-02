@@ -8,6 +8,7 @@ struct buyingListingView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var isLiked: Bool = false
+    @State private var status: String = "For sale"
     @Binding var showSignInView: Bool
     @ObservedObject var viewModel = ListingViewModel()
     @ObservedObject var userViewModel = UserInfoViewModel()
@@ -19,7 +20,8 @@ struct buyingListingView: View {
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
-    
+    @State private var showAlert = false
+
     var body: some View {
         NavigationStack{
             VStack{
@@ -38,30 +40,32 @@ struct buyingListingView: View {
                         }
                     }
                     VStack{
-                        HStack{
-                            Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
-                                .font(.custom("Jost-Regular", size: 25))
-                                .frame(maxWidth: 375, alignment: .leading)
-                                .foregroundColor(Color.foreground)
-                            Spacer()
-                            Button(action: {
-                                isLiked.toggle()
-                                
-                                Task{
-                                    do{
-                                        try await appendLikedUser(usersLiked: user ?? "", isLiked: isLiked, listingID: listing?.listingID ?? "")
-                                    }catch {
-                                        
+                        Group{
+                            HStack{
+                                Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
+                                    .font(.custom("Jost-Regular", size: 25))
+                                    .frame(maxWidth: 375, alignment: .leading)
+                                    .foregroundColor(Color.foreground)
+                                Spacer()
+                                Button(action: {
+                                    isLiked.toggle()
+                                    
+                                    Task{
+                                        do{
+                                            try await appendLikedUser(usersLiked: user ?? "", isLiked: isLiked, listingID: listing?.listingID ?? "")
+                                        }catch {
+                                            
+                                        }
                                     }
-                                }
-                            }, label: {
-                                ZStack{
-                                    Image(systemName: isLiked ? "heart.fill" : "heart")
-                                        .resizable()
-                                        .foregroundColor(.foreground)
-                                        .frame(width:40, height:35)
-                                }
-                            })
+                                }, label: {
+                                    ZStack{
+                                        Image(systemName: isLiked ? "heart.fill" : "heart")
+                                            .resizable()
+                                            .foregroundColor(.foreground)
+                                            .frame(width:40, height:35)
+                                    }
+                                })
+                            }
                         }
                         if listing?.userID == user {
                             HStack{
@@ -73,7 +77,7 @@ struct buyingListingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2, modifications: "")
                                 }
                                 Spacer()
                                 Button {
@@ -196,19 +200,31 @@ struct buyingListingView: View {
                                 .font(.custom("Jost-Regular", size: 22))
                                 .foregroundColor(.foreground)
                             Spacer()
-                            if listing?.userID != user {
+                            if status == "For sale" && listing?.userID != user {
                                 Button(action: {
-                                    //brings up message view
+                                    showAlert = true
+                                    
                                 }, label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 15)
-                                            .frame(width: 85, height: 35)
+                                            .frame(width: 100, height: 35)
                                             .foregroundColor(Color("appColor"))
                                         Text("Purchase")
                                             .font(.custom("Jost-Regular", size:20))
                                             .foregroundColor(.white)
                                     }
                                 })
+                                
+                            } else if status == "pending" && listing?.userID != user {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .frame(width: 100, height: 35)
+                                        .foregroundStyle(Color.gray)
+                                    Text("Pending")
+                                        .font(.custom("Jost-Regular", size:20))
+                                        .foregroundColor(.white)
+                                    
+                                }
                             }
                         }
                         Divider()
@@ -240,7 +256,7 @@ struct buyingListingView: View {
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
                                 try await checkForLike()
-                                
+                                try await checkStatus()
                                 
                             }catch {
                                 print("error getting listing")
@@ -249,7 +265,21 @@ struct buyingListingView: View {
                     }
                 }
 
-            }.padding()
+            }
+            .alert("Are you sure you want to purchase this vehicle?", isPresented: $showAlert) {
+        Button(role: .destructive) {
+                Task {
+                    do {
+                        try await statusPending(docID: listing?.listingID ?? "")
+                    }catch {
+                        print(error)
+                            }
+                        }
+                }label: {
+                    Text("Purchase")
+                }
+            }
+            .padding()
             .onChange(of: viewModel.reviews) {
                 reviews = viewModel.reviews.shuffled()
             }
@@ -292,7 +322,37 @@ struct buyingListingView: View {
                 }
             }
         } catch {
-            print("Error getting documents: \(error)")
+        }
+    }
+    
+    func statusPending(docID: String) async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        let docRef = db.collection("carListings").document(docID)
+
+        do {
+          try await docRef.updateData([
+            "status": "pending"
+          ])
+        } catch {
+        }
+    }
+    
+    func checkStatus() async throws {
+        
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        do {
+            let querySnapshot = try await db.collection("carListings").whereField("status", isEqualTo: "pending")
+                .getDocuments()
+            for document in querySnapshot.documents {
+                
+                if listing?.listingID == document.documentID {
+                    status = "pending"
+                }
+            }
+        } catch {
         }
     }
 }

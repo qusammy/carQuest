@@ -126,7 +126,7 @@ struct topNavigationBar: View {
                         .frame(width:40, height:30)
                         .foregroundColor(Color.foreground)
                 })
-                NavigationLink(destination: NotificationsView()) {
+                NavigationLink(destination: NotificationsView(showSignInView: $showSignInView)) {
                     Image(systemName: "bell.fill")
                         .resizable()
                         .frame(width:30, height:30)

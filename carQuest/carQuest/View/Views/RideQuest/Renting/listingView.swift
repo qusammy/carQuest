@@ -74,7 +74,7 @@ struct listingView: View {
                                         .font(.custom("Jost-Regular", size: 20))
                                     
                                 } .fullScreenCover(isPresented: $editIsPresented) {
-                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2)
+                                    listingCreation(editListing: false, carType: listing?.carType ?? "", location: "", carModel: listing?.carModel ?? "", carMake: listing?.carMake ?? "", carYear: listing?.carYear ?? "", listingPrice: "", carDescription: listing?.carDescription ?? "", listingLetter: "R", showSignInView: $showSignInView, selection: 2, modifications: "")
                                 }
                                 Spacer()
                                 Button {
@@ -164,6 +164,9 @@ struct listingView: View {
                                 .lineLimit(4)
                             Spacer()
                             }
+                        if listing?.modified == true {
+                            Text("G")
+                        }
                         HStack{
                             Text("Last edited on \(listing?.dateCreated ?? Date(), format: .dateTime.day().month().year())")
                                 .font(.custom("Jost-Regular", size: 20))

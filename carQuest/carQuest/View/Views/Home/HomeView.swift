@@ -169,7 +169,6 @@ struct HomeView: View {
                     viewModel2.generateUsersClicked()
                     Task {
                         do {
-                            user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                             try viewModel2.generateLikedListings()
                             
                         }catch {
