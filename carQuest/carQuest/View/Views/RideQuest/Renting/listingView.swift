@@ -26,11 +26,16 @@ struct listingView: View {
                 ScrollView(showsIndicators: false){
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack{
-                            ForEach((listing?.imageName)!, id: \.self) { image in
-                                WebImage(url: URL(string: image))
-                                    .resizable()
-                                    .frame(width:300, height:300)
+                            if listing?.imageName?.isEmpty != nil{
+                                ForEach((listing?.imageName)!, id: \.self) { image in
+                                    WebImage(url: URL(string: image))
+                                        .resizable()
+                                        .frame(width:300, height:300)
+                                }
+                            } else {
+                                WebImage(url: URL(string: "https://firebasestorage.googleapis.com/v0/b/carquest-4038a.appspot.com/o/4.png?alt=media&token=d79fb423-974c-4b7c-87ac-0dd495ab66e5"))
                             }
+
                         }
                     }
                     VStack{
