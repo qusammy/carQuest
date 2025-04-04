@@ -23,6 +23,7 @@ class ListingViewModel: ObservableObject {
     @Published var reviews = [Review]()
     
     func generateAllListings() {
+        self.allListings.removeAll()
         Firestore.firestore().collection("carListings").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.allListings = snapshot!.documents.map { doc in
@@ -37,6 +38,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateRentListings(){
+        self.rentListings .removeAll()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.rentListings = snapshot!.documents.map { doc in
@@ -97,21 +99,25 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateAuctionListings() {
+        self.auctionListings.removeAll()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
-                self.auctionListings = snapshot!.documents.map { doc in
+                for doc in snapshot!.documents {
                     //transforms firbase type "Timestamp" into type "Date"
                     let createdDate: Timestamp = doc["dateCreated"] as? Timestamp ?? Timestamp()
                     let create = createdDate.dateValue()
                     let endTime: Timestamp = doc["endTime"] as? Timestamp ?? Timestamp()
                     let newEndTime = endTime.dateValue()
-                    return carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", startBid: doc["startBid"] as? String ?? "", buyout: doc["buyout"] as? String ?? "", endTime: newEndTime, status: doc["status"] as? String ?? "")
+                    if newEndTime > Date.now {
+                        self.auctionListings.append(carListing(id: doc.documentID, carMake: doc["carMake"] as? String ?? "", carModel: doc["carModel"] as? String ?? "", carType: doc["carType"] as? String ?? "", carYear: doc["carYear"] as? String ?? "", userID: doc["userID"] as? String ?? "", imageName: doc["imageName"] as? [String] ?? [""], listingType: doc["listingType"] as? String ?? "", carDescription: doc["carDescription"] as? String ?? "", listingID: doc["listingID"] as? String ?? "", dateCreated: create, usersLiked: doc["usersLiked"] as? [String] ?? [""], listingTitle: doc["listingTitle"] as? String ?? "", location: doc["location"] as? String ?? "", startBid: doc["startBid"] as? String ?? "", buyout: doc["buyout"] as? String ?? "", endTime: newEndTime))
+                    }
                 }
             }
         }
     }
     
     func generateBuyListings() {
+        self.buyListings.removeAll()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "buying").getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.buyListings = snapshot!.documents.map { doc in
@@ -125,6 +131,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateMyRentListings() throws {
+        self.myrentListings.removeAll()
         let user = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
@@ -139,6 +146,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateUserRentListings(userID: String) throws {
+        self.userRentListings.removeAll()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "renting").whereField("userID", isEqualTo: userID).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.userRentListings = snapshot!.documents.map { doc in
@@ -151,6 +159,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateUserAuctionListings(userID: String) throws {
+        self.userAuctionListings.removeAll()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").whereField("userID", isEqualTo: userID).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
                 self.userAuctionListings = snapshot!.documents.map { doc in
@@ -163,6 +172,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateMyBuyListings() throws {
+        self.mybuyListings.removeAll()
         let user = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "buying").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
@@ -177,6 +187,7 @@ class ListingViewModel: ObservableObject {
     }
     
     func generateMyAuctionListings() throws {
+        self.myauctionListings.removeAll()
         let user = try AuthenticationManager.shared.getAuthenticatedUser()
         Firestore.firestore().collection("carListings").whereField("listingType", isEqualTo: "auction").whereField("userID", isEqualTo: user.uid).getDocuments() {snapshot, error in
             if error == nil && snapshot != nil {
