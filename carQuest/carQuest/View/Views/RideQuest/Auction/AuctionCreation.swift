@@ -410,7 +410,8 @@ struct AuctionCreation: View {
             "location": location,
             "startBid": startBid,
             "buyout": buyout,
-            "endTime": endTime
+            "endTime": endTime,
+            "status": "For auction"
         ], merge: true)
         if selectedImages.isEmpty == false {
             try await db.collection("carListings").document(listingID).setData([

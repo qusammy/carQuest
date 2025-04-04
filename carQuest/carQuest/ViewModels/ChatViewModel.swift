@@ -78,7 +78,6 @@ class chatViewModel: ObservableObject {
             }
     }
     func handleSend(){
-        print(chatText)
         
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
@@ -114,8 +113,6 @@ class chatViewModel: ObservableObject {
                 self.errorMessage = "Failed to save message \(error)"
                 return
             }
-            print("Successfully saved recipient user message")
-
         }
     }
     private func persistRecipientMessage(fromIdDisplayName: String, fromIdProfilePic: String){

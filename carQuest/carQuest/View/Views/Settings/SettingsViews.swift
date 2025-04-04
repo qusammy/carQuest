@@ -27,13 +27,13 @@ struct PushNotificationView: View {
     @State var pushNotification: Bool = true
     var body: some View {
         VStack{
+            HStack{
+                Text("Push Notifications")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+                }
             ScrollView(showsIndicators: false){
-                HStack{
-                    Text("Push Notifications")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                    }
                     Toggle(isOn: $pushNotification) {
                         Text("Enable push notifications")
                             .font(Font.custom("Jost-Regular", size: 20))
@@ -200,14 +200,14 @@ struct MyListingsView: View {
     
 
     var body: some View {
-        ScrollView{
-            VStack{
-                HStack{
-                    Text("My Listings")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
+        VStack{
+            HStack{
+                Text("My Listings")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+            }
+            ScrollView{
                 HStack{
                     Text("Auction")
                         .font(Font.custom("Jost", size: 30))
@@ -311,14 +311,14 @@ struct AboutCarQuest: View {
     @Binding var showSignInView: Bool
 
     var body: some View {
+        VStack{
+            HStack{
+                Text("About Car Quest")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+            }
         ScrollView{
-            VStack{
-                HStack{
-                    Text("About Car Quest")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
                 HStack{
                     Image("carQuestLogo")
                         .resizable()
@@ -342,14 +342,14 @@ struct PrivacyView: View {
     @Binding var showSignInView: Bool
     
     var body: some View {
+        VStack{
+            HStack{
+                Text("Privacy")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+            }
         ScrollView{
-            VStack{
-                HStack{
-                    Text("Privacy")
-                        .font(Font.custom("ZingRustDemo-Base", size: 40))
-                        .foregroundColor(Color.foreground)
-                    Spacer()
-                }
                 Text("CarQuest ensures its user's privacy by minimizing the collection of user data, promoting 2FA, and using a secure database, Firebase, to store user data.")
                     .font(.custom("Jost-Regular", size: 20))
                     .foregroundStyle(Color.foreground)
@@ -369,14 +369,15 @@ struct PurchasesView: View {
     @Binding var showSignInView: Bool
 
     var body: some View {
+        VStack{
+            HStack{
+                Text("Purchases & Payment")
+                    .font(Font.custom("ZingRustDemo-Base", size: 40))
+                    .foregroundColor(Color.foreground)
+                Spacer()
+            }
             ScrollView{
-                VStack{
-                    HStack{
-                        Text("Purchases & Payment")
-                            .font(Font.custom("ZingRustDemo-Base", size: 40))
-                            .foregroundColor(Color.foreground)
-                        Spacer()
-                    }
+                
                 }.padding()
             }
         }

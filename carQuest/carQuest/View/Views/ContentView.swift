@@ -17,7 +17,7 @@ struct ContentView: View {
                     
                     AuctionView(showSignInView: $showSignInView, searchText: "")
                         .tabItem{
-                            Label("", systemImage:("dollarsign.circle.fill"))
+                            Image(systemName: "building.columns.fill")
                         }.tag(1)
                     
                     rentView(showSignInView: $showSignInView, searchText: "")

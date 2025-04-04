@@ -19,7 +19,9 @@ struct AuctionListingView: View {
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
-    
+    @State private var status: String = "For auction"
+    @State private var showAlert = false
+
     var body: some View {
         NavigationStack{
             VStack{
@@ -32,44 +34,48 @@ struct AuctionListingView: View {
                                     .frame(width:300, height:300)
                             }
                         }
+                    }.toolbar{
+                        ToolbarItem(placement: .principal){
+                            VStack{
+                                if (listing?.endTime!)! <= Date.now {
+                                    Text("Current Bid: $\(listing?.currentBid ?? "No Bids") \(Image(systemName: "clock.fill")) Ended")
+                                        .background(Color.gray)
+                                        .font(.custom("Jost-Regular", size: 17))
+                                        .foregroundColor(Color.white)
+                                        .lineLimit(1)
+                                        .multilineTextAlignment(.leading)
+                                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                                        .padding()
+                                }
+                                else {
+                                    let range = Date.now...(listing?.endTime!)!
+                                    let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: (listing?.endTime!)!)
+                                    let days = diffComponents.day
+                                    if days! >= 1 {
+                                        Text(" Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill"))   \(diffComponents.day!) days ")
+                                            .background(Color.gray)
+                                            .font(.custom("Jost-Regular", size: 17))
+                                            .foregroundColor(Color.white)
+                                            .lineLimit(1)
+                                            .multilineTextAlignment(.leading)
+                                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                                            .padding()
+                                    }
+                                    else {
+                                        Text(" Current Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Time Left:  \(Text(timerInterval: range, countsDown: true)) ")
+                                            .background(Color.accentColor)
+                                            .font(.custom("Jost-Regular", size: 17))
+                                            .foregroundColor(Color.white)
+                                            .lineLimit(1)
+                                            .multilineTextAlignment(.leading)
+                                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                                            .padding()
+                                    }
+                                }
+                            }
+                        }
                     }
                     VStack{
-                        if (listing?.endTime!)! <= Date.now {
-                            Text(" Current Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Ended")
-                                .background(Color.gray)
-                                .font(.custom("Jost-Regular", size: 20))
-                                .foregroundColor(Color.white)
-                                .lineLimit(1)
-                                .multilineTextAlignment(.leading)
-                                .clipShape(RoundedRectangle(cornerRadius: 5))
-                                .padding()
-                        }
-                        else {
-                            let range = Date.now...(listing?.endTime!)!
-                            let diffComponents = Calendar.current.dateComponents([.day], from: Date.now, to: (listing?.endTime!)!)
-                            let days = diffComponents.day
-                            if days! >= 1 {
-                                Text(" Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill"))   \(diffComponents.day!) days ")
-                                    .background(Color.gray)
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .foregroundColor(Color.white)
-                                    .lineLimit(1)
-                                    .multilineTextAlignment(.leading)
-                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                                    .padding()
-                            }
-                            else {
-                                Text(" Current Bid: $\(listing?.currentBid ?? "No Bids")   \(Image(systemName: "clock.fill")) Time Left:  \(Text(timerInterval: range, countsDown: true)) ")
-                                    .background(Color.accentColor)
-                                    .font(.custom("Jost-Regular", size: 25))
-                                    .foregroundColor(Color.white)
-                                    .lineLimit(1)
-                                    .multilineTextAlignment(.leading)
-                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                                    .padding()
-                                
-                            }
-                        }
                         HStack{
                             Text("\(listing?.carYear ?? "No Data") \(listing?.carMake ?? "No Data") \(listing?.carModel ?? "No Data") \(listing?.carType ?? "No Data")")
                                 .font(.custom("Jost-Regular", size: 25))
@@ -204,7 +210,7 @@ struct AuctionListingView: View {
                         Divider()
                         VStack {
                             HStack {
-                                Text("Statr Bid: $\(listing?.startBid ?? "000.00")")
+                                Text("Stater Bid: $\(listing?.startBid ?? "000.00")")
                                     .font(.custom("Jost-Regular", size: 22))
                                     .foregroundColor(.foreground)
                                 Text("Current Bid: $\(listing?.currentBid ?? "000.00")")
@@ -224,19 +230,53 @@ struct AuctionListingView: View {
                                         .foregroundStyle(Color.accentColor)
                                 }
                                 Spacer()
-                                if listing?.userID != user {
+                                if listing?.userID != user && status == "For auction"{
                                     Button(action: {
                                         //brings up payment view
                                     }, label: {
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 15)
-                                                .frame(width: 65, height: 35)
+                                                .frame(width: 85, height: 35)
                                                 .foregroundColor(Color("appColor"))
                                             Text("Place Bid")
                                                 .font(.custom("Jost-Regular", size:20))
                                                 .foregroundColor(.white)
                                         }
                                     })
+                                } else if listing?.userID != user && status != "For auction"{
+                                    
+                                }
+                            }
+                            HStack{
+                                Text("$\(listing?.listingPrice ?? "000.00")")
+                                    .font(.custom("Jost-Regular", size: 22))
+                                    .foregroundColor(.foreground)
+                                Spacer()
+                                if status == "For auction" && listing?.userID != user {
+                                    Button(action: {
+                                        showAlert = true
+                                        
+                                    }, label: {
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .frame(width: 135, height: 35)
+                                                .foregroundColor(Color("appColor"))
+                                            Text("Buyout auction")
+                                                .font(.custom("Jost-Regular", size:20))
+                                                .foregroundColor(.white)
+                                        }
+                                    })
+                                    
+                                } else if status == "pending" && listing?.userID != user {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .frame(width: 100, height: 35)
+                                            .foregroundStyle(Color.gray)
+                                        Text("Pending")
+                                            .font(.custom("Jost-Regular", size:20))
+                                            .foregroundColor(.white)
+                                        
+                                    }
                                 }
                             }
                         }
@@ -287,6 +327,7 @@ struct AuctionListingView: View {
                         }
                     }
                 }
+            
                 .onAppear {
                     viewModel.getRatings(listingID: (listing?.listingID)!)
                     if listing != nil {
@@ -296,7 +337,7 @@ struct AuctionListingView: View {
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
                                 try await checkForLike()
-                                
+                                try await checkStatus()
                                 
                             }catch {
                                 print("error getting listing")
@@ -305,7 +346,21 @@ struct AuctionListingView: View {
                     }
                 }
                 
-            }.padding()
+            }
+            .alert("Are you sure you want to buyout this vehicle?", isPresented: $showAlert) {
+        Button(role: .destructive) {
+                Task {
+                    do {
+                        try await statusPending(docID: listing?.listingID ?? "")
+                    }catch {
+                        print(error)
+                            }
+                        }
+                }label: {
+                    Text("Buyout")
+                }
+            }
+            .padding()
                 .onChange(of: viewModel.reviews) {
                     reviews = viewModel.reviews.shuffled()
                 }
@@ -370,6 +425,35 @@ struct AuctionListingView: View {
             if newBid == biggest {
                 listing?.currentBid = document.get("currentBid") as? String ?? ""
             }
+        }
+    }
+    func checkStatus() async throws {
+        
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        
+        do {
+            let querySnapshot = try await db.collection("carListings").whereField("status", isEqualTo: "pending")
+                .getDocuments()
+            for document in querySnapshot.documents {
+                
+                if listing?.listingID == document.documentID {
+                    status = "pending"
+                }
+            }
+        } catch {
+        }
+    }
+    func statusPending(docID: String) async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        let docRef = db.collection("carListings").document(docID)
+
+        do {
+          try await docRef.updateData([
+            "status": "pending"
+          ])
+        } catch {
         }
     }
 }
