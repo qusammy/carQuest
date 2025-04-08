@@ -267,6 +267,35 @@ struct AuctionCreation: View {
                     
                     Divider()
                     
+                    //location
+                    Group {
+                        VStack {
+                            HStack {
+                                Text("Location")
+                                    .font(Font.custom("Jost", size: 25))
+                                    .foregroundStyle(Color.foreground)
+                                Spacer()
+                            }
+                            HStack {
+                                Button {
+                                    locationManager.requestLocation()
+                                }label: {
+                                    Text("Request Location")
+                                        .font(Font.custom("Jost", size: 20))
+                                }
+                                Spacer()
+                            }
+                            HStack {
+                                if locationManager.city != "" {
+                                    Text("Location: \(locationManager.city), \(locationManager.state)")
+                                        .font(Font.custom("Jost", size: 15))
+                                }
+                                Spacer()
+                            }
+                        }
+                    }
+                    Divider()
+                    
                     // price
                     Group{
                         HStack{
@@ -407,7 +436,7 @@ struct AuctionCreation: View {
             "dateCreated" : date,
             "usersLiked" : [],
             "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)",
-            "location": location,
+            "location": "\(locationManager.city), \(locationManager.state)",
             "startBid": startBid,
             "buyout": buyout,
             "endTime": endTime,

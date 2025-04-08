@@ -55,30 +55,35 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first?.coordinate
-        update()
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
          print("error:: \(error.localizedDescription)")
     }
     
+    func requestLocation() {
+        update()
+    }
+    
     func update() {
         let latitude = location?.latitude ?? 0
         let longitude = location?.longitude ?? 0
-        self.region = MKCoordinateRegion(center:CLLocationCoordinate2D(latitude:
-                                                                        CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude)), span:
-                                            MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: latitude, longitude: longitude)) { placemarks, error in
-
-            guard let placemark = placemarks?.first else {
-                let errorString = error?.localizedDescription ?? "Unexpected Error"
-                print("Unable to reverse geocode the given location. Error: \(errorString)")
-                return
+        if latitude + longitude != 0 {
+            self.region = MKCoordinateRegion(center:CLLocationCoordinate2D(latitude:
+                                                                            CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude)), span:
+                                                MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+            CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: latitude, longitude: longitude)) { placemarks, error in
+                
+                guard let placemark = placemarks?.first else {
+                    let errorString = error?.localizedDescription ?? "Unexpected Error"
+                    print("Unable to reverse geocode the given location. Error: \(errorString)")
+                    return
+                }
+                
+                let reversedGeoLocation = GeoLocation(with: placemark)
+                self.name = reversedGeoLocation.name
+                self.city = reversedGeoLocation.city
+                self.state = reversedGeoLocation.state
             }
-
-            let reversedGeoLocation = GeoLocation(with: placemark)
-            self.name = reversedGeoLocation.name
-            self.city = reversedGeoLocation.city
-            self.state = reversedGeoLocation.state
         }
     }
 
@@ -94,60 +99,13 @@ struct GeoLocation {
     let country: String
     
     init(with placemark: CLPlacemark) {
-            self.name           = placemark.name ?? ""
-            self.streetName     = placemark.thoroughfare ?? ""
-            self.city           = placemark.locality ?? ""
-            self.state          = placemark.administrativeArea ?? ""
-            self.zipCode        = placemark.postalCode ?? ""
-            self.country        = placemark.country ?? ""
-        }
-
+        self.name           = placemark.name ?? ""
+        self.streetName     = placemark.thoroughfare ?? ""
+        self.city           = placemark.locality ?? ""
+        self.state          = placemark.administrativeArea ?? ""
+        self.zipCode        = placemark.postalCode ?? ""
+        self.country        = placemark.country ?? ""
+    }
+    
 }
 
-
-//import CoreLocation
-//import Contacts
-//class LocationManager: NSObject, ObservableObject {
-//    private let manager = CLLocationManager()
-//    @Published var userLocation: CLLocation?
-//    static let shared = LocationManager()
-//
-//    override init() {
-//        super.init()
-//        manager.delegate = self
-//        manager.desiredAccuracy = kCLLocationAccuracyBest
-//        manager.startUpdatingLocation()
-//    }
-//
-//    func requestLocation() {
-//        manager.requestWhenInUseAuthorization()
-//    }
-//}
-//extension LocationManager: CLLocationManagerDelegate {
-//    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-//        switch status {
-//
-//        case .notDetermined:
-//            print("DEBUG: Not determined")
-//        case .restricted:
-//            print("DEBUG: restricted")
-//        case .denied:
-//            print("DEBUG: denied")
-//        case .authorizedAlways:
-//            print("DEBUG: authorized always")
-//        case .authorizedWhenInUse:
-//            print("DEBUG: authorized when in use")
-//        @unknown default:
-//            break
-//        }
-//    }
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        guard let location = locations.last else {return}
-//        self.userLocation = location
-//    }
-//}
-//extension CLLocation {
-//    func fetchCityAndCountry(completion: @escaping (_ city: String?, _ country:  String?, _ error: Error?) -> ()) {
-//        CLGeocoder().reverseGeocodeLocation(self) { completion($0?.first?.locality, $0?.first?.country, $1) }
-//    }
-//}
