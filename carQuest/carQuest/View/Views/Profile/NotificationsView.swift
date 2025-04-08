@@ -21,7 +21,7 @@ struct NotificationsView: View {
                 if pendingList != [carListing]() {
                     ForEach(pendingList) {listing in
                         if listing.listingType == "buying" {
-                            NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
+                            NavigationLink(destination: BuyingApproval(listing: listing)) {
                                 VStack{
                                     HStack{
                                         Image(systemName: "dollarsign")

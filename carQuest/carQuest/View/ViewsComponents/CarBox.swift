@@ -139,7 +139,9 @@ struct topNavigationBar: View {
                         .frame(width:30, height:30)
                         .foregroundColor(Color.foreground)
                         .overlay{
-                            if pendingList != [carListing]() {
+                            if pendingList.isEmpty {
+                                
+                            } else {
                                 Image(systemName: "circle.fill")
                                     .resizable()
                                     .frame(width: 15, height:15)

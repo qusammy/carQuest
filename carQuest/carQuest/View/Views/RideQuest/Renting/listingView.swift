@@ -11,6 +11,7 @@ struct listingView: View {
     @Binding var showSignInView: Bool
     @ObservedObject var viewModel = ListingViewModel()
     @ObservedObject var userViewModel = UserInfoViewModel()
+    @StateObject var chatVM = UserProfileViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
@@ -19,6 +20,7 @@ struct listingView: View {
     @State private var showingDeleteAlert: Bool = false
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
+    @State private var chatUser: CarQuestUser?
     
     var body: some View {
         NavigationStack{
@@ -135,9 +137,7 @@ struct listingView: View {
 
                         Spacer()
                             if listing?.userID != user {
-                                Button(action: {
-                                    //brings up message view
-                                }, label: {
+                                NavigationLink(destination: ChatView(carUser: chatUser), label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 15)
                                             .frame(width: 160, height: 35)
@@ -182,9 +182,7 @@ struct listingView: View {
                                 .foregroundColor(.foreground)
                             Spacer()
                             if listing?.userID != user {
-                                Button(action: {
-                                    //brings up message view
-                                }, label: {
+                                NavigationLink(destination: ChatView(carUser: chatUser), label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 15)
                                             .frame(width: 65, height: 35)
@@ -251,6 +249,7 @@ struct listingView: View {
                                 try await userViewModel.getUserInfo(listing: listing!)
                                 user = try AuthenticationManager.shared.getAuthenticatedUser().uid
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
+                                chatUser = chatVM.getUser(uid: (listing?.userID)!)
                                 try await checkForLike()
                                 
                                 

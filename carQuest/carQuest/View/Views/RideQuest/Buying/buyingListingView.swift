@@ -12,6 +12,7 @@ struct buyingListingView: View {
     @Binding var showSignInView: Bool
     @ObservedObject var viewModel = ListingViewModel()
     @ObservedObject var userViewModel = UserInfoViewModel()
+    @StateObject var chatVM = UserProfileViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
@@ -21,6 +22,7 @@ struct buyingListingView: View {
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
     @State private var showAlert = false
+    @State private var chatUser: CarQuestUser?
 
     var body: some View {
         NavigationStack{
@@ -138,9 +140,7 @@ struct buyingListingView: View {
 
                         Spacer()
                             if listing?.userID != user {
-                                Button(action: {
-                                    //brings up message view
-                                }, label: {
+                                NavigationLink(destination: ChatView(carUser: chatUser), label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 15)
                                             .frame(width: 160, height: 35)
@@ -257,6 +257,7 @@ struct buyingListingView: View {
                                 try await FirebaseManager.shared.firestore.collection("carListings").document((listing?.listingID)!).collection("usersClicked").document(user!).setData(["timeAccessed" : Date.now])
                                 try await checkForLike()
                                 try await checkStatus()
+                                chatUser = chatVM.getUser(uid: (listing?.userID)!)
                                 
                             }catch {
                                 print("error getting listing")
