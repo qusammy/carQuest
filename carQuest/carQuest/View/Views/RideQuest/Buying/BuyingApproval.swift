@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct BuyingApproval: View {
     @Environment(\.dismiss) var dismiss
@@ -86,8 +87,7 @@ struct BuyingApproval: View {
                     }
                     HStack{
                         Button {
-                            // approves listing being bought. This will change a field in firebase,
-                            // status: "pending" -> "approved"
+                            showAlert = true
                         } label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 25)
@@ -119,7 +119,33 @@ struct BuyingApproval: View {
                     .foregroundStyle(Color.gray)
                     .font(.custom("Jost", size: 15))
                     .multilineTextAlignment(.center)
-            }.padding()
+            }
+            .alert("Are you sure you want to purchase this vehicle?", isPresented: $showAlert) {
+        Button(role: .destructive) {
+                Task {
+                    do {
+                        try await approveStatus(docID: listing?.listingID ?? "")
+                    }catch {
+                        print(error)
+                            }
+                        }
+                }label: {
+                    Text("Purchase")
+                }
+            }
+            .padding()
+        }
+    }
+    func approveStatus(docID: String) async throws {
+        let db = Firestore.firestore()
+        let user = try AuthenticationManager.shared.getAuthenticatedUser().uid
+        let docRef = db.collection("carListings").document(docID)
+
+        do {
+          try await docRef.updateData([
+            "status": "approved"
+          ])
+        } catch {
         }
     }
 }

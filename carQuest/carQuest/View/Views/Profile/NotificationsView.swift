@@ -76,7 +76,7 @@ struct NotificationsView: View {
                             }
                         }
                     }
-                } else if pendingList == [carListing]() {
+                } else if pendingList.isEmpty {
                         Text("No new notifications.")
                             .font(Font.custom("Jost", size: 20))
                             .foregroundColor(Color.foreground)
