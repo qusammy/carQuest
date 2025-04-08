@@ -94,6 +94,13 @@ struct imageBox: View {
                     }
                     
                 }
+                if carYear != nil && carModel != nil && carMake != nil && carType != nil {
+                    Text("\(carYear!) \(carMake!) \(carModel!) \(carType!)")
+                        .font(.custom("Jost-Regular", size: textSize ?? 20))
+                        .foregroundColor(Color.foreground)
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                }
             }
         }
     }

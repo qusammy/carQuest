@@ -302,7 +302,36 @@ struct BuyingCreation: View {
                     }
                     
                     Divider()
-
+                    
+                    //location
+                    Group {
+                        VStack {
+                            HStack {
+                                Text("Location")
+                                    .font(Font.custom("Jost", size: 25))
+                                    .foregroundStyle(Color.foreground)
+                                Spacer()
+                            }
+                            HStack {
+                                Button {
+                                    locationManager.requestLocation()
+                                }label: {
+                                    Text("Request Location")
+                                        .font(Font.custom("Jost", size: 20))
+                                }
+                                Spacer()
+                            }
+                            HStack {
+                                if locationManager.city != "" {
+                                    Text("Location: \(locationManager.city), \(locationManager.state)")
+                                        .font(Font.custom("Jost", size: 15))
+                                }
+                                Spacer()
+                            }
+                        }
+                    }
+                    Divider()
+                    
                     // price
                     Group{
                         HStack{
@@ -434,7 +463,7 @@ struct BuyingCreation: View {
             "dateCreated" : date,
             "usersLiked" : [],
             "listingTitle": "\(carYear) \(carMake) \(carModel) \(carType)",
-            "location": location,
+            "location": "\(locationManager.city), \(locationManager.state)",
             "status": "For sale"
         ], merge: true)
         if selectedImages.isEmpty == false {

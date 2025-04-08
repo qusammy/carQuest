@@ -42,7 +42,7 @@ struct AuctionListingView: View {
                     }.toolbar{
                         ToolbarItem(placement: .principal){
                             VStack{
-                                if (listing?.endTime!)! <= Date.now {
+                                if (listing?.endTime)! <= Date.now {
                                     Text("Current Bid: $\(listing?.currentBid ?? "No Bids") \(Image(systemName: "clock.fill")) Ended")
                                         .background(Color.gray)
                                         .font(.custom("Jost-Regular", size: 17))
