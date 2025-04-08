@@ -271,6 +271,7 @@ struct buyingListingView: View {
                 Task {
                     do {
                         try await statusPending(docID: listing?.listingID ?? "")
+                        try await checkStatus()
                     }catch {
                         print(error)
                             }

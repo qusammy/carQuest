@@ -18,6 +18,7 @@ struct imageBox: View {
     var endTime: Date?
     var startBid: String?
     var currentBid: String?
+    
     var body: some View {
         VStack{
             if startBid == nil && endTime == nil && startBid == nil {
@@ -101,12 +102,11 @@ struct imageBox: View {
 struct topNavigationBar: View {
     @Binding var showSignInView: Bool
     @ObservedObject var vm = UserProfileViewModel()
-    
     @State var showNewMessageScreen = false
-    
     @State var shouldNavigateToChatView = false
-
-
+    @StateObject private var viewModel = ListingViewModel()
+    @State private var pendingList: [carListing] = [carListing]()
+    
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
         VStack{
@@ -131,6 +131,15 @@ struct topNavigationBar: View {
                         .resizable()
                         .frame(width:30, height:30)
                         .foregroundColor(Color.foreground)
+                        .overlay{
+                            if pendingList != [carListing]() {
+                                Image(systemName: "circle.fill")
+                                    .resizable()
+                                    .frame(width: 15, height:15)
+                                    .foregroundStyle(Color.accentColor)
+                                    .offset(x: 10, y: 10)
+                            }
+                        }
                 }
                 
             }
@@ -140,7 +149,25 @@ struct topNavigationBar: View {
                     .foregroundColor(.blue)
                     .multilineTextAlignment(.leading)
             }
-        }.fullScreenCover(isPresented: $showNewMessageScreen){
+        }
+        .onAppear(){
+            Task{
+                do{
+                    try viewModel.generateMyPendingBuyingListings()
+                    try viewModel.generateMyPendingAuctionListings()
+
+                } catch{
+                
+                }
+            }
+        }
+        .onChange(of: viewModel.pendingVehicles) {
+            pendingList = viewModel.pendingVehicles
+        }
+        .onChange(of: viewModel.pendingVehicles) {
+            pendingList = viewModel.pendingVehicles
+        }
+        .fullScreenCover(isPresented: $showNewMessageScreen){
                         CreateNewMessage(didSelectNewUser: { user
                             in
                             print(user?.email ?? "")

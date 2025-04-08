@@ -7,8 +7,6 @@ struct NotificationsView: View {
     @State var message: String = "Not changed"
     @StateObject private var viewModel = ListingViewModel()
     @State private var pendingList: [carListing] = [carListing]()
-    @State private var pendingAuctionList: [carListing] = [carListing]()
-
     @Binding var showSignInView: Bool
     
     var body: some View {
@@ -20,62 +18,68 @@ struct NotificationsView: View {
                 Spacer()
                 }
             ScrollView{
-                ForEach(pendingList) {listing in
-                    if listing.listingType == "buying" {
-                        NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
-                            VStack{
-                                HStack{
-                                    Image(systemName: "dollarsign")
-                                        .resizable()
-                                        .frame(width:30, height:30)
-                                        .foregroundStyle(Color.accentColor)
-                                    VStack{
-                                        HStack{
-                                            Text("Vehicle pending")
-                                                .font(.custom("Jost", size: 20))
-                                                .foregroundStyle(Color.foreground)
-                                            Spacer()
-                                        }
-                                        HStack{
-                                            Text("\(listing.listingTitle ?? "") has been bought and is waiting for your approval.")
-                                                .font(.custom("Jost", size: 16))
-                                                .foregroundStyle(Color.foreground)
-                                                .multilineTextAlignment(.leading)
-                                            Spacer()
+                if pendingList != [carListing]() {
+                    ForEach(pendingList) {listing in
+                        if listing.listingType == "buying" {
+                            NavigationLink(destination: buyingListingView(showSignInView: $showSignInView, listing: listing)) {
+                                VStack{
+                                    HStack{
+                                        Image(systemName: "dollarsign")
+                                            .resizable()
+                                            .frame(width:20, height:30)
+                                            .foregroundStyle(Color.accentColor)
+                                        VStack{
+                                            HStack{
+                                                Text("Vehicle pending")
+                                                    .font(.custom("Jost", size: 20))
+                                                    .foregroundStyle(Color.foreground)
+                                                Spacer()
+                                            }
+                                            HStack{
+                                                Text("\(listing.listingTitle ?? "") has been bought and is waiting for your approval.")
+                                                    .font(.custom("Jost", size: 16))
+                                                    .foregroundStyle(Color.foreground)
+                                                    .multilineTextAlignment(.leading)
+                                                Spacer()
+                                            }
                                         }
                                     }
+                                    Divider()
                                 }
-                                Divider()
                             }
-                        }
-                    } else if listing.listingType == "auction" {
-                        NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, listing: listing)) {
-                            VStack{
-                                HStack{
-                                    Image(systemName: "dollarsign.bank.building.fill")
-                                        .resizable()
-                                        .frame(width:30, height:30)
-                                        .foregroundStyle(Color.accentColor)
-                                    VStack{
-                                        HStack{
-                                            Text("Vehicle pending")
-                                                .font(.custom("Jost", size: 20))
-                                                .foregroundStyle(Color.foreground)
-                                            Spacer()
-                                        }
-                                        HStack{
-                                            Text("\(listing.listingTitle ?? "") has been bought out and is waiting for your approval.")
-                                                .font(.custom("Jost", size: 16))
-                                                .foregroundStyle(Color.foreground)
-                                                .multilineTextAlignment(.leading)
-                                            Spacer()
+                        } else if listing.listingType == "auction" {
+                            NavigationLink(destination: AuctionListingView(showSignInView: $showSignInView, listing: listing)) {
+                                VStack{
+                                    HStack{
+                                        Image(systemName: "building.columns.fill")
+                                            .resizable()
+                                            .frame(width:30, height:30)
+                                            .foregroundStyle(Color.accentColor)
+                                        VStack{
+                                            HStack{
+                                                Text("Vehicle pending")
+                                                    .font(.custom("Jost", size: 20))
+                                                    .foregroundStyle(Color.foreground)
+                                                Spacer()
+                                            }
+                                            HStack{
+                                                Text("\(listing.listingTitle ?? "") has been bought out and is waiting for your approval.")
+                                                    .font(.custom("Jost", size: 16))
+                                                    .foregroundStyle(Color.foreground)
+                                                    .multilineTextAlignment(.leading)
+                                                Spacer()
+                                            }
                                         }
                                     }
+                                    Divider()
                                 }
-                                Divider()
                             }
                         }
                     }
+                } else if pendingList == [carListing]() {
+                        Text("No new notifications.")
+                            .font(Font.custom("Jost", size: 20))
+                            .foregroundColor(Color.foreground)
                 }
             }
         }

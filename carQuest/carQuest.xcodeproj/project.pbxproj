@@ -30,6 +30,7 @@
 		00CF05332CA313B900E53D2F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00CF05322CA313B900E53D2F /* GoogleService-Info.plist */; };
 		00CF05352CA3144000E53D2F /* listingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF05342CA3144000E53D2F /* listingView.swift */; };
 		00E32F042C763EC100840AAA /* ZingRustDemo-Base.otf in Resources */ = {isa = PBXBuildFile; fileRef = 00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */; };
+		00E6C6F32DA040600022B3D7 /* BuyingApproval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E6C6F22DA040600022B3D7 /* BuyingApproval.swift */; };
 		00E74E022CF0D94600196B00 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E74E012CF0D94600196B00 /* ChatViewModel.swift */; };
 		00F494862CE644E40047BC56 /* CreateNewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F494852CE644E40047BC56 /* CreateNewMessage.swift */; };
 		00F5C0C12CAB07B900856E1E /* rentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5C0C02CAB07B900856E1E /* rentView.swift */; };
@@ -141,6 +142,7 @@
 		00CF05322CA313B900E53D2F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		00CF05342CA3144000E53D2F /* listingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listingView.swift; sourceTree = "<group>"; };
 		00E32F032C763EC100840AAA /* ZingRustDemo-Base.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZingRustDemo-Base.otf"; sourceTree = "<group>"; };
+		00E6C6F22DA040600022B3D7 /* BuyingApproval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyingApproval.swift; sourceTree = "<group>"; };
 		00E74E012CF0D94600196B00 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		00F494852CE644E40047BC56 /* CreateNewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessage.swift; sourceTree = "<group>"; };
 		00F5C0C02CAB07B900856E1E /* rentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rentView.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				00A7236D2D0A014400AF6CEC /* BuyingView.swift */,
 				00C032872D809F3C006881FE /* BuyingCreation.swift */,
 				0015C3A52D833D610097BB4B /* buyingListingView.swift */,
+				00E6C6F22DA040600022B3D7 /* BuyingApproval.swift */,
 			);
 			path = Buying;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				00C032882D809F3C006881FE /* BuyingCreation.swift in Sources */,
 				001111422CB56DBB001F877D /* LocationManager.swift in Sources */,
 				00E74E022CF0D94600196B00 /* ChatViewModel.swift in Sources */,
+				00E6C6F32DA040600022B3D7 /* BuyingApproval.swift in Sources */,
 				6F2EBCA62C94964500EF07FC /* CarModel.swift in Sources */,
 				22C6DF092C91D31A00F41EB3 /* RootView.swift in Sources */,
 				0099FDB72D5F8A7B00501AF0 /* OtherProfileView.swift in Sources */,
