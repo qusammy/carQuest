@@ -71,7 +71,7 @@ class UserProfileViewModel: ObservableObject{
         }
     }
     
-    func getUser(uid: String){
+    func getUser(uid: String) -> CarQuestUser? {
         
         FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
             if let error = error {
@@ -90,6 +90,7 @@ class UserProfileViewModel: ObservableObject{
 
             self.carUser = CarQuestUser(id: "", display_name: display_name, email: email, user_id: uid, profileImageURL: profileImageURL, description: description)
         }
+        return self.carUser
     }
 
 }

@@ -14,6 +14,7 @@ struct BuyingApproval: View {
     @State private var status: String = "For sale"
     @ObservedObject var viewModel = ListingViewModel()
     @ObservedObject var userViewModel = UserInfoViewModel()
+    @StateObject var chatVM = UserProfileViewModel()
     @State var listing: carListing?
     @State var user: String?
     @State private var reviewIsShown: Bool = false
@@ -23,6 +24,7 @@ struct BuyingApproval: View {
     @State private var reviews = [Review]()
     @State private var isPresentingOtherProfileView: Bool = false
     @State private var showAlert = false
+    @State private var chatUser: CarQuestUser?
 
     var body: some View {
         NavigationStack{
@@ -33,7 +35,7 @@ struct BuyingApproval: View {
                         .font(.custom("ZingRustDemo-Base", size: 40))
                     Spacer()
                     Button {
-                        // dismisses view
+                        dismiss()
                     } label: {
                         Text("Cancel")
                             .foregroundStyle(Color.accentColor)
@@ -65,9 +67,7 @@ struct BuyingApproval: View {
                             .foregroundStyle(Color.foreground)
                             .font(.custom("Jost", size: 23))
                         Spacer()
-                        Button {
-                            // Sends a message to the user who bought the car.
-                        } label: {
+                        NavigationLink(destination: ChatView(carUser: chatUser) ,label: {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 25)
                                     .frame(width:125, height:30)
@@ -76,7 +76,10 @@ struct BuyingApproval: View {
                                     .font(.custom("Jost", size: 20))
                                     .foregroundStyle(Color.white)
                             }
-                        }
+                        })
+                    }
+                    .onAppear {
+                        chatUser = chatVM.getUser(uid: (listing?.userID)!)
                     }
                     HStack{
                         Text("Manage Approval")
