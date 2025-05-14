@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 struct BuyingApproval: View {
     @Environment(\.dismiss) var dismiss
@@ -50,21 +51,23 @@ struct BuyingApproval: View {
                             .resizable()
                             .frame(width:100, height:100)
                         Spacer()
-                        Text("Year Make Model Type")
+                        Text("\(listing?.carYear ?? "error") \(listing?.carMake ?? "error") \(listing?.carModel ?? "error") \(listing?.carType ?? "error")")
                             .foregroundStyle(Color.foreground)
                             .font(.custom("Jost", size: 25))
                     }
                     HStack{
-                        Text("Final price: $0000.00")
+                        Text("Final price: $\(listing?.listingPrice ?? "error")")
                             .foregroundStyle(Color.foreground)
                             .font(.custom("Jost", size: 25))
                         Spacer()
                     }
                     HStack{
-                        Image("profileIcon")
+                        WebImage(url: URL(string: userViewModel.photoURL))
                             .resizable()
+                            .scaledToFill()
                             .frame(width:75, height:75)
-                        Text("$username")
+                            .clipShape(Circle())
+                        Text(userViewModel.displayName)
                             .foregroundStyle(Color.foreground)
                             .font(.custom("Jost", size: 23))
                         Spacer()
@@ -123,7 +126,7 @@ struct BuyingApproval: View {
                     .font(.custom("Jost", size: 15))
                     .multilineTextAlignment(.center)
             }
-            .alert("Are you sure you want to purchase this vehicle?", isPresented: $showAlert) {
+            .alert("Are you sure you want to approve of the purchase of this vehicle?", isPresented: $showAlert) {
         Button(role: .destructive) {
                 Task {
                     do {
@@ -133,7 +136,7 @@ struct BuyingApproval: View {
                             }
                         }
                 }label: {
-                    Text("Purchase")
+                    Text("Approve")
                 }
             }
             .padding()

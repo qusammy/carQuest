@@ -112,9 +112,9 @@ struct topNavigationBar: View {
     @State var showNewMessageScreen = false
     @State var shouldNavigateToChatView = false
     @StateObject private var viewModel = ListingViewModel()
-    @State private var pendingList: [carListing] = [carListing]()
-    
+    @State var pendingList: [carListing] = [carListing]()
     @Environment(\.presentationMode) var presentationMode
+    @State var count = 0
     var body: some View {
         VStack{
             HStack{
@@ -147,6 +147,10 @@ struct topNavigationBar: View {
                                     .frame(width: 15, height:15)
                                     .foregroundStyle(Color.accentColor)
                                     .offset(x: 10, y: 10)
+                                Text(count)
+                                    .font(.custom("Jost", size: 10))
+                                    .foregroundStyle(Color.white)
+                                    .offset(x: 10, y: 10)
                             }
                         }
                 }
@@ -169,6 +173,7 @@ struct topNavigationBar: View {
                 
                 }
             }
+            countPendingList()
         }
         .onChange(of: viewModel.pendingVehicles) {
             pendingList = viewModel.pendingVehicles
@@ -187,6 +192,9 @@ struct topNavigationBar: View {
        .padding()
     }
     @State var carUser: CarQuestUser?
+    func countPendingList() {
+        count = pendingList.count
+    }
 }
 
 struct carListingLink: View {
