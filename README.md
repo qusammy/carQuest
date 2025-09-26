@@ -1,3 +1,5 @@
+<img width="200" height="200" alt="4" src="https://github.com/user-attachments/assets/6d88c3d1-9d55-42aa-a031-21d26c15b8d2" />
+
 ## What is Car Quest?
 Car Quest is a high school project developed entirely in SwiftUI by James H. and Maddy Q. Car Quest is a clone of Turo made for cars with modifications. Car Quest represents our skills in Firebase, back-end development, front-end development, GitHub, and SwiftUI.
 
